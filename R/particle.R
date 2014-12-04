@@ -1,6 +1,6 @@
 ## TODO:
 ##   consider use of polar-projected coordinates for kdtree search 
-
+##   need an out of bounds test, similar to the hit-the-bottom test
 ## PREP 
 ## a single file from BGF
 ## f <- "/ds/projects/mertz/mdl/mer015_1/mer_his_0574.nc"
