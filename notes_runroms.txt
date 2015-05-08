@@ -1,0 +1,140 @@
+module load matlab/R2015a
+module load R/3.1.1
+
+module load netcdf/4.3.3.1p
+
+## matlab -nojvm
+
+##ROMS is not a sigma coordinate system (depth layers are not spaced equally)
+##s-coordinate system, different layers can be enhanced resolution in different areas
+
+BGF - high resolution at top and bottom
+- non compressibility not a problem for us probably, unless you need
+sub 100m wave-breaking stuff
+
+- curvilinear in X-Y (but this is a constant, only the layer depths is changeable)
+
+non-hydrostatic, incompressible (though Sasha has some compressibility models)
+
+## first experiment you should do is set up a test to see that terrain following model
+## does not generate currents due only to the layer compression
+
+qsub -I -P m68 -q express -l mem=4Gb,walltime=05:00:00,ncpus=4 -lsoftware=intel-fc
+#cat qsub_nci.job
+module load intel-fc
+module load netcdf
+module load openmpi
+
+cp makefile_bkgf_nci
+## edit USE_MPI ?= on ## delete the on
+## edit APPLICATION to SEAMOUNT
+make -f makefile_seamount -j 4
+
+./oceanS < ROMS/External/ocean_seamount.in > roms.out
+
+
+mct model coupling toolkit
+
+Compilers/ makefile looks in here to see what paths are set, can export these if needed
+
+ROMS/ ignore Adjoint,Represent,Tangent
+interested in Include/seamount.h  - cpp definitions tell ROMS which options
+cppdefs.h contains master defs of all these options
+
+ROMS ideal for idealized analytic applications
+
+ROMS/Nonlinear/prsgrd32.h  - see oneFifth if set to 0, becomes same as something something
+- can edit these things, no need to make clean - can just make again
+
+
+## John Hunter's under ice example under steep calving front
+closed boundaries, some flux at air-sea interface
+relaxing down to some winter time condition
+
+ice melt equations at otherwise fixed boundary with ice
+- position of ice draft is constant
+
+
+most of ROMS/External/ don't work out of the box
+
+riverplume has options to add mass at certain grid cell
+iceshelf ones "cliff", "2dtoy", 3d, icetest etc.
+
+we do one of the toy ones
+
+ROMS/External/ocean_iceshelf3d_toy.in
+10*20, 13 levels
+designed to run in parallel
+
+matching header is (C preprocessor defs) (again cppdefs for glossary of terms)
+Include/iceshelf3d_toy.h
+
+ANA_
+ analytical options
+
+Functionals/ana_  etc.
+
+ana_grid.h
+if ICESHELF3D_TOY defined
+ certain options are given
+
+sets zice - depth of ice at furthest south, so it's idealized
+
+edit Nonlinear/prsgrd32.h    OneFifth (delete the 0.0 option thing) ## ICESHELF_MORPH
+make -f makefile_bkgf_nci  -j 4
+
+
+./oceanS < ROMS/External/ocean_iceshelf3d_toy.in > roms.out
+
+## 1. what ROMS wants as input files
+
+ocean_tisom.in
+ocean_amery.in
+
+GRDNAME etc. input netcdf files
+
+#if ANA_ is undef, then model goes looking for these input netcdf files
+
+   GRD grid name
+   BRY boundary name
+   INI ini name
+
+
+   rst is restart file, be sure to change the rst name after a crash
+   his name
+
+
+   myroms.org input_NetcDF_files
+
+   
+   BRY lateral boundaries
+
+amery 
+   temp_east (along the northern boundary)
+   zice - thickness of ice
+   masks
+   grid angle
+   pm / pm reciprocal of dx/dy
+
+   varinfo.dat prescribes the order of input netcdf files
+   separated by \ but can have split fields (i.e. yearly files) with |
+   
+   
+## 2. how we create the files
+
+       there are pre and post processing tools, but not useful in ice-specific scenario
+
+   katabatic /ds/projects/tomp/totten/ana/dgwyther/netcdf/tisom008/sbc/read_tamura_daily.m
+
+   
+       surface boundary conditions
+
+   lateral boundary conditions
+
+   
+## 3. options
+
+
+
+
+
