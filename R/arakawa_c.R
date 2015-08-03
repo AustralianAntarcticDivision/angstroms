@@ -38,7 +38,7 @@ mkcvget <- function(getter) {
   }
 }
 
-ext <- extent(0, 10, 190, 201)
+ext <- extent(340, 360, 1, 20)
 
 get <- mkget(f)
 vget <- mkvget(get, ext)
@@ -53,11 +53,11 @@ plot(vget("lon_u"), vget("lat_u"), xlim = range(vget("lon_u"), vget("lon_v"), vg
 points(vget("lon_v"), vget("lat_v"), col = cv)
 points(vget("lon_rho"), vget("lat_rho"), col = crho)
 
-for (i in 1:36) {
+for (i in 1:359) {
 lines(colget("lon_u", i), colget("lat_u", i), col = "red")
 }
 
-for (i in 1:20) {
+for (i in 1:199) {
   lines(rowget("lon_v", i), rowget("lat_v", i), col = "red")
 }
 
