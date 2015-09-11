@@ -14,7 +14,7 @@ applyget <- function(vars) {
   a
 }
 
-getr <- mkget(file.path(dp, "ocean_his_1year.nc"))
+
 setIndexExt <- function(x) {
   ex <- extent(1, ncol(x), 1, nrow(x))
   setExtent(x, ex)
