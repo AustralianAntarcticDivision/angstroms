@@ -9,6 +9,6 @@ Depends:
 License: GPL-3
 LazyData: true
 Imports:
-    sptable
-Remotes: mdsumner/sptable
+    spbabel
+Remotes: mdsumner/spbabel
 RoxygenNote: 5.0.1

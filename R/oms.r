@@ -14,7 +14,7 @@ romsmap <- function(x, coords, ...) {
 
 #' @rdname romsmap
 #' @export
-#' @importFrom sptable sptable spFromTable
+#' @importFrom spbabel sptable spFromTable
 #' @importFrom nabor knn
 #' @importFrom raster intersect as.matrix
 romsmap.SpatialPolygonsDataFrame <- function(x, coords, ...) {
@@ -23,13 +23,13 @@ romsmap.SpatialPolygonsDataFrame <- function(x, coords, ...) {
   x <- raster::intersect(x, oms:::boundary(coords))
   options(op)
   
-  tab <- sptable::sptable(x)
+  tab <- spbabel::sptable(x)
   xy <- as.matrix(coords)
   kd <- nabor::knn(xy, raster::as.matrix(tab[, c("x", "y")]), k = 1, eps = 0)
   index <- expand.grid(x = seq(ncol(coords)), y = rev(seq(nrow(coords))))[kd$nn.idx, ]
   tab$x <- index$x
   tab$y <- index$y
-  sptable::spFromTable(tab, crs = projection(x))
+  spbabel::spFromTable(tab, crs = projection(x))
 }
 
 ## this is from rastermesh
