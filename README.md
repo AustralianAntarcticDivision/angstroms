@@ -7,6 +7,7 @@
 fp <- "slice3101.nc"
 ```
 
+
 ```r
 library(oms)
 ## RasterStack of the lon_u/lat_u coords
@@ -37,3 +38,5 @@ contour(sqrt(u ^ 2 + v ^ 2), add = TRUE)
 ## add polygons
 plot(map, add = TRUE, col = "grey")
 ```
+
+![plot of chunk unnamed-chunk-3](figure/unnamed-chunk-3-1.png)
