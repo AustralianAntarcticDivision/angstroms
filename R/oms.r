@@ -90,7 +90,7 @@ romscoords <- function(x, spatial = c("lon_u", "lat_u")) {
 #'
 #' @examples
 romsdata <-function(x, varname, slice = c(1, 1)) {
-  brick(x, level = slice[1L])[[slice[2L]]]
+  brick(x, level = slice[1L], varname = varname)[[slice[2L]]]
 }
 
 

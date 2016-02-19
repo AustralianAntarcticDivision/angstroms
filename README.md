@@ -12,7 +12,13 @@ fp <- "slice3101.nc"
 library(oms)
 ## RasterStack of the lon_u/lat_u coords
 coords <- romscoords(fp)
+```
 
+```
+## Loading required namespace: ncdf4
+```
+
+```r
 ## a polygon data set
 library(rworldxtra)
 data(countriesHigh)
@@ -23,37 +29,21 @@ slc <- c(4, 3)
 
 # u and v components of velocity
 u <- romsdata(fp, "u", slice = slc)
-```
-
-```
-## Warning in .varName(nc, varname, warn = warn): varname used is: u
-## If that is not correct, you can set it to one of: u, v, w, temp, salt
-```
-
-```r
 v <- romsdata(fp, "v", slice = slc)
-```
-
-```
-## Warning in .varName(nc, varname, warn = warn): varname used is: u
-## If that is not correct, you can set it to one of: u, v, w, temp, salt
-```
-
-```r
+   
 # temperature
 temp <- romsdata(fp, "temp", slice = slc)   
-```
 
-```
-## Warning in .varName(nc, varname, warn = warn): varname used is: u
-## If that is not correct, you can set it to one of: u, v, w, temp, salt
-```
-
-```r
 ## translate a SpatialPolygons data set to the ROMS mesh
 ## (also clips to the extents)
 map <- romsmap(countriesHigh, coords)
+```
 
+```
+## Loading required namespace: rgeos
+```
+
+```r
 ## plot temperature + current mag contours
 plot(temp, col = rev(heat.colors(100)))
 contour(sqrt(u ^ 2 + v ^ 2), add = TRUE)
