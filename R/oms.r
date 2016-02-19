@@ -42,7 +42,22 @@ boundary <- function(cds) {
   SpatialPolygons(list(Polygons(list(Polygon(raster::as.matrix(cds)[unique(c(left, bottom, right, top)), ])), "1")))
 }
 
-
+#' @rdname romsmap
+#' @export
+romsmap.SpatialPointsDataFrame <- function(x, coords, ...) {
+  ## first get the intersection
+  op <- options(warn = -1)
+  x <- raster::intersect(x, oms:::boundary(coords))
+  options(op)
+  
+  tab <- sptable::sptable(x)
+  xy <- as.matrix(coords)
+  kd <- nabor::knn(xy, raster::as.matrix(tab[, c("x", "y")]), k = 1, eps = 0)
+  index <- expand.grid(x = seq(ncol(coords)), y = rev(seq(nrow(coords))))[kd$nn.idx, ]
+  tab$x <- index$x
+  tab$y <- index$y
+  sptable::spFromTable(tab, crs = projection(x))
+}
 
 #' Extract coordinate arrays from ROMS. 
 #' 

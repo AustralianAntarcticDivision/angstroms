@@ -2,12 +2,15 @@
 % Please edit documentation in R/oms.r
 \name{romsmap}
 \alias{romsmap}
+\alias{romsmap.SpatialPointsDataFrame}
 \alias{romsmap.SpatialPolygonsDataFrame}
 \title{Title}
 \usage{
 romsmap(x, coords, ...)
 
 \method{romsmap}{SpatialPolygonsDataFrame}(x, coords, ...)
+
+\method{romsmap}{SpatialPointsDataFrame}(x, coords, ...)
 }
 \arguments{
 \item{x}{}
