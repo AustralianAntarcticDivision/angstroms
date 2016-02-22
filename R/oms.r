@@ -1,13 +1,19 @@
-#' Title
-#'
-#' @param x 
-#' @param ... 
+#' Remap an object to the space defined by coordinate arrays. 
+#' 
+#' Find the nearest-neighbour coordinates of `x` in the coordinate arrays of `coords`. 
+#' 
+#' The input `coords` is a assumed to be a 2-layer \code{\link[raster]{RasterStack}} or \code{\link[raster]{RasterBrick}} and
+#' using `nabor::knn` the nearest matching position of the coordinates of `x` is found in the grid space of `coords`. The
+#' motivating use-case is the curvilinear longitude and latitude arrays of ROMS model output. 
+#' 
+#' No account is made for the details of a ROMS cell, though this may be included in future. We tested only with the "lon_u" and "lat_u"
+#' arrays. 
+#' @param x object to transform to the grid space, e.g. a \code{\link[sp]{Spatial}} object
 #' @param coords romscoords RasterStack
+#' @param ... 
 #'
-#' @return
+#' @return input object with coordinates transformed to space of the coords 
 #' @export
-#'
-#' @examples
 romsmap <- function(x, coords, ...) {
   UseMethod("romsmap")
 }
@@ -32,14 +38,21 @@ romsmap.SpatialPolygonsDataFrame <- function(x, coords, ...) {
   spbabel::spFromTable(tab, crs = projection(x))
 }
 
-## this is from rastermesh
-boundary <- function(cds) {
-  left <- cellFromCol(cds, 1)
-  bottom <- cellFromRow(cds, nrow(cds))
-  right <- rev(cellFromCol(cds, ncol(cds)))
-  top <- rev(cellFromRow(cds, 1))
-  ## need XYFromCell method
-  SpatialPolygons(list(Polygons(list(Polygon(raster::as.matrix(cds)[unique(c(left, bottom, right, top)), ])), "1")))
+#' @rdname romsmap
+#' @export
+romsmap.SpatialLinesDataFrame <- function(x, coords, ...) {
+  ## first get the intersection
+  op <- options(warn = -1)
+  x <- raster::intersect(x, oms:::boundary(coords))
+  options(op)
+  
+  tab <- spbabel::sptable(x)
+  xy <- as.matrix(coords)
+  kd <- nabor::knn(xy, raster::as.matrix(tab[, c("x", "y")]), k = 1, eps = 0)
+  index <- expand.grid(x = seq(ncol(coords)), y = rev(seq(nrow(coords))))[kd$nn.idx, ]
+  tab$x <- index$x
+  tab$y <- index$y
+  spbabel::spFromTable(tab, crs = projection(x))
 }
 
 #' @rdname romsmap
@@ -58,6 +71,17 @@ romsmap.SpatialPointsDataFrame <- function(x, coords, ...) {
   tab$y <- index$y
   sptable::spFromTable(tab, crs = projection(x))
 }
+
+## this is from rastermesh
+boundary <- function(cds) {
+  left <- cellFromCol(cds, 1)
+  bottom <- cellFromRow(cds, nrow(cds))
+  right <- rev(cellFromCol(cds, ncol(cds)))
+  top <- rev(cellFromRow(cds, 1))
+  ## need XYFromCell method
+  SpatialPolygons(list(Polygons(list(Polygon(raster::as.matrix(cds)[unique(c(left, bottom, right, top)), ])), "1")))
+}
+
 
 #' Extract coordinate arrays from ROMS. 
 #' 
@@ -88,7 +112,6 @@ romscoords <- function(x, spatial = c("lon_u", "lat_u")) {
 #' @return \code{\link[raster]{RasterLayer}}
 #' @export
 #'
-#' @examples
 romsdata <-function(x, varname, slice = c(1, 1)) {
   brick(x, level = slice[1L], varname = varname)[[slice[2L]]]
 }

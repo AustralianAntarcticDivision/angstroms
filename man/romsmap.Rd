@@ -2,24 +2,38 @@
 % Please edit documentation in R/oms.r
 \name{romsmap}
 \alias{romsmap}
+\alias{romsmap.SpatialLinesDataFrame}
 \alias{romsmap.SpatialPointsDataFrame}
 \alias{romsmap.SpatialPolygonsDataFrame}
-\title{Title}
+\title{Remap an object to the space defined by coordinate arrays.}
 \usage{
 romsmap(x, coords, ...)
 
 \method{romsmap}{SpatialPolygonsDataFrame}(x, coords, ...)
 
+\method{romsmap}{SpatialLinesDataFrame}(x, coords, ...)
+
 \method{romsmap}{SpatialPointsDataFrame}(x, coords, ...)
 }
 \arguments{
-\item{x}{}
+\item{x}{object to transform to the grid space, e.g. a \code{\link[sp]{Spatial}} object}
 
 \item{coords}{romscoords RasterStack}
 
 \item{...}{}
 }
+\value{
+input object with coordinates transformed to space of the coords
+}
 \description{
-Title
+Find the nearest-neighbour coordinates of `x` in the coordinate arrays of `coords`.
+}
+\details{
+The input `coords` is a assumed to be a 2-layer \code{\link[raster]{RasterStack}} or \code{\link[raster]{RasterBrick}} and
+using `nabor::knn` the nearest matching position of the coordinates of `x` is found in the grid space of `coords`. The
+motivating use-case is the curvilinear longitude and latitude arrays of ROMS model output.
+
+No account is made for the details of a ROMS cell, though this may be included in future. We tested only with the "lon_u" and "lat_u"
+arrays.
 }
 
