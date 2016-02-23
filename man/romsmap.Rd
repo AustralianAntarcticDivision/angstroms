@@ -7,18 +7,20 @@
 \alias{romsmap.SpatialPolygonsDataFrame}
 \title{Remap an object to the space defined by coordinate arrays.}
 \usage{
-romsmap(x, coords, ...)
+romsmap(x, coords, crop = TRUE, ...)
 
-\method{romsmap}{SpatialPolygonsDataFrame}(x, coords, ...)
+\method{romsmap}{SpatialPolygonsDataFrame}(x, coords, crop, ...)
 
-\method{romsmap}{SpatialLinesDataFrame}(x, coords, ...)
+\method{romsmap}{SpatialLinesDataFrame}(x, coords, crop, ...)
 
-\method{romsmap}{SpatialPointsDataFrame}(x, coords, ...)
+\method{romsmap}{SpatialPointsDataFrame}(x, coords, crop, ...)
 }
 \arguments{
 \item{x}{object to transform to the grid space, e.g. a \code{\link[sp]{Spatial}} object}
 
 \item{coords}{romscoords RasterStack}
+
+\item{crop}{logical, if \code{TRUE} crop x to the extent of the boundary of the values in coords}
 
 \item{...}{}
 }
@@ -33,6 +35,7 @@ The input `coords` is a assumed to be a 2-layer \code{\link[raster]{RasterStack}
 using `nabor::knn` the nearest matching position of the coordinates of `x` is found in the grid space of `coords`. The
 motivating use-case is the curvilinear longitude and latitude arrays of ROMS model output.
 
+Cropping is complicated more details . . .
 No account is made for the details of a ROMS cell, though this may be included in future. We tested only with the "lon_u" and "lat_u"
 arrays.
 }

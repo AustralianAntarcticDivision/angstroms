@@ -6,15 +6,17 @@
 #' using `nabor::knn` the nearest matching position of the coordinates of `x` is found in the grid space of `coords`. The
 #' motivating use-case is the curvilinear longitude and latitude arrays of ROMS model output. 
 #' 
+#' Cropping is complicated more details . . .
 #' No account is made for the details of a ROMS cell, though this may be included in future. We tested only with the "lon_u" and "lat_u"
 #' arrays. 
 #' @param x object to transform to the grid space, e.g. a \code{\link[sp]{Spatial}} object
 #' @param coords romscoords RasterStack
+#' @param crop logical, if \code{TRUE} crop x to the extent of the boundary of the values in coords
 #' @param ... 
 #'
 #' @return input object with coordinates transformed to space of the coords 
 #' @export
-romsmap <- function(x, coords, ...) {
+romsmap <- function(x, coords, crop = TRUE, ...) {
   UseMethod("romsmap")
 }
 
@@ -23,12 +25,13 @@ romsmap <- function(x, coords, ...) {
 #' @importFrom spbabel sptable spFromTable
 #' @importFrom nabor knn
 #' @importFrom raster intersect as.matrix
-romsmap.SpatialPolygonsDataFrame <- function(x, coords, ...) {
+romsmap.SpatialPolygonsDataFrame <- function(x, coords, crop, ...) {
   ## first get the intersection
+  if (crop) {
   op <- options(warn = -1)
   x <- raster::intersect(x, oms:::boundary(coords))
   options(op)
-  
+  }
   tab <- spbabel::sptable(x)
   xy <- as.matrix(coords)
   kd <- nabor::knn(xy, raster::as.matrix(tab[, c("x", "y")]), k = 1, eps = 0)
