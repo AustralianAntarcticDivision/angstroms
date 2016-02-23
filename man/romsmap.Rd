@@ -7,22 +7,22 @@
 \alias{romsmap.SpatialPolygonsDataFrame}
 \title{Remap an object to the space defined by coordinate arrays.}
 \usage{
-romsmap(x, coords, crop = TRUE, ...)
+romsmap(x, ...)
 
-\method{romsmap}{SpatialPolygonsDataFrame}(x, coords, crop, ...)
+\method{romsmap}{SpatialPolygonsDataFrame}(x, coords, crop = FALSE, ...)
 
-\method{romsmap}{SpatialLinesDataFrame}(x, coords, crop, ...)
+\method{romsmap}{SpatialLinesDataFrame}(x, coords, crop = FALSE, ...)
 
-\method{romsmap}{SpatialPointsDataFrame}(x, coords, crop, ...)
+\method{romsmap}{SpatialPointsDataFrame}(x, coords, crop = FALSE, ...)
 }
 \arguments{
 \item{x}{object to transform to the grid space, e.g. a \code{\link[sp]{Spatial}} object}
 
+\item{...}{}
+
 \item{coords}{romscoords RasterStack}
 
 \item{crop}{logical, if \code{TRUE} crop x to the extent of the boundary of the values in coords}
-
-\item{...}{}
 }
 \value{
 input object with coordinates transformed to space of the coords

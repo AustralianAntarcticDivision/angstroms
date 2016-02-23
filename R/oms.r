@@ -16,7 +16,7 @@
 #'
 #' @return input object with coordinates transformed to space of the coords 
 #' @export
-romsmap <- function(x, coords, crop = TRUE, ...) {
+romsmap <- function(x, ...) {
   UseMethod("romsmap")
 }
 
@@ -25,7 +25,7 @@ romsmap <- function(x, coords, crop = TRUE, ...) {
 #' @importFrom spbabel sptable spFromTable
 #' @importFrom nabor knn
 #' @importFrom raster intersect as.matrix
-romsmap.SpatialPolygonsDataFrame <- function(x, coords, crop, ...) {
+romsmap.SpatialPolygonsDataFrame <- function(x, coords, crop = FALSE, ...) {
   ## first get the intersection
   if (crop) {
   op <- options(warn = -1)
