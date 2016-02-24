@@ -1,5 +1,24 @@
 ## oms - R for ROMS
 
+## Installation
+
+Install the latest version of `devtools`, and then install from Github. 
+
+```r
+if (packageVersion("devtools") < 1.10) {
+  install.packages("devtools")
+}
+
+
+devtools::install_github("mdsumner/oms")
+```
+
+## Development
+
+1. Create a New Project in RStudio, select **Version Control**, and then **Git** 
+2. Enter "https://github.com/mdsumner/oms.git". 
+3. Go to Tools/Options/Project Options ... and under Build Tools select "Generate documentation with roxygenx", click on all options. 
+4. Ctrl-SHIFT-b to build the package and reload. 
 
 
 ```r
