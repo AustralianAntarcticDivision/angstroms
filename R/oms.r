@@ -40,7 +40,7 @@ romsmap.SpatialPolygonsDataFrame <- function(x, coords, crop = FALSE, lonlat = T
   
   if (repro & !is.na(proj)) {
     llproj <- "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs +towgs84=0,0,0"
-    xy <- proj4::ptransform(cbind(tab$x, tab$y), src.proj = projection(x), dst.proj = llproj, silent = FALSE)
+    xy <- proj4::ptransform(cbind(tab$x, tab$y) * pi / 180, src.proj = projection(x), dst.proj = llproj, silent = FALSE)
     tab$x <- xy[,1]
     tab$y <- xy[,2]
     proj <- llproj
