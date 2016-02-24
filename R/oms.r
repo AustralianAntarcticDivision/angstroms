@@ -12,6 +12,7 @@
 #' @param x object to transform to the grid space, e.g. a \code{\link[sp]{Spatial}} object
 #' @param coords romscoords RasterStack
 #' @param crop logical, if \code{TRUE} crop x to the extent of the boundary of the values in coords
+#' @param longlat logical, if \code{TRUE} check for need to back-transform to longitude/latitude and do it
 #' @param ... 
 #'
 #' @return input object with coordinates transformed to space of the coords 
@@ -25,20 +26,31 @@ romsmap <- function(x, ...) {
 #' @importFrom spbabel sptable spFromTable
 #' @importFrom nabor knn
 #' @importFrom raster intersect as.matrix
-romsmap.SpatialPolygonsDataFrame <- function(x, coords, crop = FALSE, ...) {
+romsmap.SpatialPolygonsDataFrame <- function(x, coords, crop = FALSE, lonlat = TRUE, ...) {
   ## first get the intersection
   if (crop) {
   op <- options(warn = -1)
   x <- raster::intersect(x, oms:::boundary(coords))
   options(op)
   }
+  ## do we need to invert projection?
+  repro <- !raster::isLonLat(x)
+  proj <- projection(x)
   tab <- spbabel::sptable(x)
+  
+  if (repro & !is.na(proj)) {
+    llproj <- "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs +towgs84=0,0,0"
+    xy <- proj4::ptransform(cbind(tab$x, tab$y), src.proj = projection(x), dst.proj = llproj, silent = FALSE)
+    tab$x <- xy[,1]
+    tab$y <- xy[,2]
+    proj <- llproj
+  }
   xy <- as.matrix(coords)
   kd <- nabor::knn(xy, raster::as.matrix(tab[, c("x", "y")]), k = 1, eps = 0)
   index <- expand.grid(x = seq(ncol(coords)), y = rev(seq(nrow(coords))))[kd$nn.idx, ]
   tab$x <- index$x
   tab$y <- index$y
-  spbabel::spFromTable(tab, crs = projection(x))
+  spbabel::spFromTable(tab, crs = proj)
 }
 
 #' @rdname romsmap

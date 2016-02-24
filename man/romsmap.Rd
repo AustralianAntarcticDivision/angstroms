@@ -9,11 +9,14 @@
 \usage{
 romsmap(x, ...)
 
-\method{romsmap}{SpatialPolygonsDataFrame}(x, coords, crop = FALSE, ...)
+\method{romsmap}{SpatialPolygonsDataFrame}(x, coords, crop = FALSE,
+  lonlat = TRUE, ...)
 
-\method{romsmap}{SpatialLinesDataFrame}(x, coords, crop = FALSE, ...)
+\method{romsmap}{SpatialLinesDataFrame}(x, coords, crop = FALSE,
+  lonlat = TRUE, ...)
 
-\method{romsmap}{SpatialPointsDataFrame}(x, coords, crop = FALSE, ...)
+\method{romsmap}{SpatialPointsDataFrame}(x, coords, crop = FALSE,
+  lonlat = TRUE, ...)
 }
 \arguments{
 \item{x}{object to transform to the grid space, e.g. a \code{\link[sp]{Spatial}} object}
@@ -23,6 +26,8 @@ romsmap(x, ...)
 \item{coords}{romscoords RasterStack}
 
 \item{crop}{logical, if \code{TRUE} crop x to the extent of the boundary of the values in coords}
+
+\item{longlat}{logical, if \code{TRUE} check for need to back-transform to longitude/latitude and do it}
 }
 \value{
 input object with coordinates transformed to space of the coords
