@@ -9,6 +9,7 @@ Depends:
 License: GPL-3
 LazyData: true
 Imports:
+    proj4,
     spbabel
 Remotes: mdsumner/spbabel
 RoxygenNote: 5.0.1

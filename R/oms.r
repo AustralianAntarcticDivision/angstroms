@@ -25,7 +25,8 @@ romsmap <- function(x, ...) {
 #' @export
 #' @importFrom spbabel sptable spFromTable
 #' @importFrom nabor knn
-#' @importFrom raster intersect as.matrix
+#' @importFrom raster intersect as.matrix projection
+#' @importFrom sp CRS
 romsmap.SpatialPolygonsDataFrame <- function(x, coords, crop = FALSE, lonlat = TRUE, ...) {
   ## first get the intersection
   if (crop) {
@@ -40,7 +41,7 @@ romsmap.SpatialPolygonsDataFrame <- function(x, coords, crop = FALSE, lonlat = T
   
   if (repro & !is.na(proj)) {
     llproj <- "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs +towgs84=0,0,0"
-    xy <- proj4::ptransform(cbind(tab$x, tab$y) * pi / 180, src.proj = projection(x), dst.proj = llproj, silent = FALSE)
+    xy <- proj4::ptransform(cbind(tab$x, tab$y, 0), src.proj = proj, dst.proj = llproj, silent = FALSE) * 180 / pi
     tab$x <- xy[,1]
     tab$y <- xy[,2]
     proj <- llproj
@@ -50,7 +51,7 @@ romsmap.SpatialPolygonsDataFrame <- function(x, coords, crop = FALSE, lonlat = T
   index <- expand.grid(x = seq(ncol(coords)), y = rev(seq(nrow(coords))))[kd$nn.idx, ]
   tab$x <- index$x
   tab$y <- index$y
-  spbabel::spFromTable(tab, crs = proj)
+  spbabel::spFromTable(tab, crs = NA_character_)
 }
 
 #' @rdname romsmap
