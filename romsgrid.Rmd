@@ -47,6 +47,7 @@ Obtain the `lon_u`, `lat_u` and `angle` variables as `RasterLayer` objects.
 library(oms)
 lon_u <- romsdata(romsfile, "lon_u")
 lat_u <- romsdata(romsfile, "lat_u")
+
 angle <- romsdata(romsfile, "angle")
 u <- romsdata(romsfile, "u", slice = c(1, 1))
 v <- romsdata(romsfile, "v", slice = c(1, 1))
