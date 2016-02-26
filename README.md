@@ -1,4 +1,4 @@
-## oms - R for ROMS
+## angstroms - R for ROMS
 
 ## Installation
 
@@ -10,13 +10,13 @@ if (packageVersion("devtools") < 1.10) {
 }
 
 
-devtools::install_github("mdsumner/oms")
+devtools::install_github("mdsumner/angstroms")
 ```
 
 ## Development
 
 1. Create a New Project in RStudio, select **Version Control**, and then **Git** 
-2. Enter "https://github.com/mdsumner/oms.git". 
+2. Enter "https://github.com/mdsumner/angstroms.git". 
 3. Go to Tools/Options/Project Options ... and under Build Tools select "Generate documentation with roxygenx", click on all options. 
 4. Ctrl-SHIFT-b to build the package and reload. 
 
@@ -28,7 +28,7 @@ fp <- "slice3101.nc"
 
 
 ```r
-library(oms)
+library(angstroms)
 ## RasterStack of the lon_u/lat_u coords
 coords <- romscoords(fp)
 ```

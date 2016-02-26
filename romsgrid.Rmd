@@ -44,7 +44,7 @@ vars(roms) %>% select(name, ndims, units, longname)
 Obtain the `lon_u`, `lat_u` and `angle` variables as `RasterLayer` objects. 
 
 ```{r}
-library(oms)
+library(angstroms)
 lon_u <- romsdata(romsfile, "lon_u")
 lat_u <- romsdata(romsfile, "lat_u")
 
