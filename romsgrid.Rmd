@@ -16,17 +16,26 @@ Regional Ocean MOdelling System (ROMS) uses a horizontal curvilinear coordinates
 The material discussed here is sourced this:  [discussion on 'Curvlinear Coordinates'](https://www.myroms.org/forum/viewtopic.php?f=3&t=295) on the [Ocean Modeling Discussion](https://www.myroms.org) forum. 
 
 
-This file contains a subset of a ROMs model. 
-
-```{r}
-library(raadtools)
+```{r,eval=FALSE,echo=FALSE}
+##This file contains a subset of a ROMs model. 
 romsfile <- file.path(getOption("default.datadir"), 
                       "data_local", "acecrc.org.au", 
                       "ROMS", "s_corney", 
                       "cpolar", "ocean_his_3101_uvwtempsalt.nc")
+```
+
+```{r,eval=TRUE,echo=TRUE}
+##This file contains all Mertz, on RDSI, mounted on ace-ecostats
+romsfile <- file.path("/mnt/mertzdata/mdl/mer015_1", "mer_his_0001.nc")
+```
+
+```{r}
+library(raadtools)
 
 ## print out the ncdump header
-#print(raster(romsfile))
+# sink(sprintf("%s_dump", basename(romsfile)))
+# print(raster(romsfile))
+# sink(NULL)
 ```
 
 A tidier (than `ncdump -h`) summary can be obtained with the `rancid` package. 
@@ -39,6 +48,8 @@ roms <- NetCDF(romsfile)
 library(dplyr)
 ## what vars?
 vars(roms) %>% select(name, ndims, units, longname)
+dims(roms)
+atts(roms, "angle")
 ```
 
 Obtain the `lon_u`, `lat_u` and `angle` variables as `RasterLayer` objects. 
@@ -54,3 +65,4 @@ v <- romsdata(romsfile, "v", slice = c(1, 1))
 
 mesh <- as.matrix(crop(brick(lon_u, lat_u, u, v, angle), extent(400, 600, 30, 180)))
 plot(mesh, pch = ".")
+```
