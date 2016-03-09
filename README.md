@@ -1,5 +1,18 @@
 ## angstroms - R for ROMS
 
+Angstroms aims to make working with ROMS output as easy as possible in R. 
+Rather than deal explicitly with the complex curvilinear grid in ROMS, the approach simplifies this by: 
+
+* maintaining the internal index of ROMS as the default *georeferencing* 
+* converting external data (maps, transects, points, etc.) into the native internal index space of ROMS
+* providing tools to read arbitrary slices from the grids (either 2D or 3D) as Raster objects
+* providing tools to recover the original full coordinates as needed
+
+In combination these allow extraction and query from the ROMS output very easily. 
+
+
+The ability to deal with time series across multiple files is still in development, though can be used simply now with standard loops. 
+
 ## Installation
 
 Install the latest version of `devtools`, and then install from Github. 

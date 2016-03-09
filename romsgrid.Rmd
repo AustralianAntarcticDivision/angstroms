@@ -11,9 +11,9 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## ROMS grid
 
-Regional Ocean MOdelling System (ROMS) uses a horizontal curvilinear coordinates, which needs special care for use in Cartesian or other coordinate systems. 
+Regional Ocean MOdelling System (ROMS) uses a horizontal curvilinear coordinate sytem, which needs special care for use in Cartesian or other coordinate systems. 
 
-The material discussed here is sourced this:  [discussion on 'Curvlinear Coordinates'](https://www.myroms.org/forum/viewtopic.php?f=3&t=295) on the [Ocean Modeling Discussion](https://www.myroms.org) forum. 
+The material discussed here is sourced from this:  [discussion on 'Curvlinear Coordinates'](https://www.myroms.org/forum/viewtopic.php?f=3&t=295) on the [Ocean Modeling Discussion](https://www.myroms.org) forum. 
 
 
 ```{r,eval=FALSE,echo=FALSE}
@@ -47,7 +47,15 @@ library(rancid)
 roms <- NetCDF(romsfile)
 library(dplyr)
 ## what vars?
-vars(roms) %>% select(name, ndims, units, longname)
+vars(roms) %>% filter(name == "temp") %>% dplyr::select(name, ndims, units, longname ,id) %>% 
+  inner_join(roms$vardim) %>% select(dimids) %>% inner_join(dims(roms), c("dimids" = "id"))
+
+
+
+plot(brick(romsfile, varname = "temp", level = 1, dims = c(2, 3, 1))[[1]], asp = "")
+
+
+
 dims(roms)
 atts(roms, "angle")
 ```

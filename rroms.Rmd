@@ -1,0 +1,131 @@
+---
+title: "ROMS in R"
+author: "Michael Sumner"
+date: "3/4/2016"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R for ROMS
+
+```{r}
+##This file contains a subset of a ROMs model. 
+romsfile <- file.path(getOption("default.datadir"), 
+                      "data_local", "acecrc.org.au", 
+                      "ROMS", "s_corney", 
+                      "cpolar", "ocean_his_3101_uvwtempsalt.nc")
+```
+
+
+BGM box geometry model for Atlantis. 
+
+```{r}
+
+library(rbgm)
+bgm <- read_bgm(system.file("extdata", "Antarctica_28.bgm", package = "rbgm"))
+
+## convert to Spatial 2D layers
+boxes <- boxSpatial(bgm)
+faces <- faceSpatial(bgm)
+
+## BGM is in Lambert Conformal Conic:
+projection(boxes)
+
+## reproject to LL to localize in the ROMS data
+## (ROMS may not be WGS84 . . .)
+library(rgdal)
+boxLL <- spTransform(boxes, "+proj=longlat +ellps=WGS84")
+
+library(graticule)
+grat <- graticule(seq(50, 110, by = 5), seq(-70, -55, by = 5), tiles = TRUE, 
+                  proj = projection(boxes))
+
+plot(boxes, col = ifelse(boxes$boundary == 0, rainbow(nrow(boxes)), "white"))
+plot(faces, col = "black", lwd = 3, lty = 2, add = TRUE)
+
+plot(grat, border = "grey", lty = 2, add = TRUE)
+
+
+```
+
+
+Build a spatial crop in the ROMS grid based on the lon/lat coords. 
+
+```{r}
+coords <- readAll(romscoords(romsfile, c("lon_u", "lat_u")))
+## add a buffer (-/+ to the extent)
+cropex <- croproms(coords, extent(boxLL) + 5)
+
+## read a variable
+salt <- crop(romsdata(romsfile, "salt", slice = c(1, 1)), cropex)
+
+library(palr)
+col <- sstPal(palette = TRUE)
+## modify palette appropriately for salt 
+vlim <- c(34.0, 35.8)
+plot(salt, col = col$cols, zlim = vlim)
+
+## still we need the boxes (and any other map) in ROMS native grid space
+rboxes <- romsmap(boxes, coords)
+rgrat <- romsmap(grat, coords)
+
+plot(rboxes, add = TRUE)
+plot(rgrat, add = TRUE, border = "grey", lty = 2)
+```
+
+
+
+Save to local for 3d vis. 
+
+```{r}
+h <- romsdata(romsfile, "h")
+save(h, file = "hroms.rdata")
+save(coords, file = "coords.rdata")
+```
+
+
+```{r}
+vdims <- ncdim(romsfile, "salt")
+
+
+
+ntime <- vdims[4]
+library(animation)
+for (itime in seq(ntime)) {
+  #salt <- crop(romsdata(romsfile, "salt", slice = c(4, itime)), cropex)
+  salt <- romsdata(romsfile, "salt", slice = c(4, itime))
+  
+  plot(salt, col = col$cols, zlim = vlim, main = sprintf("day %0.3i", itime))
+  plot(rboxes, add = TRUE)
+  plot(rgrat, add = TRUE, border = "grey", lty = 2)
+}
+
+```
+
+
+
+```{r}
+trans <- vector("list", 31)
+for (i in seq_along(trans)) {
+  trans[[i]] <- extract(brick(romsfile, varname = "temp", level = i), l70)[[1]]
+}
+
+boxmean <- extract(brick(romsfile, varname = "salt", level = 4), 
+                   rboxes, fun = mean, na.rm = TRUE)
+
+facemean <- extract(brick(romsfile, varname = "salt"), level = 4, 
+                    rboxes, fun = mean, na.rm = TRUE)
+
+
+
+## need a function to save indexes
+bgmsalt <- array(NA_real_, c(nrow(boxes), ntime, 3))
+  ## get mean, min, max
+  bgmsalt[,itime, 1] <- extract(salt, rboxes, fun = mean, na.rm = TRUE)
+  bgmsalt[,itime, 1] <- extract(salt, rboxes, fun = min, na.rm = TRUE)
+  bgmsalt[,itime, 1] <- extract(salt, rboxes, fun = max, na.rm = TRUE)
+  
+```
