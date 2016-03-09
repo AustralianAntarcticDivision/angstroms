@@ -110,11 +110,6 @@ romshcoords <- function(x, S = "Cs_r", depth = "h"){
 }
 
 
-ncget <- function(x, varname) {
-  nc <- ncdf4::nc_open(x)
-  on.exit(ncdf4::nc_close(nc))
-  ncdf4::ncvar_get(nc, varname)
-}
 
 #' Extract a data lyaer from ROMS by name and slice. 
 #'
