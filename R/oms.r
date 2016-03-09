@@ -80,7 +80,7 @@ boundary <- function(cds) {
 #' @param x ROMS file name
 #' @param spatial names of coordinate variables (e.g. lon_u, lat_u) 
 #'
-#' @return \code{\link[raster]{RasterStack}}
+#' @return \code{\link[raster]{RasterStack}} with two layers of the 2D-variables
 #' @export 
 #'
 #' @examples
@@ -91,6 +91,29 @@ romscoords <- function(x, spatial = c("lon_u", "lat_u")) {
   l <- vector("list", length(spatial))
   for (i in seq_along(l)) l[[i]] <- raster(x, varname = spatial[i])
   stack(l)
+}
+
+
+#' Coordinates at depth
+#' \code{S} and \code{h} are the  names of the appropriate variables
+#' @param x ROMS file name 
+#' @param S  of S-coordinate stretching curve at RHO-points
+#' @param h bathymetry at RHO-points
+#' @return \code{\link[raster]{RasterStack}} with a layer for every depth
+#' @export
+romshcoords <- function(x, S = "Cs_r", depth = "h"){
+  h <- raster(x, varname = depth)
+  Cs_r <- ncget(x, S)
+  v <- values(h)
+  setExtent(brick(array(rep(rev(Cs_r), each = length(v)) * v, c(ncol(h), nrow(h), length(Cs_r))), transpose = TRUE), 
+            extent(0, ncol(h), 0, nrow(h)))
+}
+
+
+ncget <- function(x, varname) {
+  nc <- ncdf4::nc_open(x)
+  on.exit(ncdf4::nc_close(nc))
+  ncdf4::ncvar_get(nc, varname)
 }
 
 #' Extract a data lyaer from ROMS by name and slice. 
@@ -104,6 +127,28 @@ romscoords <- function(x, spatial = c("lon_u", "lat_u")) {
 #'
 romsdata <-function(x, varname, slice = c(1, 1)) {
   brick(x, level = slice[1L], varname = varname)[[slice[2L]]]
+}
+
+
+
+#' Title
+#'
+#' @param varname 
+#'
+#' @return
+#' @export
+#'
+#' @examples
+ncdim <- function(x, varname) {
+   library(rancid)
+   roms <- NetCDF(x)
+  # ## still exploring neatest way to do this . . .
+   vdim <- vars(roms) %>% 
+     filter(name == varname) %>% 
+     inner_join(roms$vardim, "id") %>% 
+     dplyr::transmute(id = dimids) %>% 
+     inner_join(dims(roms), "id") 
+   vdim$len
 }
 
 

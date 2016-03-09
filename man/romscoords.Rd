@@ -12,7 +12,7 @@ romscoords(x, spatial = c("lon_u", "lat_u"))
 \item{spatial}{names of coordinate variables (e.g. lon_u, lat_u)}
 }
 \value{
-\code{\link[raster]{RasterStack}}
+\code{\link[raster]{RasterStack}} with two layers of the 2D-variables
 }
 \description{
 Returns a RasterStack of the given variable names.
