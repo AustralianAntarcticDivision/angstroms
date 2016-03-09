@@ -62,15 +62,6 @@ romsmap.SpatialLinesDataFrame <- romsmap.SpatialPolygonsDataFrame
 #' @export
 romsmap.SpatialPointsDataFrame <- romsmap.SpatialPolygonsDataFrame
 
-## this is from rastermesh
-boundary <- function(cds) {
-  left <- cellFromCol(cds, 1)
-  bottom <- cellFromRow(cds, nrow(cds))
-  right <- rev(cellFromCol(cds, ncol(cds)))
-  top <- rev(cellFromRow(cds, 1))
-  ## need XYFromCell method
-  SpatialPolygons(list(Polygons(list(Polygon(raster::as.matrix(cds)[unique(c(left, bottom, right, top)), ])), "1")))
-}
 
 
 #' Extract coordinate arrays from ROMS. 
@@ -110,40 +101,5 @@ romshcoords <- function(x, S = "Cs_r", depth = "h"){
 }
 
 
-
-#' Extract a data lyaer from ROMS by name and slice. 
-#'
-#' @param x ROMS file name
-#' @param varname name of ROMS variable 
-#' @param slice index in w and t (depth and time), defaults to first encountered
-#'
-#' @return \code{\link[raster]{RasterLayer}}
-#' @export
-#'
-romsdata <-function(x, varname, slice = c(1, 1)) {
-  brick(x, level = slice[1L], varname = varname)[[slice[2L]]]
-}
-
-
-
-#' Title
-#'
-#' @param varname 
-#'
-#' @return
-#' @export
-#'
-#' @examples
-ncdim <- function(x, varname) {
-   library(rancid)
-   roms <- NetCDF(x)
-  # ## still exploring neatest way to do this . . .
-   vdim <- vars(roms) %>% 
-     filter(name == varname) %>% 
-     inner_join(roms$vardim, "id") %>% 
-     dplyr::transmute(id = dimids) %>% 
-     inner_join(dims(roms), "id") 
-   vdim$len
-}
 
 
