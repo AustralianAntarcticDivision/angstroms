@@ -34,6 +34,7 @@ devtools::install_github("mdsumner/angstroms")
 4. Ctrl-SHIFT-b to build the package and reload. 
 
 
+## Usage 
 ```r
 ## filename of ROMS data
 fp <- "slice3101.nc"
