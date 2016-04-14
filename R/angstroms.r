@@ -62,15 +62,6 @@ romsmap.SpatialLinesDataFrame <- romsmap.SpatialPolygonsDataFrame
 #' @export
 romsmap.SpatialPointsDataFrame <- romsmap.SpatialPolygonsDataFrame
 
-## this is from rastermesh
-boundary <- function(cds) {
-  left <- cellFromCol(cds, 1)
-  bottom <- cellFromRow(cds, nrow(cds))
-  right <- rev(cellFromCol(cds, ncol(cds)))
-  top <- rev(cellFromRow(cds, 1))
-  ## need XYFromCell method
-  SpatialPolygons(list(Polygons(list(Polygon(raster::as.matrix(cds)[unique(c(left, bottom, right, top)), ])), "1")))
-}
 
 
 #' Extract coordinate arrays from ROMS. 
@@ -80,7 +71,7 @@ boundary <- function(cds) {
 #' @param x ROMS file name
 #' @param spatial names of coordinate variables (e.g. lon_u, lat_u) 
 #'
-#' @return \code{\link[raster]{RasterStack}}
+#' @return \code{\link[raster]{RasterStack}} with two layers of the 2D-variables
 #' @export 
 #'
 #' @examples
@@ -93,17 +84,22 @@ romscoords <- function(x, spatial = c("lon_u", "lat_u")) {
   stack(l)
 }
 
-#' Extract a data lyaer from ROMS by name and slice. 
-#'
-#' @param x ROMS file name
-#' @param varname name of ROMS variable 
-#' @param slice index in w and t (depth and time), defaults to first encountered
-#'
-#' @return \code{\link[raster]{RasterLayer}}
+
+#' Coordinates at depth
+#' \code{S} and \code{h} are the  names of the appropriate variables
+#' @param x ROMS file name 
+#' @param S  of S-coordinate stretching curve at RHO-points
+#' @param h bathymetry at RHO-points
+#' @return \code{\link[raster]{RasterStack}} with a layer for every depth
 #' @export
-#'
-romsdata <-function(x, varname, slice = c(1, 1)) {
-  brick(x, level = slice[1L], varname = varname)[[slice[2L]]]
+romshcoords <- function(x, S = "Cs_r", depth = "h"){
+  h <- raster(x, varname = depth)
+  Cs_r <- ncget(x, S)
+  v <- values(h)
+  setExtent(brick(array(rep(rev(Cs_r), each = length(v)) * v, c(ncol(h), nrow(h), length(Cs_r))), transpose = TRUE), 
+            extent(0, ncol(h), 0, nrow(h)))
 }
+
+
 
 
