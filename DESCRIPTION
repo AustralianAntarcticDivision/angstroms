@@ -8,9 +8,9 @@ Depends:
 License: GPL-3
 LazyData: true
 Imports:
-    nabor,
     proj4,
+    rancid,
     spbabel
-Remotes: mdsumner/spbabel
+Remotes: mdsumner/spbabel, mdsumner/rancid
 RoxygenNote: 5.0.1
 Suggests: testthat
