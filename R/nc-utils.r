@@ -32,13 +32,18 @@ ncdim <- function(x, varname) {
 #' @param x ROMS file name
 #' @param varname name of ROMS variable 
 #' @param slice index in w and t (depth and time), defaults to first encountered
-#'
+#' @param ncdf default to \code{TRUE}, set to \code{FALSE} to allow raster format detection \code{\link[raster]{brick}}
 #' @return \code{\link[raster]{RasterLayer}}
 #' @export
 #'
-romsdata <-function(x, varname, slice = c(1, 1)) {
-  brick(x, level = slice[1L], varname = varname)[[slice[2L]]]
+romsdata <- function (x, varname, slice = c(1, 1), ncdf = TRUE, ...) 
+{
+
+   x <- brick(x, level = slice[1L], varname = varname, ncdf = ncdf, ...)[[slice[2L]]]
+   e <- extent(0, nrow(x), 0, ncol(x))
+  setExtent(x, e)
 }
+
 
 ## this is from rastermesh
 boundary <- function(cds) {
