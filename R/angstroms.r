@@ -49,15 +49,9 @@ romsmap.SpatialPolygonsDataFrame <- function(x, coords, crop = FALSE, lonlat = T
   xy <- as.matrix(coords)
   kd <- nabor::knn(xy, raster::as.matrix(tab[, c("x_", "y_")]), k = 1, eps = 0)
   index <- expand.grid(x = seq(ncol(coords)), y = rev(seq(nrow(coords))))[kd$nn.idx, ]
-<<<<<<< HEAD
-  tab$x <- index$x
-  tab$y <- index$y
-  spbabel::sp(tab, crs = NA_character_)
-=======
-  tab$x_ <- index$x
+ tab$x_ <- index$x
   tab$y_ <- index$y
   spbabel::spFromTable(tab, crs = NA_character_)
->>>>>>> 273f14765417a5a64777af10dedce1dc8a21337f
 }
 
 #' @rdname romsmap
