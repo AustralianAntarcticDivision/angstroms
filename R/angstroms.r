@@ -70,6 +70,8 @@ romsmap.SpatialPointsDataFrame <- romsmap.SpatialPolygonsDataFrame
 #'
 #' @param x ROMS file name
 #' @param spatial names of coordinate variables (e.g. lon_u, lat_u) 
+#' @param ncdf default to NetCDF no matter what file name
+#' @param ... 
 #'
 #' @return \code{\link[raster]{RasterStack}} with two layers of the 2D-variables
 #' @export 
@@ -78,9 +80,9 @@ romsmap.SpatialPointsDataFrame <- romsmap.SpatialPolygonsDataFrame
 #' \dontrun{
 #'   coord <- romscoord("roms.nc")
 #' }
-romscoords <- function(x, spatial = c("lon_u", "lat_u")) {
+romscoords <- function(x, spatial = c("lon_u", "lat_u"), ncdf = TRUE,  ... ) {
   l <- vector("list", length(spatial))
-  for (i in seq_along(l)) l[[i]] <- raster(x, varname = spatial[i])
+  for (i in seq_along(l)) l[[i]] <- raster(x, varname = spatial[i], ncdf = TRUE, ...)
   l <- lapply(l, function(x) setExtent(x, extent(0, nrow(x), 0, ncol(x))))
   stack(l)
 }

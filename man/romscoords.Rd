@@ -4,12 +4,16 @@
 \alias{romscoords}
 \title{Extract coordinate arrays from ROMS.}
 \usage{
-romscoords(x, spatial = c("lon_u", "lat_u"))
+romscoords(x, spatial = c("lon_u", "lat_u"), ncdf = TRUE, ...)
 }
 \arguments{
 \item{x}{ROMS file name}
 
 \item{spatial}{names of coordinate variables (e.g. lon_u, lat_u)}
+
+\item{ncdf}{default to NetCDF no matter what file name}
+
+\item{...}{}
 }
 \value{
 \code{\link[raster]{RasterStack}} with two layers of the 2D-variables
