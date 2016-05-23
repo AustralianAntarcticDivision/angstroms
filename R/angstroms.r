@@ -41,17 +41,23 @@ romsmap.SpatialPolygonsDataFrame <- function(x, coords, crop = FALSE, lonlat = T
   
   if (repro & !is.na(proj)) {
     llproj <- "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs +towgs84=0,0,0"
-    xy <- proj4::ptransform(cbind(tab$x, tab$y, 0), src.proj = proj, dst.proj = llproj, silent = FALSE) * 180 / pi
+    xy <- proj4::ptransform(cbind(tab$x_, tab$y_, 0), src.proj = proj, dst.proj = llproj, silent = FALSE) * 180 / pi
     tab$x <- xy[,1]
     tab$y <- xy[,2]
     proj <- llproj
   }
   xy <- as.matrix(coords)
-  kd <- nabor::knn(xy, raster::as.matrix(tab[, c("x", "y")]), k = 1, eps = 0)
+  kd <- nabor::knn(xy, raster::as.matrix(tab[, c("x_", "y_")]), k = 1, eps = 0)
   index <- expand.grid(x = seq(ncol(coords)), y = rev(seq(nrow(coords))))[kd$nn.idx, ]
+<<<<<<< HEAD
   tab$x <- index$x
   tab$y <- index$y
   spbabel::sp(tab, crs = NA_character_)
+=======
+  tab$x_ <- index$x
+  tab$y_ <- index$y
+  spbabel::spFromTable(tab, crs = NA_character_)
+>>>>>>> 273f14765417a5a64777af10dedce1dc8a21337f
 }
 
 #' @rdname romsmap

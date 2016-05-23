@@ -1,3 +1,5 @@
+[![Travis-CI Build Status](https://travis-ci.org/mdsumner/angstroms.svg?branch=master)](https://travis-ci.org/mdsumner/angstroms)
+
 ## angstroms - R for ROMS
 
 Angstroms aims to make working with ROMS output as easy as possible in R. 
@@ -34,6 +36,7 @@ devtools::install_github("mdsumner/angstroms")
 4. Ctrl-SHIFT-b to build the package and reload. 
 
 
+## Usage 
 ```r
 ## filename of ROMS data
 fp <- "slice3101.nc"
