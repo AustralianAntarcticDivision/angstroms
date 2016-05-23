@@ -81,6 +81,7 @@ romsmap.SpatialPointsDataFrame <- romsmap.SpatialPolygonsDataFrame
 romscoords <- function(x, spatial = c("lon_u", "lat_u")) {
   l <- vector("list", length(spatial))
   for (i in seq_along(l)) l[[i]] <- raster(x, varname = spatial[i])
+  l <- lapply(l, function(x) setExtent(x, extent(0, nrow(x), 0, ncol(x))))
   stack(l)
 }
 
