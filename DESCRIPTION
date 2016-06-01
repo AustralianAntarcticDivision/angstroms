@@ -8,8 +8,10 @@ Depends:
 License: GPL-3
 LazyData: true
 Imports:
+    nabor,
     proj4,
     rancid,
+    sp,
     spbabel
 Remotes: mdsumner/spbabel, mdsumner/rancid
 RoxygenNote: 5.0.1
