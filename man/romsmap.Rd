@@ -21,13 +21,13 @@ romsmap(x, ...)
 \arguments{
 \item{x}{object to transform to the grid space, e.g. a \code{\link[sp]{Spatial}} object}
 
-\item{...}{}
+\item{...}{unused}
 
 \item{coords}{romscoords RasterStack}
 
 \item{crop}{logical, if \code{TRUE} crop x to the extent of the boundary of the values in coords}
 
-\item{longlat}{logical, if \code{TRUE} check for need to back-transform to longitude/latitude and do it}
+\item{lonlat}{logical, if \code{TRUE} check for need to back-transform to longitude/latitude and do it}
 }
 \value{
 input object with coordinates transformed to space of the coords
@@ -36,7 +36,7 @@ input object with coordinates transformed to space of the coords
 Find the nearest-neighbour coordinates of `x` in the coordinate arrays of `coords`.
 }
 \details{
-The input `coords` is a assumed to be a 2-layer \code{\link[raster]{RasterStack}} or \code{\link[raster]{RasterBrick}} and
+The input `coords` is a assumed to be a 2-layer RasterStack or RasterBrick and
 using `nabor::knn` the nearest matching position of the coordinates of `x` is found in the grid space of `coords`. The
 motivating use-case is the curvilinear longitude and latitude arrays of ROMS model output.
 

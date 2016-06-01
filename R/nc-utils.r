@@ -5,14 +5,14 @@
 #' NetCDF variable dimension
 #'
 #' This belongs in rancid . . .
-#' @param varname 
 #'
-#' @return
+#' @param varname variable name
+#' @param x file
+#'
 #' @export
 #'
-#' @examples
+#' @importFrom dplyr transmute
 ncdim <- function(x, varname) {
-  library(rancid)
   roms <- NetCDF(x)
   # ## still exploring neatest way to do this . . .
   vdim <- vars(roms) %>% 
@@ -29,11 +29,14 @@ ncdim <- function(x, varname) {
 #' 
 #' Maybe this replaced by rastergetslice??
 #' Returns a single slice 2D layer
+#'
 #' @param x ROMS file name
 #' @param varname name of ROMS variable 
 #' @param slice index in w and t (depth and time), defaults to first encountered
-#' @param ncdf default to \code{TRUE}, set to \code{FALSE} to allow raster format detection \code{\link[raster]{brick}}
-#' @return \code{\link[raster]{RasterLayer}}
+#' @param ... unused
+#' @param ncdf default to \code{TRUE}, set to \code{FALSE} to allow raster format detection brick
+#'
+#' @return RasterLayer
 #' @export
 #'
 romsdata <- function (x, varname, slice = c(1, 1), ncdf = TRUE, ...) 
@@ -45,6 +48,8 @@ romsdata <- function (x, varname, slice = c(1, 1), ncdf = TRUE, ...)
 }
 
 
+#' @importFrom sp SpatialPolygons Polygons Polygon
+#' @importFrom raster as.matrix cellFromRow cellFromCol xmin xmax ymin ymax trim setExtent setValues raster extract flip extent 
 ## this is from rastermesh
 boundary <- function(cds) {
   left <- cellFromCol(cds, 1)
@@ -55,7 +60,7 @@ boundary <- function(cds) {
   SpatialPolygons(list(Polygons(list(Polygon(raster::as.matrix(cds)[unique(c(left, bottom, right, top)), ])), "1")))
 }
 
-
+#' @importFrom ncdf4 nc_open nc_close ncvar_get 
 ncget <- function(x, varname) {
   nc <- ncdf4::nc_open(x)
   on.exit(ncdf4::nc_close(nc))
@@ -85,7 +90,6 @@ rastergetslice <- function(x, slice) {
 #' @param varname variable name
 #' @param slice index, specified with NA for the index to read all steps
 #'
-#' @return
 #' @export
 ncraster <- function(x, varname, slice) {
   nc <- rancid::NetCDF(x)

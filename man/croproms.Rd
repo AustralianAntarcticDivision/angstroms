@@ -7,11 +7,11 @@
 croproms(x, ext, ...)
 }
 \arguments{
-\item{x}{}
+\item{x}{file}
 
-\item{ext}{}
+\item{ext}{extent}
 
-\item{...}{}
+\item{...}{ignore}
 }
 \description{
 Title

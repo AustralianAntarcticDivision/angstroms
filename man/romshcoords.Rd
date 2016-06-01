@@ -2,8 +2,7 @@
 % Please edit documentation in R/angstroms.r
 \name{romshcoords}
 \alias{romshcoords}
-\title{Coordinates at depth
-\code{S} and \code{h} are the  names of the appropriate variables}
+\title{Coordinates at depth}
 \usage{
 romshcoords(x, S = "Cs_r", depth = "h")
 }
@@ -12,13 +11,12 @@ romshcoords(x, S = "Cs_r", depth = "h")
 
 \item{S}{of S-coordinate stretching curve at RHO-points}
 
-\item{h}{bathymetry at RHO-points}
+\item{depth}{depth thing}
 }
 \value{
-\code{\link[raster]{RasterStack}} with a layer for every depth
+RasterStack with a layer for every depth
 }
 \description{
-Coordinates at depth
 \code{S} and \code{h} are the  names of the appropriate variables
 }
 

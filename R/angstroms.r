@@ -2,7 +2,7 @@
 #' 
 #' Find the nearest-neighbour coordinates of `x` in the coordinate arrays of `coords`. 
 #' 
-#' The input `coords` is a assumed to be a 2-layer \code{\link[raster]{RasterStack}} or \code{\link[raster]{RasterBrick}} and
+#' The input `coords` is a assumed to be a 2-layer RasterStack or RasterBrick and
 #' using `nabor::knn` the nearest matching position of the coordinates of `x` is found in the grid space of `coords`. The
 #' motivating use-case is the curvilinear longitude and latitude arrays of ROMS model output. 
 #' 
@@ -12,8 +12,8 @@
 #' @param x object to transform to the grid space, e.g. a \code{\link[sp]{Spatial}} object
 #' @param coords romscoords RasterStack
 #' @param crop logical, if \code{TRUE} crop x to the extent of the boundary of the values in coords
-#' @param longlat logical, if \code{TRUE} check for need to back-transform to longitude/latitude and do it
-#' @param ... 
+#' @param lonlat logical, if \code{TRUE} check for need to back-transform to longitude/latitude and do it
+#' @param ... unused
 #'
 #' @return input object with coordinates transformed to space of the coords 
 #' @export
@@ -31,7 +31,7 @@ romsmap.SpatialPolygonsDataFrame <- function(x, coords, crop = FALSE, lonlat = T
   ## first get the intersection
   if (crop) {
   op <- options(warn = -1)
-  x <- raster::intersect(x, oms:::boundary(coords))
+  x <- raster::intersect(x, boundary(coords))
   options(op)
   }
   ## do we need to invert projection?
@@ -71,9 +71,9 @@ romsmap.SpatialPointsDataFrame <- romsmap.SpatialPolygonsDataFrame
 #' @param x ROMS file name
 #' @param spatial names of coordinate variables (e.g. lon_u, lat_u) 
 #' @param ncdf default to NetCDF no matter what file name
-#' @param ... 
+#' @param ... unused
 #'
-#' @return \code{\link[raster]{RasterStack}} with two layers of the 2D-variables
+#' @return RasterStack with two layers of the 2D-variables
 #' @export 
 #'
 #' @examples
@@ -89,11 +89,14 @@ romscoords <- function(x, spatial = c("lon_u", "lat_u"), ncdf = TRUE,  ... ) {
 
 
 #' Coordinates at depth
+#' 
 #' \code{S} and \code{h} are the  names of the appropriate variables
+#'
 #' @param x ROMS file name 
+#' @param depth depth thing
 #' @param S  of S-coordinate stretching curve at RHO-points
-#' @param h bathymetry at RHO-points
-#' @return \code{\link[raster]{RasterStack}} with a layer for every depth
+#'
+#' @return RasterStack with a layer for every depth
 #' @export
 romshcoords <- function(x, S = "Cs_r", depth = "h"){
   h <- raster(x, varname = depth)

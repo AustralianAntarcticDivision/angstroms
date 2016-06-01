@@ -13,10 +13,12 @@ romsdata(x, varname, slice = c(1, 1), ncdf = TRUE, ...)
 
 \item{slice}{index in w and t (depth and time), defaults to first encountered}
 
-\item{ncdf}{default to \code{TRUE}, set to \code{FALSE} to allow raster format detection \code{\link[raster]{brick}}}
+\item{ncdf}{default to \code{TRUE}, set to \code{FALSE} to allow raster format detection brick}
+
+\item{...}{unused}
 }
 \value{
-\code{\link[raster]{RasterLayer}}
+RasterLayer
 }
 \description{
 Maybe this replaced by rastergetslice??

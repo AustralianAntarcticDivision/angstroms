@@ -1,43 +1,42 @@
-##gris:::quadmeshFromRaster
-
-quadmesh <- 
-function (x, z = NULL, na.rm = FALSE) 
-{
-  
-  rc <- rhocoords(x)
-  uc <- ucoords(x)
-  vc <- vcoords(x)
-  psi <- psicoords(x)
-  
-  x <- x[[1]]
-  exy <- edgesXY(x)
-  ind <- apply(prs(seq(ncol(x) + 1)), 1, p4, nc = ncol(x) + 
-                 1)
-  ind0 <- as.vector(ind) + rep(seq(0, length = nrow(x), by = ncol(x) + 
-                                     1), each = 4 * ncol(x))
-  if (na.rm) {
-    ind1 <- matrix(ind0, nrow = 4)
-    ind0 <- ind1[, !is.na(values(x))]
-  }
-  ob <- gris::q3d
-  if (!is.null(z)) 
-    z <- extract(z, exy, method = "bilinear")
-  else z <- 0
-  ob$vb <- t(cbind(exy, z, 1))
-  ob$ib <- matrix(ind0, nrow = 4)
-  ob
-}
+# ##gris:::quadmeshFromRaster
+# 
+# quadmesh <- 
+# function (x, z = NULL, na.rm = FALSE) 
+# {
+#   
+#   rc <- rhocoords(x)
+#   uc <- ucoords(x)
+#   vc <- vcoords(x)
+#   psi <- psicoords(x)
+#   
+#   x <- x[[1]]
+#   exy <- edgesXY(x)
+#   ind <- apply(prs(seq(ncol(x) + 1)), 1, p4, nc = ncol(x) + 
+#                  1)
+#   ind0 <- as.vector(ind) + rep(seq(0, length = nrow(x), by = ncol(x) + 
+#                                      1), each = 4 * ncol(x))
+#   if (na.rm) {
+#     ind1 <- matrix(ind0, nrow = 4)
+#     ind0 <- ind1[, !is.na(values(x))]
+#   }
+#   q3d <- NULL
+#   data(q3d)
+#   ob <- q3d
+#   if (!is.null(z)) 
+#     z <- extract(z, exy, method = "bilinear")
+#   else z <- 0
+#   ob$vb <- t(cbind(exy, z, 1))
+#   ob$ib <- matrix(ind0, nrow = 4)
+#   ob
+# }
 
 #' Title
 #'
-#' @param x 
-#' @param ext 
-#' @param ... 
+#' @param x file
+#' @param ext extent
+#' @param ... ignore
 #'
-#' @return
 #' @export
-#'
-#' @examples
 croproms <- function(x, ext, ...) {
   ## x is a romscoords 2-layer Brick
   ## ext is a RasterExtent in coords of x

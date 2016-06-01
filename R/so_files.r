@@ -1,6 +1,8 @@
 
 #' Find and return data base of files
 #'
+#' @param files the files
+#'
 #' @return data frame of files
 #' @export
 #' @importFrom rancid NetCDF

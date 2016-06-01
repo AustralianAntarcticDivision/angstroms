@@ -8,7 +8,9 @@ Depends:
 License: GPL-3
 LazyData: true
 Imports:
+    dplyr,
     nabor,
+    ncdf4,
     proj4,
     rancid,
     sp,

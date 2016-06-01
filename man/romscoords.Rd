@@ -13,10 +13,10 @@ romscoords(x, spatial = c("lon_u", "lat_u"), ncdf = TRUE, ...)
 
 \item{ncdf}{default to NetCDF no matter what file name}
 
-\item{...}{}
+\item{...}{unused}
 }
 \value{
-\code{\link[raster]{RasterStack}} with two layers of the 2D-variables
+RasterStack with two layers of the 2D-variables
 }
 \description{
 Returns a RasterStack of the given variable names.

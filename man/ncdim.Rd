@@ -7,7 +7,9 @@
 ncdim(x, varname)
 }
 \arguments{
-\item{varname}{}
+\item{x}{file}
+
+\item{varname}{variable name}
 }
 \description{
 This belongs in rancid . . .

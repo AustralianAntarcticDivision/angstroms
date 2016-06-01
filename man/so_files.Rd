@@ -6,6 +6,9 @@
 \usage{
 so_files(files = NULL)
 }
+\arguments{
+\item{files}{the files}
+}
 \value{
 data frame of files
 }
