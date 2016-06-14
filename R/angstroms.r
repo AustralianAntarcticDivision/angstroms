@@ -52,7 +52,7 @@ romsmap.SpatialPolygonsDataFrame <- function(x, coords, crop = FALSE, lonlat = T
   index <- expand.grid(x = seq(ncol(coords)), y = rev(seq(nrow(coords))))[kd$nn.idx, ]
  tab$x_ <- index$x
   tab$y_ <- index$y
-  spbabel::sp(tab, crs = NA_character_)
+  spbabel::sp(tab, attr_tab = as.data.frame(x), crs = proj)
 }
 
 #' @rdname romsmap
