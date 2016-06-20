@@ -33,17 +33,22 @@ ncdim <- function(x, varname) {
 #' @param x ROMS file name
 #' @param varname name of ROMS variable 
 #' @param slice index in w and t (depth and time), defaults to first encountered
+#' @param transpose the extents (ROMS is FALSE, Access is TRUE)
 #' @param ... unused
 #' @param ncdf default to \code{TRUE}, set to \code{FALSE} to allow raster format detection brick
 #'
 #' @return RasterLayer
 #' @export
 #'
-romsdata <- function (x, varname, slice = c(1, 1), ncdf = TRUE, ...) 
+romsdata <- function (x, varname, slice = c(1, 1), ncdf = TRUE, transpose = FALSE, ...) 
 {
 
    x <- brick(x, level = slice[1L], varname = varname, ncdf = ncdf, ...)[[slice[2L]]]
+   if (transpose) {
+    e <- extent(0, ncol(x), 0, nrow(x)) 
+   } else {
    e <- extent(0, nrow(x), 0, ncol(x))
+   }
   setExtent(x, e)
 }
 
