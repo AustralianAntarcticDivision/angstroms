@@ -4,7 +4,8 @@
 \alias{romscoords}
 \title{Extract coordinate arrays from ROMS.}
 \usage{
-romscoords(x, spatial = c("lon_u", "lat_u"), ncdf = TRUE, ...)
+romscoords(x, spatial = c("lon_u", "lat_u"), ncdf = TRUE,
+  transpose = FALSE, ...)
 }
 \arguments{
 \item{x}{ROMS file name}
@@ -12,6 +13,8 @@ romscoords(x, spatial = c("lon_u", "lat_u"), ncdf = TRUE, ...)
 \item{spatial}{names of coordinate variables (e.g. lon_u, lat_u)}
 
 \item{ncdf}{default to NetCDF no matter what file name}
+
+\item{transpose}{the extents (ROMS is FALSE, Access is TRUE)}
 
 \item{...}{unused}
 }

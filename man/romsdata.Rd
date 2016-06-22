@@ -4,7 +4,7 @@
 \alias{romsdata}
 \title{Extract a data layer from ROMS by name and slice.}
 \usage{
-romsdata(x, varname, slice = c(1, 1), ncdf = TRUE, ...)
+romsdata(x, varname, slice = c(1, 1), ncdf = TRUE, transpose = FALSE, ...)
 }
 \arguments{
 \item{x}{ROMS file name}
@@ -14,6 +14,8 @@ romsdata(x, varname, slice = c(1, 1), ncdf = TRUE, ...)
 \item{slice}{index in w and t (depth and time), defaults to first encountered}
 
 \item{ncdf}{default to \code{TRUE}, set to \code{FALSE} to allow raster format detection brick}
+
+\item{transpose}{the extents (ROMS is FALSE, Access is TRUE)}
 
 \item{...}{unused}
 }
