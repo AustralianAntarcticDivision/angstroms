@@ -53,17 +53,7 @@ romsdata <- function (x, varname, slice = c(1, 1), ncdf = TRUE, transpose = FALS
 }
 
 
-#' @importFrom sp SpatialPolygons Polygons Polygon
-#' @importFrom raster as.matrix cellFromRow cellFromCol xmin xmax ymin ymax trim setExtent setValues raster extract flip extent 
-## this is from rastermesh
-boundary <- function(cds) {
-  left <- cellFromCol(cds, 1)
-  bottom <- cellFromRow(cds, nrow(cds))
-  right <- rev(cellFromCol(cds, ncol(cds)))
-  top <- rev(cellFromRow(cds, 1))
-  ## need XYFromCell method
-  SpatialPolygons(list(Polygons(list(Polygon(raster::as.matrix(cds)[unique(c(left, bottom, right, top)), ])), "1")))
-}
+
 
 #' @importFrom ncdf4 nc_open nc_close ncvar_get 
 ncget <- function(x, varname) {

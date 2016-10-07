@@ -31,7 +31,7 @@ romsmap.SpatialPolygonsDataFrame <- function(x, coords, crop = FALSE, lonlat = T
   ## first get the intersection
   if (crop) {
   op <- options(warn = -1)
-  x <- raster::intersect(x, boundary(coords))
+  x <- raster::intersect(x, tabularaster::boundary(coords))
   options(op)
   }
   ## do we need to invert projection?

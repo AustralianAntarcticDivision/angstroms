@@ -26,7 +26,7 @@ ln <- spLines(cbind(c1, 0:392))
 #plot(raster(slice[nrow(slice):1, ncol(slice):1]), col = palr::sstPal(100))
 h_s <- t(raster(outer(hs, Cs_r)[,31:1 ]))
 y_s <- setValues(raster(h_s), rep(ys, 31))
-bd <- boundary(brick(y_s, h_s))
+bd <- tabularaster::boundary(brick(y_s, h_s))
 
 bd_tab <- raster::geom(bd)
 library(dplyr)
