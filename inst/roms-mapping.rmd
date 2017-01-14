@@ -1,0 +1,95 @@
+---
+title: "ROMS mapping"
+author: "Michael Sumner"
+date: "15/01/2017"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+Basic R tools to deal with ROMS and make maps. 
+
+First, load up some packages and find out the variables in the file, extract one out, get the X-Y coordinates for this data and find the boundary in the real world for the model. 
+
+
+```{r}
+roms_path <- file.path(getOption("default.datadir"), "data_local/acecrc.org.au/ROMS/mertz_sample/mer_his_1992_01.nc")
+library(angstroms)    ## devtools::install_github("mdsumner/angstroms")
+library(ncdump)       ## devtools::install_github("r-gris/ncdump")
+library(tabularaster) ## devtools::install_github("r-gris/tabularaster")
+library(rworldmap)
+ncd <- NetCDF(roms_path)
+
+ncd$variable$name
+
+```
+
+Let's choose `u`, and read the first available XY-slice, also read the grid's coordinates and derive the boundary. 
+
+```{r}
+
+vname <- "u"
+dd <- romsdata(roms_path, varname = vname, slice = c(1, 1), transpose = TRUE)
+plot(dd)  ## this is pure 0-dimX, 0-dimY index space
+longlat <- romscoords(roms_path, transpose = TRUE)
+contour(longlat[[1]], add = TRUE, lty = 2)
+contour(longlat[[2]], add = TRUE, lty = 2)
+bound <- boundary(longlat)
+projection(bound) <- "+init=epsg:4326"
+extent(bound)
+```
+
+
+Now, plot this region in the "real world", but first choose a local map projection. 
+
+```{r}
+pbound <- spTransform(bound, "+proj=lcc +lat_0=-65 +lat_1=-72 +lat_2=-60 +lon_0=147 +ellps=WGS84 +no_defs")
+plot(pbound)
+data(countriesLow)
+w <- spTransform(countriesLow, projection(pbound))
+plot(w, add = TRUE)
+library(rgdal)
+op <- par(xpd = NA)
+llgridlines(pbound)
+par(op)
+# lon_grat <- rasterToContour(longlat[[1]]); projection(lon_grat) <- "+init=epsg:4326"
+# lat_grat <- rasterToContour(longlat[[2]]); projection(lat_grat) <- "+init=epsg:4326"
+# plot(spTransform(lon_grat, projection(pbound)), add = TRUE, lty = 2)
+# plot(spTransform(lat_grat, projection(pbound)), add = TRUE, lty = 2)
+```
+
+
+```{r}
+library(leaflet)
+set_crs <- function(x, value) {
+  projection(x) <- value
+  x
+}
+epsg3857 <- "+init=epsg:3857 +proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null
++no_defs"
+dd1 <- dd
+set_ext <- function(x) setExtent(x, extent(c(xmin(x), xmax(x), ymin(x), ymax(x)) * 10))
+
+get_slice <- function(i = 1) {
+  r <- romsdata(roms_path, varname = vname, slice = c(i, 1), transpose = TRUE)
+  set_ext(set_crs(dd, epsg3857))
+}
+leaflet() %>% addRasterImage(get_slice())
+
+```
+
+
+```{r}
+## what dims does our var have?
+dm <- ncd$variable %>% filter(name == "u") %>% select(id) %>% inner_join(ncd$vardim) %>% inner_join(ncd$dimension, c("dimids" = "id"))
+dm
+
+## choose s_rho 
+zd <- "s_rho"
+zn <- (dm %>% filter(name == zd))$len
+
+
+```
