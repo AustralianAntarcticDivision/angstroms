@@ -16,6 +16,10 @@ In combination these allow extraction and query from the ROMS output very easily
 
 The ability to deal with time series across multiple files is still in development, though can be used simply now with standard loops. 
 
+
+Some more examples: http://rpubs.com/cyclemumner/roms0
+
+
 ## Installation
 
 Install the latest version of `devtools`, and then install from Github. 
