@@ -42,8 +42,14 @@ ncdim <- function(x, varname) {
 #'
 romsdata <- function (x, varname, slice = c(1, 1), ncdf = TRUE, transpose = FALSE, ...) 
 {
-
-   x <- brick(x, level = slice[1L], varname = varname, ncdf = ncdf, ...)[[slice[2L]]]
+   stopifnot(!missing(varname))
+   x0 <- try(brick(x, level = slice[1L], varname = varname, ncdf = ncdf, ...), silent = TRUE)
+  if (inherits(x0, "try-error")) {
+     ## 
+    stop(sprintf("%s is not multi-dimensional/interpretable as a RasterLayer, try extracting in raw form with rawdata()", varname))
+    
+    }
+  x <- x0[[slice[2L]]]
    if (transpose) {
     e <- extent(0, ncol(x), 0, nrow(x)) 
    } else {
@@ -52,7 +58,11 @@ romsdata <- function (x, varname, slice = c(1, 1), ncdf = TRUE, transpose = FALS
   setExtent(x, e)
 }
 
-
+#' Read the variable as is
+#' @export
+rawdata <- function(x, varname) {
+  return(ncdf4::ncvar_get(ncdf4::nc_open(x), varname))
+ }
 
 
 #' @importFrom ncdf4 nc_open nc_close ncvar_get 
