@@ -16,4 +16,3 @@ ncraster(x, varname, slice)
 \description{
 Read an arbitrary 2D or 3D slice from NetCDF as a RasterBrick
 }
-

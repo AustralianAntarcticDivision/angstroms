@@ -26,4 +26,3 @@ RasterLayer
 Maybe this replaced by rastergetslice??
 Returns a single slice 2D layer
 }
-

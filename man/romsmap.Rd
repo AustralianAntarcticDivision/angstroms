@@ -2,9 +2,9 @@
 % Please edit documentation in R/angstroms.r
 \name{romsmap}
 \alias{romsmap}
+\alias{romsmap.SpatialPolygonsDataFrame}
 \alias{romsmap.SpatialLinesDataFrame}
 \alias{romsmap.SpatialPointsDataFrame}
-\alias{romsmap.SpatialPolygonsDataFrame}
 \title{Remap an object to the space defined by coordinate arrays.}
 \usage{
 romsmap(x, ...)
@@ -44,4 +44,3 @@ Cropping is complicated more details . . .
 No account is made for the details of a ROMS cell, though this may be included in future. We tested only with the "lon_u" and "lat_u"
 arrays.
 }
-

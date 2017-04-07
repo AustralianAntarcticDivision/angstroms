@@ -43,6 +43,7 @@ ncdim <- function(x, varname) {
 romsdata <- function (x, varname, slice = c(1, 1), ncdf = TRUE, transpose = FALSE, ...) 
 {
    stopifnot(!missing(varname))
+  if (is.null(x)) stop("x must be a valid file name")
    x0 <- try(brick(x, level = slice[1L], varname = varname, ncdf = ncdf, ...), silent = TRUE)
   if (inherits(x0, "try-error")) {
      ## 

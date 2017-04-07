@@ -14,4 +14,3 @@ ncdim(x, varname)
 \description{
 This belongs in rancid . . .
 }
-

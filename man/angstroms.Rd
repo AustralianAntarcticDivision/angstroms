@@ -4,8 +4,8 @@
 \name{angstroms}
 \alias{angstroms}
 \alias{angstroms-package}
+\alias{angstroms-package}
 \title{angstroms.}
 \description{
 angstroms.
 }
-

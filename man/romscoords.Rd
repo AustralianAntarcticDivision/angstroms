@@ -29,4 +29,3 @@ Returns a RasterStack of the given variable names.
   coord <- romscoord("roms.nc")
 }
 }
-

@@ -19,4 +19,3 @@ RasterStack with a layer for every depth
 \description{
 \code{S} and \code{h} are the  names of the appropriate variables
 }
-

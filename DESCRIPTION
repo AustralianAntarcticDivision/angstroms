@@ -16,5 +16,5 @@ Imports:
     sp,
     spbabel
 Remotes: mdsumner/spbabel, mdsumner/rancid
-RoxygenNote: 5.0.1
+RoxygenNote: 6.0.1
 Suggests: testthat
