@@ -3,3 +3,4 @@
 .RData
 data/*.nc
 data/coords.rda
+extradata
