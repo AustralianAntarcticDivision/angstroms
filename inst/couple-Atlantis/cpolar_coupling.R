@@ -19,6 +19,8 @@ library(angstroms)
 library(rbgm) ## read BGM
 library(bgmfiles) ## archive of BGM files
 
+
+## get the Circumpolar files
 cpolar <- cpolarfiles()
 roms_file <- cpolar$fullname[1]
 
@@ -48,6 +50,8 @@ boxes <- boxSpatial(bgm)
 ## which box does each point fall in
 ind_box <- over(project_to(coords_points(roms_ll), boxes) , as(boxes, "SpatialPolygons"))
 
+## build the index for each box to the ROMS cells it contains
+## and each face for the ROMS cells it traverses
 library(dplyr)
 box_roms_index <- tibble(box = ind_box, cell = seq_len(ncell(roms_ll))) %>% 
   filter(!is.na(box))
@@ -58,7 +62,7 @@ face_roms_index <- tibble(face = rep(seq_len(nrow(roms_face)), lengths(ind_face)
 
 
 
-## test
+## test 
 l <- vector("list", 31 * 31)
 i <- 1
 box_data <- fortify(roms_box) %>% 
