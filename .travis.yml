@@ -14,4 +14,3 @@ r_binary_packages:
   - testthat
   - tibble
   - dplyr
-  - nabor
