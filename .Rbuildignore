@@ -1,4 +1,7 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
-^figure/.*
+^figure.*
+^extradata.*
 ^\.travis\.yml$
+^README\.Rmd$
+^README-.*\.png$

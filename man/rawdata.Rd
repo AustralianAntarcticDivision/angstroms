@@ -6,6 +6,11 @@
 \usage{
 rawdata(x, varname)
 }
+\arguments{
+\item{x}{netcdf file path}
+
+\item{varname}{variable name}
+}
 \description{
 Read the variable as is
 }

@@ -53,6 +53,7 @@ croproms <- function(x, ext, ...) {
 # The v-grid represents the grid North-South sides (green triangles)
 # The psi-grid represents the grid corners (purple crosses)
 
+#' @importFrom raster crop 
 plot_cgrid <- function(x, ex = extent(0, 15, 0, 20), 
                        include = c("u", "v", "rho", "psi"), cell = TRUE,  ...) {
   

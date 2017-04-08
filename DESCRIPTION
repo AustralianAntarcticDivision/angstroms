@@ -1,6 +1,6 @@
 Package: angstroms
-Title: Tools for ROMS in R
-Version: 0.0.0.9000
+Title: Tools for Regional Ocean Modeling System 
+Version: 0.0.1
 Authors@R: person("Michael D.","Sumner", role = c("aut", "cre"), email = "mdsumner@gmail.com")
 Description: Helper functions for working with Regional Ocean Modelling System (ROMS) output.
 Depends:
@@ -12,9 +12,7 @@ Imports:
     nabor,
     ncdf4,
     proj4,
-    rancid,
     sp,
     spbabel
-Remotes: mdsumner/spbabel, mdsumner/rancid
 RoxygenNote: 6.0.1
 Suggests: testthat

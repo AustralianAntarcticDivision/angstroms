@@ -1,3 +1,6 @@
+# angstroms 0.0.1
+
+
 # angstroms 0.0.0.9000
 
 * use spbabel::sp not spFromTable

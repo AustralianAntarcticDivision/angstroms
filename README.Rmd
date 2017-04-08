@@ -1,42 +1,55 @@
+---
+output: github_document
+---
 
 [![Travis-CI Build Status](https://travis-ci.org/mdsumner/angstroms.svg?branch=master)](https://travis-ci.org/mdsumner/angstroms)
 
+
 <!-- README.md is generated from README.Rmd. Please edit that file -->
-angstroms
-=========
 
-The goal of angstroms is to provide easy access to Regional Ocean Modeling System (ROMS) output for R.
+```{r, echo = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "README-"
+)
+```
 
-Installation
-------------
+# angstroms
+
+The goal of angstroms is to provide easy access to Regional Ocean Modeling System (ROMS) output for R. 
+
+## Installation
 
 You can install angstroms from github with:
 
-``` r
+```{r gh-installation, eval = FALSE}
 # install.packages("devtools")
 devtools::install_github("mdsumner/angstroms")
 ```
 
-angstroms - R for ROMS
-----------------------
+## angstroms - R for ROMS
 
-Angstroms aims to make working with ROMS output as easy as possible in R. Rather than deal explicitly with the complex curvilinear grid in ROMS, the approach simplifies this by:
+Angstroms aims to make working with ROMS output as easy as possible in R. 
+Rather than deal explicitly with the complex curvilinear grid in ROMS, the approach simplifies this by: 
 
--   maintaining the internal index of ROMS as the default *georeferencing*
--   converting external data (maps, transects, points, etc.) into the native internal index space of ROMS
--   providing tools to read arbitrary slices from the grids (either 2D or 3D) as Raster objects
--   providing tools to recover the original full coordinates as needed
+* maintaining the internal index of ROMS as the default *georeferencing* 
+* converting external data (maps, transects, points, etc.) into the native internal index space of ROMS
+* providing tools to read arbitrary slices from the grids (either 2D or 3D) as Raster objects
+* providing tools to recover the original full coordinates as needed
 
-In combination these allow extraction and query from the ROMS output very easily.
+In combination these allow extraction and query from the ROMS output very easily. 
 
-The ability to deal with time series across multiple files is still in development, though can be used simply now with standard loops.
 
-Some more examples: <http://rpubs.com/cyclemumner/roms0>
+The ability to deal with time series across multiple files is still in development, though can be used simply now with standard loops. 
 
-Usage
------
 
-``` r
+Some more examples: http://rpubs.com/cyclemumner/roms0
+
+
+
+## Usage 
+```r
 ## filename of ROMS data
 fp <- "slice3101.nc"
 
@@ -44,10 +57,9 @@ library(angstroms)
 ## RasterStack of the lon_u/lat_u coords
 coords <- romscoords(fp)
 ```
+`
 
-\`
-
-``` r
+```r
 ## a polygon data set
 library(rworldxtra)
 data(countriesHigh)
@@ -68,9 +80,11 @@ temp <- romsdata(fp, "temp", slice = slc)
 map <- romsmap(countriesHigh, coords)
 ```
 
-    ## Loading required namespace: rgeos
+```
+## Loading required namespace: rgeos
+```
 
-``` r
+```r
 ## plot temperature + current mag contours
 plot(temp, col = rev(heat.colors(100)))
 contour(sqrt(u ^ 2 + v ^ 2), add = TRUE)
@@ -82,7 +96,8 @@ plot(map, add = TRUE, col = "grey")
 
 Track data
 
-``` r
+
+```r
 plot(as.matrix(coords), pch = ".")
 #tr <- locator()
 rawtr <- structure(list(x = c(78.6376482505178, 76.3968349542337, 74.3283919115098, 
@@ -115,7 +130,7 @@ plotrack(tr, pch = 19)
 
 ![plot of chunk unnamed-chunk-4](figure/unnamed-chunk-4-1.png)
 
-``` r
+```r
 romstr0 <- romsmap(as(tr, "SpatialPointsDataFrame"), coords)
 romstr <- trip(romstr0, c("gmt", "ID"))
 plot(temp, col = rev(heat.colors(100)))
@@ -126,3 +141,4 @@ plotrack(romstr, pch = 19)
 ```
 
 ![plot of chunk unnamed-chunk-4](figure/unnamed-chunk-4-2.png)
+

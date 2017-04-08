@@ -18,5 +18,6 @@ coords_points(x, ...)
 Convenience wrapper around `SpatialPoints` for a two layer brick with longitude and latitude coordinate arrays.
 }
 \examples{
-coords_points(romscoords(cpolarfiles()$fullname[1]))
+## library(raadtools)
+##coords_points(romscoords(cpolarfiles()$fullname[1]))
 }

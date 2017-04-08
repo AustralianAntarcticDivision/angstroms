@@ -31,7 +31,7 @@ romsmap.SpatialPolygonsDataFrame <- function(x, coords, crop = FALSE, lonlat = T
   ## first get the intersection
   if (crop) {
   op <- options(warn = -1)
-  x <- raster::intersect(x, tabularaster::boundary(coords))
+  x <- raster::intersect(x, romsboundary(coords))
   options(op)
   }
   ## do we need to invert projection?
@@ -63,7 +63,22 @@ romsmap.SpatialLinesDataFrame <- romsmap.SpatialPolygonsDataFrame
 #' @export
 romsmap.SpatialPointsDataFrame <- romsmap.SpatialPolygonsDataFrame
 
-
+#' Create a boundary polygon by tracking around coordinates stored in a RasterStack
+#'  
+#' The first layer is treated as the X coordinate, second as Y. 
+#' @param cds two-layer Raster
+#'
+#' @importFrom sp SpatialPolygons Polygons Polygon
+#' @importFrom raster as.matrix cellFromRow cellFromCol xmin xmax ymin ymax trim setExtent setValues raster extract flip extent 
+#' @export
+romsboundary <- function(cds) {
+  left <- cellFromCol(cds, 1)
+  bottom <- cellFromRow(cds, nrow(cds))
+  right <- rev(cellFromCol(cds, ncol(cds)))
+  top <- rev(cellFromRow(cds, 1))
+  ## need XYFromCell method
+  SpatialPolygons(list(Polygons(list(Polygon(raster::as.matrix(cds)[unique(c(left, bottom, right, top)), ])), "1")))
+}
 
 #' Extract coordinate arrays from ROMS. 
 #' 
@@ -82,6 +97,7 @@ romsmap.SpatialPointsDataFrame <- romsmap.SpatialPolygonsDataFrame
 #' \dontrun{
 #'   coord <- romscoord("roms.nc")
 #' }
+#' @importFrom raster brick values
 #' @importFrom raster stack
 romscoords <- function(x, spatial = c("lon_u", "lat_u"), ncdf = TRUE,  transpose = FALSE, ... ) {
   l <- vector("list", length(spatial))

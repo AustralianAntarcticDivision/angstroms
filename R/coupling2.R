@@ -7,10 +7,13 @@
 #'
 #' @return `SpatialPoints`
 #' @export
+#' @importFrom sp SpatialPoints CRS
+#' @importFrom raster values
 #' @examples
-#' coords_points(romscoords(cpolarfiles()$fullname[1]))
+#' ## library(raadtools)
+#' ##coords_points(romscoords(cpolarfiles()$fullname[1]))
 coords_points <- function(x, ...) {
-  SpatialPoints(cbind(values(x[[1]]), values(x[[2]])), 
+  SpatialPoints(cbind(values(x[[1]]), raster::values(x[[2]])), 
                 proj4string = CRS("+init=epsg:4326"))
 }
 
@@ -23,23 +26,9 @@ coords_points <- function(x, ...) {
 #'
 #' @return `x`, transformed
 #' @export
-#'
+#' @importFrom raster projection
+#' @importFrom sp spTransform
 project_to <- function(x, to) {
   spTransform(x, CRS(projection(to)))
 }
 
-#' Circumpolar ROMS files. 
-#' 
-#' 
-#' @param ... ignored
-#'
-#' @return data frame of fullname, date
-#' @export
-#'
-#' @examples
-#' cpolarfiles()
-cpolarfiles <- function(...) {
-  dplyr::mutate(dplyr::filter(raadtools::allfiles(), 
-      grepl("s_corney/cpolar", fullname)), 
-      date = as.POSIXct(strptime(sprintf("197%s-01", substr(basename(fullname), 12, 14)), "%Y%m-%d")))
-}
