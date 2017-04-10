@@ -5,7 +5,7 @@
 \alias{angstroms}
 \alias{angstroms-package}
 \alias{angstroms-package}
-\title{angstroms.}
+\title{Tools for ROMS model output.}
 \description{
-angstroms.
+Tools for ROMS model output.
 }

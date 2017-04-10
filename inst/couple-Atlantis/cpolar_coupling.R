@@ -61,6 +61,19 @@ face_roms_index <- tibble(face = rep(seq_len(nrow(roms_face)), lengths(ind_face)
                           cell = unlist(ind_face))
 
 
+#' Convenience function to transform map projection . 
+#'
+#' Transform `x` to whatever the projection of `to` is. 
+#' @param x  object to transform
+#' @param to object with a map projection
+#'
+#' @return `x`, transformed
+#' @export
+#' @importFrom raster projection
+#' @importFrom sp spTransform
+project_to <- function(x, to) {
+  spTransform(x, CRS(projection(to)))
+}
 
 ## test 
 l <- vector("list", 31 * 31)

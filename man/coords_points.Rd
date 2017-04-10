@@ -20,4 +20,6 @@ Convenience wrapper around `SpatialPoints` for a two layer brick with longitude 
 \examples{
 ## library(raadtools)
 ##coords_points(romscoords(cpolarfiles()$fullname[1]))
+
+pts <- coords_points(ice_coords)
 }

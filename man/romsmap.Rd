@@ -5,7 +5,7 @@
 \alias{romsmap.SpatialPolygonsDataFrame}
 \alias{romsmap.SpatialLinesDataFrame}
 \alias{romsmap.SpatialPointsDataFrame}
-\title{Remap an object to the space defined by coordinate arrays.}
+\title{Remap an object to the ROMS grid.}
 \usage{
 romsmap(x, ...)
 
@@ -40,7 +40,13 @@ The input `coords` is a assumed to be a 2-layer RasterStack or RasterBrick and
 using `nabor::knn` the nearest matching position of the coordinates of `x` is found in the grid space of `coords`. The
 motivating use-case is the curvilinear longitude and latitude arrays of ROMS model output.
 
-Cropping is complicated more details . . .
 No account is made for the details of a ROMS cell, though this may be included in future. We tested only with the "lon_u" and "lat_u"
 arrays.
+}
+\examples{
+ant_ice_coords <- romsmap(antarctica, ice_coords)
+plot(ice_fake, main = "sea ice in pure grid space")
+plot(ant_ice_coords, add = TRUE)
+
+
 }

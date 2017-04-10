@@ -12,23 +12,12 @@
 #' @examples
 #' ## library(raadtools)
 #' ##coords_points(romscoords(cpolarfiles()$fullname[1]))
+#' 
+#' pts <- coords_points(ice_coords)
 coords_points <- function(x, ...) {
   SpatialPoints(cbind(values(x[[1]]), raster::values(x[[2]])), 
                 proj4string = CRS("+init=epsg:4326"))
 }
 
 
-#' Convenience function to transform map projection . 
-#'
-#' Transform `x` to whatever the projection of `to` is. 
-#' @param x  object to transform
-#' @param to object with a map projection
-#'
-#' @return `x`, transformed
-#' @export
-#' @importFrom raster projection
-#' @importFrom sp spTransform
-project_to <- function(x, to) {
-  spTransform(x, CRS(projection(to)))
-}
 
