@@ -5,3 +5,5 @@
 ^\.travis\.yml$
 ^README\.Rmd$
 ^README-.*\.png$
+^appveyor\.yml$
+^CONDUCT\.md$

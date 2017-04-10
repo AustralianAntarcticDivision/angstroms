@@ -2,7 +2,7 @@ Package: angstroms
 Title: Tools for Regional Ocean Modeling System 
 Version: 0.0.1
 Authors@R: person("Michael D.","Sumner", role = c("aut", "cre"), email = "mdsumner@gmail.com")
-Description: Helper functions for working with Regional Ocean Modelling System (ROMS) output.
+Description: Helper functions for working with Regional Ocean Modelling System 'ROMS' output.
 Depends:
     raster
 License: GPL-3
