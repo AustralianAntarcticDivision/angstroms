@@ -1,5 +1,7 @@
 # angstroms 0.0.1
 
+* updates and checks
+
 
 # angstroms 0.0.0.9000
 
