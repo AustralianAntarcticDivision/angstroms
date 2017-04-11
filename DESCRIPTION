@@ -15,4 +15,5 @@ Imports:
     sp,
     spbabel
 RoxygenNote: 6.0.1
-Suggests: testthat
+Suggests: testthat,
+    covr

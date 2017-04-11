@@ -4,7 +4,7 @@ output: github_document
 
 [![Travis-CI Build Status](https://travis-ci.org/mdsumner/angstroms.svg?branch=master)](https://travis-ci.org/mdsumner/angstroms)
 [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/mdsumner/angstroms?branch=master&svg=true)](https://ci.appveyor.com/project/mdsumner/angstroms)
-
+[![Coverage Status](https://img.shields.io/codecov/c/github/mdsumner/angstroms/master.svg)](https://codecov.io/github/mdsumner/angstroms?branch=master)
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
 ```{r, echo = FALSE}
@@ -31,7 +31,7 @@ devtools::install_github("mdsumner/angstroms")
 ## angstroms - R for ROMS
 
 Angstroms aims to make working with ROMS output as easy as possible in R. 
-Rather than deal explicitly with the complex curvilinear grid in ROMS, the approach simplifies this by: 
+Rather than re-map explicitly the complex curvilinear grid in ROMS, the approach simplifies this by: 
 
 * maintaining the internal index of ROMS as the default *georeferencing* 
 * converting external data (maps, transects, points, etc.) into the native internal index space of ROMS

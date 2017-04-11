@@ -1,7 +1,6 @@
 
-[![Travis-CI Build Status](https://travis-ci.org/mdsumner/angstroms.svg?branch=master)](https://travis-ci.org/mdsumner/angstroms) [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/mdsumner/angstroms?branch=master&svg=true)](https://ci.appveyor.com/project/mdsumner/angstroms)
+[![Travis-CI Build Status](https://travis-ci.org/mdsumner/angstroms.svg?branch=master)](https://travis-ci.org/mdsumner/angstroms) [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/mdsumner/angstroms?branch=master&svg=true)](https://ci.appveyor.com/project/mdsumner/angstroms) [![Coverage Status](https://img.shields.io/codecov/c/github/mdsumner/angstroms/master.svg)](https://codecov.io/github/mdsumner/angstroms?branch=master) <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-<!-- README.md is generated from README.Rmd. Please edit that file -->
 angstroms
 =========
 

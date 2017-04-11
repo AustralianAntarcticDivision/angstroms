@@ -9,3 +9,4 @@
 ^CONDUCT\.md$
 ^data-raw$
 ^cran-comments\.md$
+^codecov\.yml$

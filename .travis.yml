@@ -14,3 +14,6 @@ r_binary_packages:
   - testthat
   - tibble
   - dplyr
+
+after_success:
+  - Rscript -e 'covr::codecov()'
