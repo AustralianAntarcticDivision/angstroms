@@ -2,9 +2,34 @@
 % Please edit documentation in R/nc-utils.r
 \name{romsdata}
 \alias{romsdata}
+\alias{roms_xy}
+\alias{romsdata}
+\alias{roms_xz}
+\alias{romsdata}
+\alias{roms_xt}
+\alias{romsdata}
+\alias{roms_yz}
+\alias{romsdata}
+\alias{roms_yt}
+\alias{romsdata}
+\alias{roms_zt}
+\alias{romsdata}
 \title{Extract a data layer from ROMS by name and slice.}
 \usage{
-romsdata(x, varname, slice = c(1, 1), ncdf = TRUE, transpose = FALSE, ...)
+roms_xy(x, varname, slice = c(1L, 1L), transpose = TRUE, ...)
+
+roms_xz(x, varname, slice = c(1L, 1L), transpose = TRUE, ...)
+
+roms_xt(x, varname, slice = c(1L, 1L), transpose = TRUE, ...)
+
+roms_yz(x, varname, slice = c(1L, 1L), transpose = TRUE, ...)
+
+roms_yt(x, varname, slice = c(1L, 1L), transpose = TRUE, ...)
+
+roms_zt(x, varname, slice = c(1L, 1L), transpose = TRUE, ...)
+
+romsdata(x, varname, slice = c(1L, 1L), ncdf = TRUE, transpose = FALSE,
+  ...)
 }
 \arguments{
 \item{x}{ROMS file name}
@@ -13,11 +38,11 @@ romsdata(x, varname, slice = c(1, 1), ncdf = TRUE, transpose = FALSE, ...)
 
 \item{slice}{index in w and t (depth and time), defaults to first encountered}
 
-\item{ncdf}{default to \code{TRUE}, set to \code{FALSE} to allow raster format detection brick}
-
 \item{transpose}{the extents (ROMS is FALSE, Access is TRUE)}
 
 \item{...}{unused}
+
+\item{ncdf}{default to \code{TRUE}, set to \code{FALSE} to allow raster format detection brick}
 }
 \value{
 RasterLayer
@@ -25,4 +50,14 @@ RasterLayer
 \description{
 Maybe this replaced by rastergetslice??
 Returns a single slice 2D layer
+}
+\examples{
+x <- raadtools:::cpolarfiles()$fullname[1]
+plot(roms_xy(x, "u"))
+plot(roms_xz(x, "u", slice = c(392L,1L)), asp = NA)
+plot(roms_xt(x, "u", slice = c(392L,1L)), asp = NA)
+
+plot(roms_yz(x, "u"))
+plot(roms_yt(x, "u", slice = c(1L,1L)), asp = NA)
+plot(roms_zt(x, "u", slice = c(1L, 392L)), asp = NA)
 }
