@@ -9,14 +9,14 @@ raster_ispace <- function(x, transpose = TRUE) {
 }
 
 #' @examples 
-#' x <- raadtools:::cpolarfiles()$fullname[1]
-#' plot(roms_xy(x, "u"))
-#' plot(roms_xz(x, "u", slice = c(392L,1L)), asp = NA)
-#' plot(roms_xt(x, "u", slice = c(392L,1L)), asp = NA)
+#' #x <- raadtools:::cpolarfiles()$fullname[1]
+#' #plot(roms_xy(x, "u"))
+#' #plot(roms_xz(x, "u", slice = c(392L,1L)), asp = NA)
+#' #plot(roms_xt(x, "u", slice = c(392L,1L)), asp = NA)
 #' 
-#' plot(roms_yz(x, "u"))
-#' plot(roms_yt(x, "u", slice = c(1L,1L)), asp = NA)
-#' plot(roms_zt(x, "u", slice = c(1L, 392L)), asp = NA)
+#' #plot(roms_yz(x, "u"))
+#' #plot(roms_yt(x, "u", slice = c(1L,1L)), asp = NA)
+#' #plot(roms_zt(x, "u", slice = c(1L, 392L)), asp = NA)
 #' @name romsdata
 #' @export
 roms_xy <- function(x, varname, slice = c(1L, 1L), transpose = TRUE, ...) {
