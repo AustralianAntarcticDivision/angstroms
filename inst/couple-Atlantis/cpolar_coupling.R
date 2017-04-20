@@ -8,6 +8,13 @@
 
 ##corners <- read.delim("https://raw.githubusercontent.com/cecilieha/NoBA/master/corners_neighbours_nordic.txt")
 
+#- box mass properties are slice-intersections, interpolated between two ROMS depth layers 
+#- face transport properties are depth-integrated with however many ROMS layers are within the Atlantis depth layer 
+# (ROMS cell depths are all cell-specific based on the Cs_r/bathy ramp)
+# I.e. the transport properties are not the bulk coalesce-calcs that Cecille seems to be doing (though given their method 
+# that might also be why their hyper-diffusion correction  is based on the Area/Length ratio)
+# extra step called hydroconstruct (like ncgen) that does the netcdf creation
+
 ## dummy hydro
 # sohydro <- "~/projects/AtlantisEastAntartica/SOhydrodummy.nc"
 # library(ncdump)
