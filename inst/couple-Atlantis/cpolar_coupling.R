@@ -13,16 +13,28 @@
 # library(ncdump)
 # nc <- NetCDF(sohydro)
 
-
+#' Convenience function to transform map projection . 
+#'
+#' Transform `x` to whatever the projection of `to` is. 
+#' @param x  object to transform
+#' @param to object with a map projection
+#'
+#' @return `x`, transformed
+#' @export
+#' @importFrom raster projection
+#' @importFrom sp spTransform
+project_to <- function(x, to) {
+  spTransform(x, CRS(projection(to)))
+}
 ## devtools::install_github(c("mdsumner/angstroms"))
 library(angstroms)
 library(rbgm) ## read BGM
 library(bgmfiles) ## archive of BGM files
-
-
+library(raadtools)
+library(ncdump)
 ## get the Circumpolar files
-cpolar <- cpolarfiles()
-roms_file <- cpolar$fullname[1]
+cpolar <- raadtools:::cpolarfiles()
+roms_file <- cpolar$fullname[2]
 
 ## get a BGM and read it
 bfile <- bgmfiles::bgmfiles("antarctica_28")
@@ -61,19 +73,8 @@ face_roms_index <- tibble(face = rep(seq_len(nrow(roms_face)), lengths(ind_face)
                           cell = unlist(ind_face))
 
 
-#' Convenience function to transform map projection . 
-#'
-#' Transform `x` to whatever the projection of `to` is. 
-#' @param x  object to transform
-#' @param to object with a map projection
-#'
-#' @return `x`, transformed
-#' @export
-#' @importFrom raster projection
-#' @importFrom sp spTransform
-project_to <- function(x, to) {
-  spTransform(x, CRS(projection(to)))
-}
+angstroms:::rawdata(roms_file, "Cs_r")
+angstroms::romsdata(roms_file, "")
 
 ## test 
 l <- vector("list", 31 * 31)

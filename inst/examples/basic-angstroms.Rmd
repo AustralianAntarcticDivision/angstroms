@@ -27,5 +27,9 @@ The `romsdata` function will read out a slice from the NetCDF file, in `RasterLa
 aromsfile <- "/mnt/temproms/ocean_his_3101.nc"
 library(raster)
 library(angstroms)
-romsdata(aromsfile, "u")
+a <- romsdata(aromsfile, "u", transpose = TRUE)
+
+b <- roms_xy(aromsfile, "u", c(1, 1))
+
+
 ```
