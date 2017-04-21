@@ -141,7 +141,7 @@ extract_at_level <- function(x, cell_level) {
   values <- numeric(nrow(cell_level))
   for (ul in seq_along(ulevel)) {
     asub <- cell_level$level == ulevel[ul]
-    values[asub] <- extract(x[[ulevel[ul]]], 
+    values[asub] <- as.vector(extract(brick(x[[ulevel[ul]]])), 
             cell_level$cell[asub])
   }
   values
