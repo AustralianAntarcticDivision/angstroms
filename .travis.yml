@@ -3,8 +3,14 @@
 language: R
 sudo: required
 
+r:
+  - release
+  - devel
+  
 dist: trusty
 cache: packages
+#R binary packages not supported with 'sudo: false' or 'dist: precise',  falling back to source install
+#Installing R packages: rgdal, proj4, ncdf4, sp, raster, Rcpp, RcppEigen, testthat, tibble, dplyr
 
 r_binary_packages:
   - rgdal
