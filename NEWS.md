@@ -1,5 +1,7 @@
 # angstroms 0.0.1
 
+* romsdata defaults to transpose
+
 * updates and checks
 
 

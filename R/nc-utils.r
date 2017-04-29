@@ -79,7 +79,7 @@ roms_zt <- function(x, varname, slice = c(1L, 1L), transpose = TRUE, ...) {
 #' @return RasterLayer
 #' @export
 #'
-romsdata <- function (x, varname, slice = c(1L, 1L), ncdf = TRUE, transpose = FALSE, ...) 
+romsdata <- function (x, varname, slice = c(1L, 1L), ncdf = TRUE, transpose = TRUE, ...) 
 {
    stopifnot(!missing(varname))
   if (is.null(x)) stop("x must be a valid file name")

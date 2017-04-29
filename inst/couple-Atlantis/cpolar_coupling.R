@@ -95,7 +95,7 @@ face_data <- fortify(roms_face) %>%
 
 system.time({
   for(ilevel in 1:31) {
-    for (itime in 1:31) {
+#    for (itime in 1:31) {
       i <- i + 1
       depth_time <- c(ilevel, itime)
       box_roms_index$u <- extract(romsdata(roms_file, "u", slice = depth_time), box_roms_index$cell)
@@ -119,7 +119,7 @@ system.time({
       
       
       
-    }
+  #  }
     print(ilevel)
   }
 })

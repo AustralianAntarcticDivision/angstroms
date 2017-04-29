@@ -28,7 +28,7 @@ roms_yt(x, varname, slice = c(1L, 1L), transpose = TRUE, ...)
 
 roms_zt(x, varname, slice = c(1L, 1L), transpose = TRUE, ...)
 
-romsdata(x, varname, slice = c(1L, 1L), ncdf = TRUE, transpose = FALSE,
+romsdata(x, varname, slice = c(1L, 1L), ncdf = TRUE, transpose = TRUE,
   ...)
 }
 \arguments{

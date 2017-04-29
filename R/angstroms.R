@@ -101,6 +101,13 @@ romsboundary <- function(cds) {
   SpatialPolygons(list(Polygons(list(Polygon(raster::as.matrix(cds)[unique(c(left, bottom, right, top)), ])), "1")))
 }
 
+
+## put any raster into xy-index space (0, nc, 0, nr)
+set_indextent <- function(x) {
+  setExtent(x, extent(0, ncol(x), 0, nrow(x)))
+}
+
+
 #' Extract coordinate arrays from ROMS. 
 #' 
 #' Returns a RasterStack of the given variable names. 
