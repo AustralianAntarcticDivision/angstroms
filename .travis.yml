@@ -3,6 +3,9 @@
 language: R
 sudo: required
 
+dist: trusty
+cache: packages
+
 r_binary_packages:
   - rgdal
   - proj4
