@@ -21,7 +21,7 @@ The goal of angstroms is to provide easy access to Regional Ocean Modeling Syste
 
 ## Installation
 
-You can install angstroms from github with:
+You can install the development version of angstroms from github with:
 
 ```{r gh-installation, eval = FALSE}
 # install.packages("devtools")

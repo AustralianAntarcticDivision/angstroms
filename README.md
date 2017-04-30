@@ -9,7 +9,7 @@ The goal of angstroms is to provide easy access to Regional Ocean Modeling Syste
 Installation
 ------------
 
-You can install angstroms from github with:
+You can install the development version of angstroms from github with:
 
 ``` r
 # install.packages("devtools")
@@ -19,7 +19,7 @@ devtools::install_github("mdsumner/angstroms")
 angstroms - R for ROMS
 ----------------------
 
-Angstroms aims to make working with ROMS output as easy as possible in R. Rather than deal explicitly with the complex curvilinear grid in ROMS, the approach simplifies this by:
+Angstroms aims to make working with ROMS output as easy as possible in R. Rather than re-map explicitly the complex curvilinear grid in ROMS, the approach simplifies this by:
 
 -   maintaining the internal index of ROMS as the default *georeferencing*
 -   converting external data (maps, transects, points, etc.) into the native internal index space of ROMS
