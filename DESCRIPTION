@@ -19,3 +19,5 @@ RoxygenNote: 6.0.1
 Suggests: testthat,
     covr
 Roxygen: list(markdown = TRUE)
+URL: https://github.com/mdsumner/angstroms
+BugReports: https://github.com/mdsumner/angstroms/issues
