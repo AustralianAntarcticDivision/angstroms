@@ -13,7 +13,9 @@
 #' @param crop logical, if \code{TRUE} crop x to the extent of the boundary of the values in coords
 #' @param lonlat logical, if \code{TRUE} check for need to back-transform to longitude/latitude and do it
 #' @param ... unused
-#'
+#' @note Do not use this for extraction purposes without checking the output, this is best used for exploration
+#' and visualization. Re-mapping ROMS data is better done by looking up the `coords_points` within spatial objects, 
+#' and transferring via the grid index. 
 #' @return input object with coordinates transformed to space of the coords 
 #' @export
 #' @examples 
@@ -149,8 +151,9 @@ romscoords <- function(x, spatial = c("lon_u", "lat_u"), ncdf = TRUE,  transpose
 
 #' Coordinates at depth
 #' 
-#' \code{S} and \code{h} are the  names of the appropriate variables
-#'
+#' Extract the multi-layer 'h'eight grid with S-coordinate stretching applied
+#' 
+#'  \code{S} and \code{h} are the  names of the appropriate variables
 #' @param x ROMS file name 
 #' @param depth depth thing
 #' @param S  of S-coordinate stretching curve at RHO-points

@@ -1,3 +1,9 @@
+## angstroms first release
+
+Second submission 0.0.1
+
+* added documentation for croproms and ROMS URL
+
 ## Test environments
 
 * ubuntu 14.04 (on travis-ci), R 3.4.0

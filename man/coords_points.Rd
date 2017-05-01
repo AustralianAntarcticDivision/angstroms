@@ -7,15 +7,15 @@
 coords_points(x, ...)
 }
 \arguments{
-\item{x}{two layer `RasterBrick` with longitude and latitude values}
+\item{x}{two layer \code{RasterBrick} with longitude and latitude values}
 
 \item{...}{ignored}
 }
 \value{
-`SpatialPoints`
+\code{SpatialPoints}
 }
 \description{
-Convenience wrapper around `SpatialPoints` for a two layer brick with longitude and latitude coordinate arrays.
+Convenience wrapper around \code{SpatialPoints} for a two layer brick with longitude and latitude coordinate arrays.
 }
 \examples{
 ## library(raadtools)

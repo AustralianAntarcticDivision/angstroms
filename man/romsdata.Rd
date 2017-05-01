@@ -14,7 +14,9 @@
 \alias{romsdata}
 \alias{roms_zt}
 \alias{romsdata}
-\title{Extract a data layer from ROMS by name and slice.}
+\title{ROMS single slice 2D layer
+
+Extract a data layer from ROMS by name and 4-D slice.}
 \usage{
 roms_xy(x, varname, slice = c(1L, 1L), transpose = TRUE, ...)
 
@@ -48,8 +50,8 @@ romsdata(x, varname, slice = c(1L, 1L), ncdf = TRUE, transpose = TRUE,
 RasterLayer
 }
 \description{
-Maybe this replaced by rastergetslice??
-Returns a single slice 2D layer
+\code{romsdata} always works in the first two dimensions (x-y), the more specialist functions will
+work in the space indicated by their name \code{roms_xy}, \code{roms_xt} and so on.
 }
 \examples{
 #x <- raadtools:::cpolarfiles()$fullname[1]

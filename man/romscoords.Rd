@@ -25,8 +25,8 @@ RasterStack with two layers of the 2D-variables
 Returns a RasterStack of the given variable names.
 }
 \details{
-The two layers from the model output are used to define the real-world space. This is used to create a boundary `romsboundary`, to map real-world
-objects into  grid space `romscoords` and to generate graticules for mapping into the grid space with `graphics::contour`.
+The two layers from the model output are used to define the real-world space. This is used to create a boundary \code{romsboundary}, to map real-world
+objects into  grid space \code{romscoords} and to generate graticules for mapping into the grid space with \code{graphics::contour}.
 }
 \examples{
 \dontrun{

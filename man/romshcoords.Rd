@@ -17,5 +17,8 @@ romshcoords(x, S = "Cs_r", depth = "h")
 RasterStack with a layer for every depth
 }
 \description{
+Extract the multi-layer 'h'eight grid with S-coordinate stretching applied
+}
+\details{
 \code{S} and \code{h} are the  names of the appropriate variables
 }

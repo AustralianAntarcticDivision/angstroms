@@ -1,6 +1,17 @@
 #' Tools for ROMS model output.
 #' 
-#'  
+#' Facilities for  easy access to Regional Ocean Modeling System (ROMS) output. 
+#' 
+#' \tabular{ll}{
+#'  \code{\link{coords_points}} \tab produce [sp::SpatialPoints] from ROMS coordinate arrays  \cr
+#'  \code{\link{croproms}} \tab create a [raster::extent] by cropping a ROMS data layer  \cr
+#'  \code{\link{rawdata}} \tab read raw NetCDF variables by name \cr
+#'  \code{\link{romsdata}} read data layers from 4D variables by arbitrary slice  \cr
+#'  \code{\link{romsboundary}} \tab generate the spatial boundary of the ROMS data set in x-y coordinate space \cr
+#'  \code{\link{romscoords}} \tab extract the x-y (long-lat) coordinates \cr
+#'  \code{\link{romshcoords}} \tab extract the multi-layer 'h'eight grid with S-coordinate stretching applied \cr
+#'  \code{\link{romsmap}} \tab re-map a spatial layer (polygons, lines, points) into ROMS grid space \cr
+#'  }
 #' @name angstroms
 #' @aliases angstroms-package
 #' @docType package

@@ -64,11 +64,12 @@ roms_zt <- function(x, varname, slice = c(1L, 1L), transpose = TRUE, ...) {
 }
 
 
-#' Extract a data layer from ROMS by name and slice. 
+#'  ROMS single slice 2D layer
+#'  
+#'  Extract a data layer from ROMS by name and 4-D slice. 
 #' 
-#' Maybe this replaced by rastergetslice??
-#' Returns a single slice 2D layer
-#'
+#' `romsdata` always works in the first two dimensions (x-y), the more specialist functions will
+#' work in the space indicated by their name `roms_xy`, `roms_xt` and so on. 
 #' @param x ROMS file name
 #' @param varname name of ROMS variable 
 #' @param slice index in w and t (depth and time), defaults to first encountered
