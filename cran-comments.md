@@ -1,6 +1,6 @@
-## angstroms first release
+## angstroms 0.0.1
 
-Second submission 0.0.1
+Updated submission 0.0.1
 
 * added documentation for croproms and ROMS URL
 
