@@ -2,9 +2,17 @@
 % Please edit documentation in R/nc-utils.r
 \name{rawdata}
 \alias{rawdata}
+\alias{rawdata}
+\alias{rawdata.character}
+\alias{rawdata}
+\alias{rawdata.NetCDF}
 \title{Read the variable as is}
 \usage{
-rawdata(x, varname)
+rawdata(x, varname, ...)
+
+\method{rawdata}{character}(x, varname, ...)
+
+\method{rawdata}{NetCDF}(x, varname, ...)
 }
 \arguments{
 \item{x}{netcdf file path}

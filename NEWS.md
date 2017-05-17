@@ -1,3 +1,7 @@
+# angstroms dev
+
+* S3 methods for rawdata
+
 # angstroms 0.0.1
 
 * added documentation for croproms and ROMS URL, thanks to CRAN feedback

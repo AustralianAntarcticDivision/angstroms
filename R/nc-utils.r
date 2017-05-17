@@ -105,9 +105,17 @@ romsdata <- function (x, varname, slice = c(1L, 1L), ncdf = TRUE, transpose = TR
 #' @param varname variable name
 #'
 #' @export
-rawdata <- function(x, varname) {
+rawdata <- function(x, varname, ...) UseMethod("rawdata")
+#' @name rawdata
+#' @export
+rawdata.character <- function(x, varname, ...) {
   return(ncdf4::ncvar_get(ncdf4::nc_open(x), varname))
- }
+}
+#' @name rawdata
+#' @export
+rawdata.NetCDF <- function(x, varname, ...) {
+  rawdata(nc$file$filename[1L], varname = varname, ...)
+}
 
 
 #' @importFrom ncdf4 nc_open nc_close ncvar_get 
