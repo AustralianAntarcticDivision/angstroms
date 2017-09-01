@@ -23,7 +23,8 @@
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
-
+  
+  
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -51,6 +52,12 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
+  <a href="..//index.html">
+    <span class="fa fa-home fa-lg"></span>
+     
+  </a>
+</li>
+<li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li>
@@ -118,15 +125,14 @@
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>The two layers from the model output are used to define the real-world space. This is used to create a boundary <code>romsboundary</code>, to map real-world
-objects into  grid space <code>romscoords</code> and to generate graticules for mapping into the grid space with <code>graphics::contour</code>.</p>
+objects into  grid space <code>romscoords</code> and to generate graticules for mapping into the grid space with <code><a href='http://www.rdocumentation.org/packages/graphics/topics/contour'>graphics::contour</a></code>.</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'>not_run</span>({
-    <span class='no'>coord</span> <span class='kw'>&lt;-</span> <span class='fu'>romscoord</span>(<span class='st'>"roms.nc"</span>)
-})
-<span class='co'>## with in-built fake data</span>
-<span class='fu'>plot</span>(<span class='no'>ice_fake</span>, <span class='kw'>asp</span> <span class='kw'>=</span> <span class='fl'>0.5</span>)</div><div class='input'><span class='fu'>contour</span>(<span class='no'>ice_coords</span><span class='kw'>[[</span><span class='fl'>1</span>]], <span class='kw'>add</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>levels</span> <span class='kw'>=</span> <span class='fu'>seq</span>(-<span class='fl'>165</span>, <span class='fl'>165</span>, <span class='kw'>by</span> <span class='kw'>=</span> <span class='fl'>15</span>))</div><div class='input'><span class='fu'>contour</span>(<span class='no'>ice_coords</span><span class='kw'>[[</span><span class='fl'>2</span>]], <span class='kw'>add</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><img src='romscoords-4.png' alt='' width='540' height='400' /><div class='input'>
+    <pre class="examples"><span class='co'># NOT RUN {</span>
+  <span class='no'>coord</span> <span class='kw'>&lt;-</span> <span class='fu'>romscoord</span>(<span class='st'>"roms.nc"</span>)
+<span class='co'># }</span><div class='input'><span class='co'>## with in-built fake data</span>
+<span class='fu'>plot</span>(<span class='no'>ice_fake</span>, <span class='kw'>asp</span> <span class='kw'>=</span> <span class='fl'>0.5</span>)</div><div class='output co'>#&gt; <span class='error'>Error in as.double(y): cannot coerce type 'S4' to vector of type 'double'</span></div><div class='input'><span class='fu'>contour</span>(<span class='no'>ice_coords</span><span class='kw'>[[</span><span class='fl'>1</span>]], <span class='kw'>add</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>levels</span> <span class='kw'>=</span> <span class='fu'>seq</span>(-<span class='fl'>165</span>, <span class='fl'>165</span>, <span class='kw'>by</span> <span class='kw'>=</span> <span class='fl'>15</span>))</div><div class='output co'>#&gt; <span class='error'>Error in contour.default(x = xFromCol(x, 1:ncol(x)), y = yFromRow(x, nrow(x):1),     z = t((getValues(x, format = "matrix"))[nrow(x):1, ]), ...): plot.new has not been called yet</span></div><div class='input'><span class='fu'>contour</span>(<span class='no'>ice_coords</span><span class='kw'>[[</span><span class='fl'>2</span>]], <span class='kw'>add</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; <span class='error'>Error in contour.default(x = xFromCol(x, 1:ncol(x)), y = yFromRow(x, nrow(x):1),     z = t((getValues(x, format = "matrix"))[nrow(x):1, ]), ...): plot.new has not been called yet</span></div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">

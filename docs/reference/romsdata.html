@@ -25,7 +25,8 @@ Extract a data layer from ROMS by name and 4-D slice. — romsdata • angstroms
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
-
+  
+  
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -53,6 +54,12 @@ Extract a data layer from ROMS by name and 4-D slice. — romsdata • angstroms
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
+  <a href="..//index.html">
+    <span class="fa fa-home fa-lg"></span>
+     
+  </a>
+</li>
+<li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li>
@@ -138,14 +145,15 @@ work in the space indicated by their name <code>roms_xy</code>, <code>roms_xt</c
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'>#x &lt;- raadtools:::cpolarfiles()$fullname[1]</span>
-<span class='co'>#plot(roms_xy(x, "u"))</span>
-<span class='co'>#plot(roms_xz(x, "u", slice = c(392L,1L)), asp = NA)</span>
-<span class='co'>#plot(roms_xt(x, "u", slice = c(392L,1L)), asp = NA)</span>
+    <pre class="examples"><div class='input'>#x <- raadtools:::cpolarfiles()$fullname[1]
+#plot(roms_xy(x, "u"))
+#plot(roms_xz(x, "u", slice = c(392L,1L)), asp = NA)
+#plot(roms_xt(x, "u", slice = c(392L,1L)), asp = NA)
 
-<span class='co'>#plot(roms_yz(x, "u"))</span>
-<span class='co'>#plot(roms_yt(x, "u", slice = c(1L,1L)), asp = NA)</span>
-<span class='co'>#plot(roms_zt(x, "u", slice = c(1L, 392L)), asp = NA)</span></div></pre>
+#plot(roms_yz(x, "u"))
+#plot(roms_yt(x, "u", slice = c(1L,1L)), asp = NA)
+#plot(roms_zt(x, "u", slice = c(1L, 392L)), asp = NA)
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
