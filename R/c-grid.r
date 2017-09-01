@@ -30,16 +30,23 @@
 #   ob
 # }
 
-#' Title
-#'
-#' @param x file
-#' @param ext extent
-#' @param ... ignore
+#' Crop a ROMS layer
+#' 
+#' Crop a ROMS data layer from `romsdata` with a raster extent. 
+#' 
+#' The spatial crop is performed in the coordinate space of roms data. 
+#' @param x ROMS xy- coordinates, see `romscoords`
+#' @param ext `raster::extent` in the coordinate system of `x`
+#' @param ... ignored
 #'
 #' @export
+#' @examples
+#' ## notice that extent is in long-lat, but ice_local is in the grid
+#' ## space of ice_coords
+#' ice_local <- croproms(ice_coords, extent(100, 120, -75, -60))
+#' plot(ice_coords[[2]], col = grey(seq(0, 1, length  = 20)))
+#' plot(crop(ice_fake, ice_local), add = TRUE)
 croproms <- function(x, ext, ...) {
-  ## x is a romscoords 2-layer Brick
-  ## ext is a RasterExtent in coords of x
   xy <- as.matrix(x)
   incells <- which(xy[,1] >= xmin(ext) & xy[,1] <= xmax(ext) &
                      xy[,2] >= ymin(ext) & xy[,2] <= ymax(ext))
@@ -53,6 +60,7 @@ croproms <- function(x, ext, ...) {
 # The v-grid represents the grid North-South sides (green triangles)
 # The psi-grid represents the grid corners (purple crosses)
 
+#' @importFrom raster crop 
 plot_cgrid <- function(x, ex = extent(0, 15, 0, 20), 
                        include = c("u", "v", "rho", "psi"), cell = TRUE,  ...) {
   

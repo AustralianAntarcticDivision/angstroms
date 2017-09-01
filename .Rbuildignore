@@ -1,4 +1,15 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
-^figure/.*
+^figure.*
+^extradata.*
 ^\.travis\.yml$
+^README\.Rmd$
+^README-.*\.png$
+^appveyor\.yml$
+^CONDUCT\.md$
+^data-raw$
+^cran-comments\.md$
+^codecov\.yml$
+^inst/couple-Atlantis/*
+^inst/work/*
+^docs$

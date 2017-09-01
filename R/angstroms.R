@@ -1,4 +1,4 @@
-#' Remap an object to the space defined by coordinate arrays. 
+#' Remap an object to the ROMS grid. 
 #' 
 #' Find the nearest-neighbour coordinates of `x` in the coordinate arrays of `coords`. 
 #' 
@@ -6,7 +6,6 @@
 #' using `nabor::knn` the nearest matching position of the coordinates of `x` is found in the grid space of `coords`. The
 #' motivating use-case is the curvilinear longitude and latitude arrays of ROMS model output. 
 #' 
-#' Cropping is complicated more details . . .
 #' No account is made for the details of a ROMS cell, though this may be included in future. We tested only with the "lon_u" and "lat_u"
 #' arrays. 
 #' @param x object to transform to the grid space, e.g. a \code{\link[sp]{Spatial}} object
@@ -14,9 +13,17 @@
 #' @param crop logical, if \code{TRUE} crop x to the extent of the boundary of the values in coords
 #' @param lonlat logical, if \code{TRUE} check for need to back-transform to longitude/latitude and do it
 #' @param ... unused
-#'
+#' @note Do not use this for extraction purposes without checking the output, this is best used for exploration
+#' and visualization. Re-mapping ROMS data is better done by looking up the `coords_points` within spatial objects, 
+#' and transferring via the grid index. 
 #' @return input object with coordinates transformed to space of the coords 
 #' @export
+#' @examples 
+#' ant_ice_coords <- romsmap(antarctica, ice_coords)
+#' plot(ice_fake, main = "sea ice in pure grid space")
+#' plot(ant_ice_coords, add = TRUE)
+#' 
+#' 
 romsmap <- function(x, ...) {
   UseMethod("romsmap")
 }
@@ -31,7 +38,7 @@ romsmap.SpatialPolygonsDataFrame <- function(x, coords, crop = FALSE, lonlat = T
   ## first get the intersection
   if (crop) {
   op <- options(warn = -1)
-  x <- raster::intersect(x, tabularaster::boundary(coords))
+  x <- raster::intersect(x, romsboundary(coords))
   options(op)
   }
   ## do we need to invert projection?
@@ -63,12 +70,52 @@ romsmap.SpatialLinesDataFrame <- romsmap.SpatialPolygonsDataFrame
 #' @export
 romsmap.SpatialPointsDataFrame <- romsmap.SpatialPolygonsDataFrame
 
+#' Boundary polygon from raster of coordinates. 
+#' 
+#' Create a boundary polygon by tracking around coordinates stored in a RasterStack. 
+#' 
+#' The first layer in the stack is treated as the X coordinate, second as Y. 
+#' @param cds two-layer Raster
+#'
+#' @importFrom sp SpatialPolygons Polygons Polygon
+#' @importFrom raster as.matrix cellFromRow cellFromCol xmin xmax ymin ymax trim setExtent setValues raster extract flip extent 
+#' @export
+#' @examples 
+#' ice_grid_boundary <- romsboundary(ice_coords)
+#' plot(antarctica)
+#' ## does not make sense in this space
+#' plot(ice_grid_boundary, add = TRUE, border = "grey")
+#' 
+#' ## ok in this one
+#' #library(rgdal)
+#'#   proj4string(ice_grid_boundary) <- CRS("+init=epsg:4326")
+#'# pweird <- "+proj=laea +lon_0=147 +lat_0=-42 +ellps=WGS84"
+#'#  laea_world <- spTransform(antarctica, pweird)
+#'#  plot(extent(laea_world) + 8e6, type = "n", asp = 1)
+#'#  plot(laea_world, add = TRUE)
+#'#  plot(spTransform(ice_grid_boundary, pweird), add  = TRUE, border = "darkgrey")
+romsboundary <- function(cds) {
+  left <- cellFromCol(cds, 1)
+  bottom <- cellFromRow(cds, nrow(cds))
+  right <- rev(cellFromCol(cds, ncol(cds)))
+  top <- rev(cellFromRow(cds, 1))
+  ## need XYFromCell method
+  SpatialPolygons(list(Polygons(list(Polygon(raster::as.matrix(cds)[unique(c(left, bottom, right, top)), ])), "1")))
+}
+
+
+## put any raster into xy-index space (0, nc, 0, nr)
+set_indextent <- function(x) {
+  setExtent(x, extent(0, ncol(x), 0, nrow(x)))
+}
 
 
 #' Extract coordinate arrays from ROMS. 
 #' 
 #' Returns a RasterStack of the given variable names. 
-#'
+#' 
+#' The two layers from the model output are used to define the real-world space. This is used to create a boundary `romsboundary`, to map real-world
+#' objects into  grid space `romscoords` and to generate graticules for mapping into the grid space with `graphics::contour`. 
 #' @param x ROMS file name
 #' @param spatial names of coordinate variables (e.g. lon_u, lat_u) 
 #' @param ncdf default to NetCDF no matter what file name
@@ -82,7 +129,14 @@ romsmap.SpatialPointsDataFrame <- romsmap.SpatialPolygonsDataFrame
 #' \dontrun{
 #'   coord <- romscoord("roms.nc")
 #' }
+#' ## with in-built fake data
+#' plot(ice_fake, asp = 0.5)
+#' contour(ice_coords[[1]], add = TRUE, levels = seq(-165, 165, by = 15))
+#' contour(ice_coords[[2]], add = TRUE)
+#' 
+#' @importFrom raster brick values
 #' @importFrom raster stack
+#' 
 romscoords <- function(x, spatial = c("lon_u", "lat_u"), ncdf = TRUE,  transpose = FALSE, ... ) {
   l <- vector("list", length(spatial))
   for (i in seq_along(l)) l[[i]] <- raster(x, varname = spatial[i], ncdf = TRUE, ...)
@@ -97,8 +151,9 @@ romscoords <- function(x, spatial = c("lon_u", "lat_u"), ncdf = TRUE,  transpose
 
 #' Coordinates at depth
 #' 
-#' \code{S} and \code{h} are the  names of the appropriate variables
-#'
+#' Extract the multi-layer 'h'eight grid with S-coordinate stretching applied
+#' 
+#'  \code{S} and \code{h} are the  names of the appropriate variables
 #' @param x ROMS file name 
 #' @param depth depth thing
 #' @param S  of S-coordinate stretching curve at RHO-points

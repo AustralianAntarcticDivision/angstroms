@@ -1,0 +1,35 @@
+---
+title: "angstroms"
+author: "Michael Sumner"
+date: "10/04/2017"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Read out data layers
+
+Here we set up access to some ROMS files, ultimately it's just a file path to a NetCDF file. 
+
+```{r,eval=FALSE}
+library(raadtools)
+files <- raadtools:::cpolarfiles()
+aromsfile <- sprintf("/mnt/temproms/%s", basename(files$fullname[1L]))
+file.copy(files$fullname[1L], aromsfile)
+
+```
+
+The `romsdata` function will read out a slice from the NetCDF file, in `RasterLayer` form. 
+
+```{r}
+aromsfile <- "/mnt/temproms/ocean_his_3101.nc"
+library(raster)
+library(angstroms)
+a <- romsdata(aromsfile, "u", transpose = TRUE)
+
+b <- roms_xy(aromsfile, "u", c(1, 1))
+
+
+```

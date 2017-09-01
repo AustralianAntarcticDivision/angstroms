@@ -1,3 +1,12 @@
+# angstroms 0.0.1
+
+* added documentation for croproms and ROMS URL, thanks to CRAN feedback
+
+* romsdata defaults to transpose
+
+* updates and checks
+
+
 # angstroms 0.0.0.9000
 
 * use spbabel::sp not spFromTable

@@ -1,50 +1,91 @@
-## these should all be in rancid?
-## if so must be exported . . .
+raster_ispace <- function(x, transpose = TRUE) {
+  x <- t(x[,ncol(x):1])
+  if (transpose) {
+    e <- extent(0, ncol(x), 0, nrow(x)) 
+  } else {
+    e <- extent(0, nrow(x), 0, ncol(x))
+  }
+  setExtent(raster(x), e)
+}
 
-
-#' NetCDF variable dimension
-#'
-#' This belongs in rancid . . .
-#'
-#' @param varname variable name
-#' @param x file
-#'
+#' @examples 
+#' #x <- raadtools:::cpolarfiles()$fullname[1]
+#' #plot(roms_xy(x, "u"))
+#' #plot(roms_xz(x, "u", slice = c(392L,1L)), asp = NA)
+#' #plot(roms_xt(x, "u", slice = c(392L,1L)), asp = NA)
+#' 
+#' #plot(roms_yz(x, "u"))
+#' #plot(roms_yt(x, "u", slice = c(1L,1L)), asp = NA)
+#' #plot(roms_zt(x, "u", slice = c(1L, 392L)), asp = NA)
+#' @name romsdata
 #' @export
-#'
-#' @importFrom dplyr transmute
-ncdim <- function(x, varname) {
-  roms <- NetCDF(x)
-  # ## still exploring neatest way to do this . . .
-  vdim <- vars(roms) %>% 
-    filter(name == varname) %>% 
-    inner_join(roms$vardim, "id") %>% 
-    dplyr::transmute(id = dimids) %>% 
-    inner_join(dims(roms), "id") 
-  vdim$len
+roms_xy <- function(x, varname, slice = c(1L, 1L), transpose = TRUE, ...) {
+  start <- c(1L, 1L, slice)
+  count <- c(-1L, -1L, 1L, 1L)
+  raster_ispace(ncgetslice(x, varname, start = start, count = count))
+}
+#' @name romsdata
+#' @export
+roms_xz <- function(x, varname, slice = c(1L, 1L), transpose = TRUE, ...) {
+  start <- c(1L, slice[1L], 1L, slice[2L])
+  count <- c(-1L, 1L, -1L, 1L)
+  raster_ispace(ncgetslice(x, varname, start = start, count = count))
+}
+#' @name romsdata
+#' @export
+roms_xt <- function(x, varname, slice = c(1L, 1L), transpose = TRUE, ...) {
+  start <- c(1L, slice[1L], slice[2L], 1L)
+  count <- c(-1L, 1L, 1L, -1L)
+  raster_ispace(ncgetslice(x, varname, start = start, count = count))
 }
 
 
+#' @name romsdata
+#' @export
+roms_yz <- function(x, varname, slice = c(1L, 1L), transpose = TRUE, ...) {
+  start <- c(slice[1L], 1L, 1L, slice[2L])
+  count <- c(1L, -1L, -1L,  1L)
+  raster_ispace(ncgetslice(x, varname, start = start, count = count))
+}
+#' @name romsdata
+#' @export
+roms_yt <- function(x, varname, slice = c(1L, 1L), transpose = TRUE, ...) {
+  start <- c(slice[1L], 1L,  slice[2L], 1L)
+  count <- c(1L, -1L,  1L, -1L)
+  raster_ispace(ncgetslice(x, varname, start = start, count = count))
+}
 
-#' Extract a data layer from ROMS by name and slice. 
+#' @name romsdata
+#' @export
+roms_zt <- function(x, varname, slice = c(1L, 1L), transpose = TRUE, ...) {
+  start <- c(slice, 1L, 1L)
+  count <- c(1L, 1L, -1L, -1L)
+  raster_ispace(ncgetslice(x, varname, start = start, count = count))
+}
+
+
+#'  ROMS single slice 2D layer
+#'  
+#'  Extract a data layer from ROMS by name and 4-D slice. 
 #' 
-#' Maybe this replaced by rastergetslice??
-#' Returns a single slice 2D layer
-#'
+#' `romsdata` always works in the first two dimensions (x-y), the more specialist functions will
+#' work in the space indicated by their name `roms_xy`, `roms_xt` and so on. 
 #' @param x ROMS file name
 #' @param varname name of ROMS variable 
 #' @param slice index in w and t (depth and time), defaults to first encountered
 #' @param transpose the extents (ROMS is FALSE, Access is TRUE)
 #' @param ... unused
 #' @param ncdf default to \code{TRUE}, set to \code{FALSE} to allow raster format detection brick
-#'
+#' @importFrom raster brick 
 #' @return RasterLayer
 #' @export
 #'
-romsdata <- function (x, varname, slice = c(1, 1), ncdf = TRUE, transpose = FALSE, ...) 
+romsdata <- function (x, varname, slice = c(1L, 1L), ncdf = TRUE, transpose = TRUE, ...) 
 {
    stopifnot(!missing(varname))
-  ## not sure that lvar was necessary before ...
+  if (is.null(x)) stop("x must be a valid file name")
    x0 <- try(brick(x, level = slice[1L], lvar = 4L, varname = varname, ncdf = ncdf, ...), silent = TRUE)
+
   if (inherits(x0, "try-error")) {
      ## 
     stop(sprintf("%s is not multi-dimensional/interpretable as a RasterLayer, try extracting in raw form with rawdata()", varname))
@@ -60,6 +101,10 @@ romsdata <- function (x, varname, slice = c(1, 1), ncdf = TRUE, transpose = FALS
 }
 
 #' Read the variable as is
+#' 
+#' @param x netcdf file path
+#' @param varname variable name
+#'
 #' @export
 rawdata <- function(x, varname) {
   return(ncdf4::ncvar_get(ncdf4::nc_open(x), varname))
@@ -73,48 +118,22 @@ ncget <- function(x, varname) {
   ncdf4::ncvar_get(nc, varname)
 }
 
-ncgetslice <- function(x, varname, start, count) {
+ncgetslice <- function(x, varname, start = c(1L, 1L, 1L, 1L), count = c(-1L, -1L, -1L, -1L)) {
   con <- ncdf4::nc_open(x)
   on.exit(ncdf4::nc_close(con))
   ncdf4::ncvar_get(con, varname, start = start, count = count)
 }
 
+#' @importFrom raster getValuesBlock raster setExtent extent nlayers
 rastergetslice <- function(x, slice) {
   ## expect slice to be c(xindex, NA, NA) or c(NA, yindex, NA)
   ## all longitudes
-  if (is.na(slice[1]))  x1 <-  setExtent(raster(getValuesBlock(x, row = slice[2], nrows = 1)), extent(0, ncol(x), 0, nlayers(x)))
+  if (is.na(slice[1]))  x1 <-  setExtent(raster(getValuesBlock(x, row = slice[2], nrows = 1L)), extent(0, ncol(x), 0, nlayers(x)))
   ## all latitudes
-  if (is.na(slice[2]))  x1 <-  setExtent(raster(getValuesBlock(x, col = slice[1], ncols = 1, nrows = nrow(x))), extent(0, nrow(x), 0, nlayers(x)))
+  if (is.na(slice[2]))  x1 <-  setExtent(raster(getValuesBlock(x, col = slice[1], ncols = 1L, nrows = nrow(x))), extent(0, nrow(x), 0, nlayers(x)))
   x1
 }
 
 
 
-#' Read an arbitrary 2D or 3D slice from NetCDF as a RasterBrick
-#' 
-#' @param x ROMS file name
-#' @param varname variable name
-#' @param slice index, specified with NA for the index to read all steps
-#'
-#' @export
-ncraster <- function(x, varname, slice) {
-  nc <- rancid::NetCDF(x)
-  vd <- ## how is order controlled here?
-    rancid::vars(nc) %>% filter(name == varname) %>% 
-    inner_join(nc$vardim, "id") %>% transmute(vid = id, id = dimids) %>% 
-    inner_join(dims(nc), "id")
-  ## if slice is NA, we get all
-  start <- ifelse(is.na(slice), 1, slice)
-  count <- ifelse(is.na(slice), vd$len, 1)
- # print(start)
-#  print(count)
-  a <- ncgetslice(x, varname, start, count)
-  if (length(dim(a)) == 2) {
-    a <- a[, ncol(a):1 ]
-    a <- setExtent(raster(t(a)), extent(0, nrow(a), 0, ncol(a)))
-  } else {
-    a <- a[,ncol(a):1,]
-    a <- setExtent(brick(a,  transpose = TRUE)  , extent(0, nrow(a), 0, ncol(a)))
-  }
-  a
-}
+

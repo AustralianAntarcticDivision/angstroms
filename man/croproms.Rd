@@ -2,18 +2,27 @@
 % Please edit documentation in R/c-grid.r
 \name{croproms}
 \alias{croproms}
-\title{Title}
+\title{Crop a ROMS layer}
 \usage{
 croproms(x, ext, ...)
 }
 \arguments{
-\item{x}{file}
+\item{x}{ROMS xy- coordinates, see \code{romscoords}}
 
-\item{ext}{extent}
+\item{ext}{\code{raster::extent} in the coordinate system of \code{x}}
 
-\item{...}{ignore}
+\item{...}{ignored}
 }
 \description{
-Title
+Crop a ROMS data layer from \code{romsdata} with a raster extent.
 }
-
+\details{
+The spatial crop is performed in the coordinate space of roms data.
+}
+\examples{
+## notice that extent is in long-lat, but ice_local is in the grid
+## space of ice_coords
+ice_local <- croproms(ice_coords, extent(100, 120, -75, -60))
+plot(ice_coords[[2]], col = grey(seq(0, 1, length  = 20)))
+plot(crop(ice_fake, ice_local), add = TRUE)
+}

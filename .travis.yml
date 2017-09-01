@@ -1,38 +1,36 @@
-## Sample .travis.yml file for use with metacran/r-builder
-## See https://github.com/metacran/r-builder for details.
+# R for travis: see documentation at https://docs.travis-ci.com/user/languages/r
 
-language: c
+language: R
 sudo: required
 
+r:
+  - release
+  - devel
+  
+dist: trusty
+
 before_install:
-  - curl -OL https://raw.githubusercontent.com/metacran/r-builder/master/pkg-build.sh
-  - chmod 755 pkg-build.sh
-  - ./pkg-build.sh bootstrap
-  - cd
-  - wget http://download.osgeo.org/proj/proj-4.9.2.tar.gz
-  - tar zxvf proj-4.9.2.tar.gz
-  - cd proj-4.9.2
-  - ./configure --prefix=/usr
-  - make
-  - sudo make install
-  - cd /home/travis/build/mdsumner/angstroms
+  - sudo add-apt-repository ppa:ubuntugis/ubuntugis-unstable --yes
+  - sudo apt-get --yes --force-yes update -qq
+  - sudo apt-get install -y libudunits2-dev libproj-dev libgeos++-dev libgdal-dev
+  - sudo apt-get install -y netcdf-bin libnetcdf-dev
+  
+r_binary_packages:
+  - rgdal
+  - proj4
+  - ncdf4
+  - sp
+  - raster
+  - Rcpp
+  - RcppEigen
+  - testthat
+  - tibble
+  - dplyr
+  
+cache: packages
+#R binary packages not supported with 'sudo: false' or 'dist: precise',  falling back to source install
+#Installing R packages: rgdal, proj4, ncdf4, sp, raster, Rcpp, RcppEigen, testthat, tibble, dplyr
 
-install:
-  - ./pkg-build.sh install_deps
 
-script:
-  - ./pkg-build.sh run_tests
-
-after_failure:
-  - ./pkg-build.sh dump_logs
-
-notifications:
-  email:
-    on_success: change
-    on_failure: change
-
-env:
-  matrix:
-    - RVERSION=oldrel
-    - RVERSION=release
-    - RVERSION=devel
+after_success:
+  - Rscript -e 'covr::codecov()'
