@@ -43,7 +43,8 @@ ncdim <- function(x, varname) {
 romsdata <- function (x, varname, slice = c(1, 1), ncdf = TRUE, transpose = FALSE, ...) 
 {
    stopifnot(!missing(varname))
-   x0 <- try(brick(x, level = slice[1L], varname = varname, ncdf = ncdf, ...), silent = TRUE)
+  ## not sure that lvar was necessary before ...
+   x0 <- try(brick(x, level = slice[1L], lvar = 4L, varname = varname, ncdf = ncdf, ...), silent = TRUE)
   if (inherits(x0, "try-error")) {
      ## 
     stop(sprintf("%s is not multi-dimensional/interpretable as a RasterLayer, try extracting in raw form with rawdata()", varname))
