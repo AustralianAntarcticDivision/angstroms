@@ -23,7 +23,8 @@
 <link href="../pkgdown.css" rel="stylesheet">
 <script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
-
+  
+  
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -51,6 +52,12 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
+  <a href="..//index.html">
+    <span class="fa fa-home fa-lg"></span>
+     
+  </a>
+</li>
+<li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li>
@@ -101,16 +108,17 @@
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='no'>ice_grid_boundary</span> <span class='kw'>&lt;-</span> <span class='fu'>romsboundary</span>(<span class='no'>ice_coords</span>)
-<span class='fu'>plot</span>(<span class='no'>antarctica</span>)</div><div class='input'><span class='co'>## does not make sense in this space</span>
-<span class='fu'>plot</span>(<span class='no'>ice_grid_boundary</span>, <span class='kw'>add</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>border</span> <span class='kw'>=</span> <span class='st'>"grey"</span>)</div><img src='romsboundary-3.png' alt='' width='540' height='400' /><div class='input'>
-<span class='co'>## ok in this one</span>
-<span class='co'>#library(rgdal)</span>
-<span class='co'>#   proj4string(ice_grid_boundary) &lt;- CRS("+init=epsg:4326")</span>
-<span class='co'># pweird &lt;- "+proj=laea +lon_0=147 +lat_0=-42 +ellps=WGS84"</span>
-<span class='co'>#  laea_world &lt;- spTransform(antarctica, pweird)</span>
-<span class='co'>#  plot(extent(laea_world) + 8e6, type = "n", asp = 1)</span>
-<span class='co'>#  plot(laea_world, add = TRUE)</span>
-<span class='co'>#  plot(spTransform(ice_grid_boundary, pweird), add  = TRUE, border = "darkgrey")</span></div></pre>
+<span class='fu'>plot</span>(<span class='no'>antarctica</span>)</div><div class='output co'>#&gt; <span class='error'>Error in as.double(y): cannot coerce type 'S4' to vector of type 'double'</span></div><div class='input'><span class='co'>## does not make sense in this space</span>
+<span class='fu'>plot</span>(<span class='no'>ice_grid_boundary</span>, <span class='kw'>add</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>border</span> <span class='kw'>=</span> <span class='st'>"grey"</span>)</div><div class='output co'>#&gt; <span class='error'>Error in as.double(y): cannot coerce type 'S4' to vector of type 'double'</span></div><div class='input'>
+## ok in this one
+#library(rgdal)
+#   proj4string(ice_grid_boundary) <- CRS("+init=epsg:4326")
+# pweird <- "+proj=laea +lon_0=147 +lat_0=-42 +ellps=WGS84"
+#  laea_world <- spTransform(antarctica, pweird)
+#  plot(extent(laea_world) + 8e6, type = "n", asp = 1)
+#  plot(laea_world, add = TRUE)
+#  plot(spTransform(ice_grid_boundary, pweird), add  = TRUE, border = "darkgrey")
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

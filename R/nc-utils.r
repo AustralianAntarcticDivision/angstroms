@@ -84,7 +84,8 @@ romsdata <- function (x, varname, slice = c(1L, 1L), ncdf = TRUE, transpose = TR
 {
    stopifnot(!missing(varname))
   if (is.null(x)) stop("x must be a valid file name")
-   x0 <- try(brick(x, level = slice[1L], varname = varname, ncdf = ncdf, ...), silent = TRUE)
+   x0 <- try(brick(x, level = slice[1L], lvar = 4L, varname = varname, ncdf = ncdf, ...), silent = TRUE)
+
   if (inherits(x0, "try-error")) {
      ## 
     stop(sprintf("%s is not multi-dimensional/interpretable as a RasterLayer, try extracting in raw form with rawdata()", varname))
