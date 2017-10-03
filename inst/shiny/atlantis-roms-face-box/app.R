@@ -5,7 +5,7 @@ library(raster)
 library(rbgm)
 library(bgmfiles)
 library(tibble)
-romsfiles <- tibble(fullname = "/mnt/temproms/ocean_his_31month_av.nc", 
+romsfiles <- tibble(fullname = "/rdsi/PRIVATE/raad/data_local/acecrc.org.au/ROMS/s_corney/ocean_his_31month_av.nc", 
                     date = as.POSIXct("2009-01-01", tz = "GMT"))
 library(dplyr)
 file_db <- bind_rows(lapply(romsfiles$fullname, function(x) {
