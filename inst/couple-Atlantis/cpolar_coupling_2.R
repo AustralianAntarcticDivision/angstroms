@@ -58,8 +58,16 @@ bgm <- rbgm:::read_bgm(bfile)
 roms_ll <- romscoords(file_db$fullname[1], transpose = TRUE)
 
 ## we need the unsullied boxes to identify points inside them
-boxes <- boxSpatial(bgm)
-roms_face <- romsmap(project_to(faceSpatial(bgm), "+init=epsg:4326"), roms_ll)
+#boxes <- boxSpatial(bgm)
+boxes <- as(sf::st_sf(label = bgm$box$box, 
+                      geometry =  sf::st_sfc(rbgm:::make_boxes(bgm$vertex), 
+                                             crs = bgm$meta$projection), stringsAsFactors = FALSE), "Spatial")
+#roms_face <- romsmap(project_to(faceSpatial(bgm), "+init=epsg:4326"), roms_ll)
+roms_face <- romsmap(project_to(
+  as(sf::st_sf(label = bgm$face$face,  
+               geometry = sf::st_sfc(rbgm:::make_faces(bgm$face), 
+                                     crs = bgm$meta$projection), stringsAsFactors = FALSE), "Spatial"),
+  "+init=epsg:4326"), roms_ll)
 
 ## which box does each point fall in
 index_box <- function(box_sp, roms_ll) {
@@ -75,7 +83,7 @@ index_box <- function(box_sp, roms_ll) {
 ## and each face for the ROMS cells it traverses
 library(dplyr)
 box_roms_index <- index_box(boxes, roms_ll)
-ind_face <- cellFromLine(romsdata(roms_file, "u"), roms_face)
+ind_face <- cellFromLine(romsdata(file_db$fullname[1], "u"), roms_face)
 face_roms_index <- tibble(face = roms_face$label[rep(seq_len(nrow(roms_face)), lengths(ind_face))], 
                           cell = unlist(ind_face))
 
@@ -87,9 +95,9 @@ roms_level <- function(Cs_r, h, cell) {
 }
 
 ## important to readAll here, else extract is very slow in the loop
-h <- readAll(raster(roms_file, varname = "h"))
+h <- readAll(raster(file_db$fullname[1], varname = "h"))
 ## Cs_r is the S-coord stretching
-Cs_r <- rawdata(roms_file, "Cs_r")
+Cs_r <- rawdata(file_db$fullname[1], "Cs_r")
 
 
 ## build the level index between Atlantis and ROMS
