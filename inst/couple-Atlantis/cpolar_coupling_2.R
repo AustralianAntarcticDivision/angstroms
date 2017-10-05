@@ -91,9 +91,14 @@ face_roms_index <- tibble(face = roms_face$label[rep(seq_len(nrow(roms_face)), l
 #' return the ramp of positive depths from surface down 
 #' (so that the order is native to the NetCDF order)
 roms_level <- function(Cs_r, h, cell) {
-  extract(h, cell) *  Cs_r
+  extract(h, cell) * Cs_r
 }
 
+roms_z <- function(Cs_r, h, cell) {
+  out <- flip(raster(matrix(rep(extract(h, cell), each = length(Cs_r)) *  rep(Cs_r, length(cell)), 
+         length(Cs_r))), "y")
+  setExtent(out, extent(0, ncol(out), 0, nrow(out)))
+}
 ## important to readAll here, else extract is very slow in the loop
 h <- readAll(raster(file_db$fullname[1], varname = "h"))
 ## Cs_r is the S-coord stretching

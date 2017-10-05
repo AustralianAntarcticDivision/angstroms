@@ -12,4 +12,5 @@
 ^codecov\.yml$
 ^inst/couple-Atlantis/*
 ^inst/work/*
+^inst/shiny/*
 ^docs$

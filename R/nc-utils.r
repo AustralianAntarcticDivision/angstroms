@@ -8,6 +8,23 @@ raster_ispace <- function(x, transpose = TRUE) {
   setExtent(raster(x), e)
 }
 
+#' convert the depth ramp Cs_r, h (bottom depth), and cell number
+#' to a correctly oriented layer of depth values
+romscoords_z <- function(x, cell) {
+  ## important to readAll here, else extract is very slow in the loop
+  h <- readAll(raster(x, varname = "h"))
+  ## Cs_r is the S-coord stretching
+  Cs_r <- rawdata(x, "Cs_r")
+  
+  out <- flip(raster(matrix(rep(extract(h, cell), each = length(Cs_r)) *  rep(Cs_r, length(cell)), 
+                            length(Cs_r))), "y")
+  setExtent(out, extent(0, ncol(out), 0, nrow(out)))
+}
+
+## read the 180th (reading up) latitude
+## which happens to cut the coast a few times
+#zz <- roms_xz(f, "temp", slice = c(180, 1))
+
 #' @examples 
 #' #x <- raadtools:::cpolarfiles()$fullname[1]
 #' #plot(roms_xy(x, "u"))
@@ -80,26 +97,40 @@ roms_zt <- function(x, varname, slice = c(1L, 1L), transpose = TRUE, ...) {
 #' @return RasterLayer
 #' @export
 #'
-romsdata <- function (x, varname, slice = c(1L, 1L), ncdf = TRUE, transpose = TRUE, ...) 
+romsdata <- function (x, varname, slice = c(1L, 1L), transpose = TRUE, ...) 
 {
-   stopifnot(!missing(varname))
-  if (is.null(x)) stop("x must be a valid file name")
-   x0 <- try(brick(x, level = slice[1L], lvar = 4L, varname = varname, ncdf = ncdf, ...), silent = TRUE)
-
-  if (inherits(x0, "try-error")) {
-     ## 
-    stop(sprintf("%s is not multi-dimensional/interpretable as a RasterLayer, try extracting in raw form with rawdata()", varname))
-    
-    }
-  x <- x0[[slice[2L]]]
-   if (transpose) {
-    e <- extent(0, ncol(x), 0, nrow(x)) 
-   } else {
-   e <- extent(0, nrow(x), 0, ncol(x))
-   }
-  setExtent(x, e)
+  romsdata3d(x, varname = varname, slice = slice[2L], transpose = transpose)[[slice[1L]]]
 }
-
+#' @name romsdata
+#' @export
+romsdata2d <- romsdata
+#' for romsdata3d slice must be length 1, intended to get all depths
+#' @name romsdata
+#' @export
+romsdata3d <- function (x, varname, slice = 1L, transpose = TRUE, verbose = TRUE,  ...) 
+{
+  stopifnot(length(slice) == 1L)
+  if (is.null(x)) stop("x must be a valid NetCDF source name")
+  ## why is ncdf = TRUE needed? (maybe if the filename is not *.nc ...)
+  x0 <- try(brick(x, level = slice[1L], lvar = 4L, varname = varname, ncdf = TRUE, ...), silent = TRUE)
+  if (inherits(x0, "try-error")) {
+    message(sprintf("cannot read in this form, need varname = ' a 4D variable in this source:\n%s", x))
+   # tnc <- try(tidync::tidync(x))
+    tnc <- ncdf4::nc_open(x)
+    if (!inherits(tnc, "try-error") && verbose) {
+      message("printing summary of source ...")
+      print(tnc)
+      
+    }
+    stop("%s is not multi-dimensional/interpretable as a RasterLayer, try extracting in raw form with rawdata()")
+  }
+  if (transpose) {
+    e <- extent(0, ncol(x0), 0, nrow(x0)) 
+  } else {
+    e <- extent(0, nrow(x0), 0, ncol(x0))
+  }
+  setExtent(x0, e)
+}
 #' Read the variable as is
 #' 
 #' @param x netcdf file path
