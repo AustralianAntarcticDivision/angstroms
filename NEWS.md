@@ -1,5 +1,7 @@
 # angstroms dev
 
+* more general approach to reading slices, with `romsdata3d` and `romsdata2d`
+
 * S3 methods for rawdata
 
 # angstroms 0.0.1
