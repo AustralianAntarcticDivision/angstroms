@@ -1,3 +1,27 @@
+romsmap.sf <- function(x, coords, crop = FALSE, lonlat = TRUE, ...) {
+  ## first get the intersection
+  #  if (crop) {
+  #    op <- options(warn = -1)
+  #    x <- raster::intersect(x, romsboundary(coords))
+  #    options(op)
+  #  }
+  ## do we need to invert projection?
+  #  repro <- !raster::isLonLat(x)
+  #  proj <- projection(x)
+  # tab <- spbabel::sptable(x)
+  gm <- gibble::gibble(x)
+  vertex <- silicate::sc_coord(x)
+  xy <- as.matrix(coords)
+  kd <- nabor::knn(xy, raster::as.matrix(vertex[, c("x_", "y_")]), k = 1, eps = 0)
+  index <- expand.grid(x = seq(ncol(coords)), y = rev(seq(nrow(coords))))[kd$nn.idx, ]
+  vertex$x_ <- index$x
+  vertex$y_ <- index$y
+  #  spbabel::sp(tab, attr_tab = as.data.frame(x), crs = NA_character_)
+  out <- tibble::as_tibble(as.data.frame(x))
+  out[[attr(x, "sf_column")]]  <- silicate:::build_sf(gm, vertex, crs = NA)
+  out
+}
+
 #' Remap an object to the ROMS grid. 
 #' 
 #' Find the nearest-neighbour coordinates of `x` in the coordinate arrays of `coords`. 
@@ -77,6 +101,17 @@ romsmap.SpatialLinesDataFrame <- romsmap.SpatialPolygonsDataFrame
 #' @export
 romsmap.SpatialPointsDataFrame <- romsmap.SpatialPolygonsDataFrame
 
+keeponlymostcomplexline <- function (x) 
+{
+  for (iObj in seq_len(nrow(x))) {
+    if (inherits(x, "SpatialLinesDataFrame")) {
+      wmax <- which.max(sapply(x[iObj, ]@lines[[1]]@Lines, 
+                               function(x) nrow(x@coords)))
+      x@lines[[iObj]]@Lines <- x@lines[[iObj]]@Lines[wmax]
+    }
+  }
+  x
+}
 #' Boundary polygon from raster of coordinates. 
 #' 
 #' Create a boundary polygon by tracking around coordinates stored in a RasterStack. 
@@ -107,9 +142,23 @@ romsboundary <- function(cds) {
   right <- rev(cellFromCol(cds, ncol(cds)))
   top <- rev(cellFromRow(cds, 1))
   ## need XYFromCell method
-  SpatialPolygons(list(Polygons(list(Polygon(raster::as.matrix(cds)[unique(c(left, bottom, right, top)), ])), "1")))
+  polys <- SpatialPolygonsDataFrame(SpatialPolygons(list(Polygons(list(Polygon(raster::as.matrix(cds)[unique(c(left, bottom, right, top)), ])), "1")), 
+                                                    proj4string = CRS("+init=epsg:4326")), 
+                                    data.frame(boundary = "coords", stringsAsFactors = FALSE))
 }
 
+#' @name romsboundary
+#' @export
+databoundary <- function(x, mask = NULL, ...) {
+  if (is.null(mask)) {
+    ## longshot, put an NA band around the mask and contour on that
+    maskboundary <- rgeos::gPolygonize(as(keeponlymostcomplexline(
+      rasterToContour(is.na(extend(x, c(2, 2), value = NA)), level = 1)), 
+      "SpatialLinesDataFrame"))
+    maskboundary <- SpatialPolygonsDataFrame(maskboundary, data.frame(boundary = "mask", stringsAsFactors = FALSE))
+  }
+  maskboundary
+}
 
 ## put any raster into xy-index space (0, nc, 0, nr)
 set_indextent <- function(x) {
