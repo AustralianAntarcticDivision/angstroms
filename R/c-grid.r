@@ -67,15 +67,15 @@ plot_cgrid <- function(x, ex = extent(0, 15, 0, 20),
  invisible(NULL) 
 } 
 ucoords <- function(x, ...) {
-  s <- stack(raster(x, varname = "lon_u"), raster(x, varname = "lat_u"))
+  s <- stack(raster(x, varname = "lon_u", ncdf = TRUE), raster(x, varname = "lat_u", ncdf = TRUE))
   setExtent(s, extent(0, ncol(s), 0, nrow(s)))
 }
 vcoords <- function(x, ...) {
-  s <- stack(raster(x, varname = "lon_v"), raster(x, varname = "lat_v"))
+  s <- stack(raster(x, varname = "lon_v", ncdf = TRUE), raster(x, varname = "lat_v", ncdf = TRUE))
   setExtent(s, extent(0, ncol(s), 0, nrow(s)))
 }
 rhocoords <- function(x, ...) {
-  s <- stack(raster(x, varname = "lon_rho"), raster(x, varname = "lat_rho"))
+  s <- stack(raster(x, varname = "lon_rho", ncdf = TRUE), raster(x, varname = "lat_rho", ncdf = TRUE))
   setExtent(s, extent(0, ncol(s), 0, nrow(s)))
 }
 psicoords <- function(x, ...) {

@@ -12,7 +12,7 @@ raster_ispace <- function(x, transpose = TRUE) {
 #' to a correctly oriented layer of depth values
 romscoords_z <- function(x, cell) {
   ## important to readAll here, else extract is very slow in the loop
-  h <- readAll(raster(x, varname = "h"))
+  h <- readAll(raster(x, varname = "h", ncdf = TRUE))
   ## Cs_r is the S-coord stretching
   Cs_r <- rawdata(x, "Cs_r")
   
@@ -99,6 +99,9 @@ roms_zt <- function(x, varname, slice = c(1L, 1L), transpose = TRUE, ...) {
 #'
 romsdata <- function (x, varname, slice = c(1L, 1L), transpose = TRUE, ...) 
 {
+  if (missing(varname)) {
+    stop("no varname supplied")
+  }
   romsdata3d(x, varname = varname, slice = slice[2L], transpose = transpose)[[slice[1L]]]
 }
 #' @name romsdata
@@ -113,6 +116,7 @@ romsdata3d <- function (x, varname, slice = 1L, transpose = TRUE, verbose = TRUE
   if (is.null(x)) stop("x must be a valid NetCDF source name")
   ## why is ncdf = TRUE needed? (maybe if the filename is not *.nc ...)
   x0 <- try(brick(x, level = slice[1L], lvar = 4L, varname = varname, ncdf = TRUE, ...), silent = TRUE)
+
   if (inherits(x0, "try-error")) {
     message(sprintf("cannot read in this form, need varname = ' a 4D variable in this source:\n%s", x))
     # tnc <- try(tidync::tidync(x))
@@ -123,7 +127,7 @@ romsdata3d <- function (x, varname, slice = 1L, transpose = TRUE, verbose = TRUE
       
     }
     stop("%s is not multi-dimensional/interpretable as a RasterLayer, try extracting in raw form with rawdata()")
-  }
+  } 
   if (transpose) {
     e <- extent(0, ncol(x0), 0, nrow(x0)) 
   } else {
