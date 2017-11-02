@@ -1,5 +1,7 @@
 # angstroms dev
 
+* update missing uses of `ncdf = TRUE` thanks to Ryan Morse in https://github.com/hypertidy/angstroms/issues/6
+
 * added `databoundary` function, to trace around valid pixels
 
 * more general approach to reading slices, with `romsdata3d` and `romsdata2d`
