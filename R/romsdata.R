@@ -110,12 +110,12 @@ romsdata2d <- romsdata
 #' for romsdata3d slice must be length 1, intended to get all depths
 #' @name romsdata
 #' @export
-romsdata3d <- function (x, varname, slice = 1L, transpose = TRUE, verbose = TRUE,  ...) 
+romsdata3d <- function (x, varname, slice = 1L, transpose = TRUE, verbose = TRUE,  ..., lvar = 4L) 
 {
   stopifnot(length(slice) == 1L)
   if (is.null(x)) stop("x must be a valid NetCDF source name")
   ## why is ncdf = TRUE needed? (maybe if the filename is not *.nc ...)
-  x0 <- try(brick(x, level = slice[1L], lvar = 4L, varname = varname, ncdf = TRUE, ...), silent = TRUE)
+  x0 <- try(brick(x, level = slice[1L], lvar = lvar, varname = varname, ncdf = TRUE, ...), silent = TRUE)
 
   if (inherits(x0, "try-error")) {
     message(sprintf("cannot read in this form, need varname = ' a 4D variable in this source:\n%s", x))
