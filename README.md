@@ -36,4 +36,21 @@ Some more examples:
 
 <http://rpubs.com/cyclemumner/266770>
 
+Contributing
+------------
+
+Here are some notes on lessons learned, all is work in progress.
+
+-   calls to raster/brick/stack should be wrapped by an appropriate `romsdata()`, to ensure that `ncdf = TRUE` is consistent, and to reduce the amount of extent-setting and orienting code
+-   romsdata() should have a convention to accept a raw matrix/array, see first point
+-   use `set_indextent` on a brick/raster to ensure it is in index-extent, again to reduce code duplications
+-   `ncdf=TRUE` is required, because on some systems we might fall back to rgdal which won't support NetCDF properly (can be done with SDS strings or VRT but that's a hassle)
+-   use of raster (and so ncdf4) package could be better done more directly with RNetCDF / tidync
+-   RNetCDF loses speed on ncdf4 for some metadata harvesting, but is otherwise a better choice right now (Nov 2017) especially with Thredds support for Win64 now on CRAN
+-   orientation is an open question, but at the moment it looks like X-increasing, Y-decreasing, Z-decreasing, T-increasing - though it's not that simple - and for no good reason other than train-wreck-convention
+-   romsdata() generally needs a bit more thought, should it take a raw array or only a source string, do 2d/3d variants make sense, how to orient specific slice conventions (roms\_xt etc.)
+
+Conduct
+-------
+
 Please note that this project is released with a [Contributor Code of Conduct](CONDUCT.md). By participating in this project you agree to abide by its terms.
