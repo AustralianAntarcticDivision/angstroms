@@ -1,5 +1,5 @@
 
-[![Travis-CI Build Status](https://travis-ci.org/mdsumner/angstroms.svg?branch=master)](https://travis-ci.org/mdsumner/angstroms) [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/mdsumner/angstroms?branch=master&svg=true)](https://ci.appveyor.com/project/mdsumner/angstroms) [![Coverage Status](https://img.shields.io/codecov/c/github/mdsumner/angstroms/master.svg)](https://codecov.io/github/mdsumner/angstroms?branch=master) <!-- README.md is generated from README.Rmd. Please edit that file -->
+[![Travis-CI Build Status](https://travis-ci.org/hypertidy/angstroms.svg?branch=master)](https://travis-ci.org/hypertidy/angstroms) [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/hypertidy/angstroms?branch=master&svg=true)](https://ci.appveyor.com/project/hypertidy/angstroms) [![Coverage Status](https://img.shields.io/codecov/c/github/hypertidy/angstroms/master.svg)](https://codecov.io/github/hypertidy/angstroms?branch=master) <!-- README.md is generated from README.Rmd. Please edit that file -->
 
 angstroms
 =========
@@ -13,7 +13,7 @@ You can install the development version of angstroms from github with:
 
 ``` r
 # install.packages("devtools")
-devtools::install_github("mdsumner/angstroms")
+devtools::install_github("hypertidy/angstroms")
 ```
 
 angstroms - R for ROMS
