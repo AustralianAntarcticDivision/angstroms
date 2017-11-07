@@ -1,5 +1,10 @@
 # angstroms dev
 
+* add better romshcoords logic, and romsdepth alias (simple arg provides original, 
+probably wrong, implementation)
+
+* add lvar argument to romsdata3d (needs more thought)
+
 * update missing uses of `ncdf = TRUE` thanks to Ryan Morse in https://github.com/hypertidy/angstroms/issues/6
 
 * added `databoundary` function, to trace around valid pixels
