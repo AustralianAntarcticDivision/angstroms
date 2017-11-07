@@ -147,6 +147,10 @@ romsboundary <- function(cds) {
                                     data.frame(boundary = "coords", stringsAsFactors = FALSE))
 }
 
+#' @param x a thing
+#' @param mask logical
+#' @param ... dots
+#' 
 #' @name romsboundary
 #' @export
 databoundary <- function(x, mask = NULL, ...) {

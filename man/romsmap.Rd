@@ -3,6 +3,7 @@
 \name{romsmap}
 \alias{romsmap}
 \alias{romsmap.SpatialPolygonsDataFrame}
+\alias{romsmap.default}
 \alias{romsmap.SpatialLinesDataFrame}
 \alias{romsmap.SpatialPointsDataFrame}
 \title{Remap an object to the ROMS grid.}
@@ -11,6 +12,8 @@ romsmap(x, ...)
 
 \method{romsmap}{SpatialPolygonsDataFrame}(x, coords, crop = FALSE,
   lonlat = TRUE, ...)
+
+\method{romsmap}{default}(x, coords, crop = FALSE, lonlat = TRUE, ...)
 
 \method{romsmap}{SpatialLinesDataFrame}(x, coords, crop = FALSE,
   lonlat = TRUE, ...)

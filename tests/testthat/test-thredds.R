@@ -1,4 +1,5 @@
 context("thredds")
+skip_on_travis()
 ur <- "http://tds.marine.rutgers.edu/thredds/dodsC/roms/gom/g9/daily_avg"
 library(raster)
 h <- raster(ur, varname = "h", ncdf = TRUE)

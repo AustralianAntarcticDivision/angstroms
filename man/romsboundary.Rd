@@ -2,12 +2,22 @@
 % Please edit documentation in R/romsmap.R
 \name{romsboundary}
 \alias{romsboundary}
+\alias{romsboundary}
+\alias{databoundary}
 \title{Boundary polygon from raster of coordinates.}
 \usage{
 romsboundary(cds)
+
+databoundary(x, mask = NULL, ...)
 }
 \arguments{
 \item{cds}{two-layer Raster}
+
+\item{x}{a thing}
+
+\item{mask}{logical}
+
+\item{...}{dots}
 }
 \description{
 Create a boundary polygon by tracking around coordinates stored in a RasterStack.

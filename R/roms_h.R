@@ -26,18 +26,18 @@ romshcoords <- function(x, grid_type = "rho", slice, ..., S = "Cs_r", depth = "h
   } else {
     grid_type <- match.arg(tolower(grid_type),c("rho","psi","u","v","w"))
     
-    Vtransform <- as.integer(angstroms:::ncget(x,"Vtransform"))
+    Vtransform <- as.integer(ncget(x,"Vtransform"))
     if (!Vtransform %in% c(1,2)) stop("Vtransform must be 1 or 2")
     
-    hc <- angstroms:::ncget(x,"hc")
+    hc <- ncget(x,"hc")
     
     depth_grid <- if (grid_type=="w") "w" else "rho"
     
     zeta <- if (missing(slice)) 0 else stop("not coded yet")##angstroms::romsdata2d(x,"zeta",slice=slice,transpose=FALSE)
-    N <- length(angstroms:::ncget(x,"Cs_r"))
+    N <- length(ncget(x,"Cs_r"))
     Np <- N+1
     
-    h <- angstroms:::ncget(x,"h")
+    h <- ncget(x,"h")
     hmin <- min(h)
     hmax <- max(h)
     
@@ -51,9 +51,9 @@ romshcoords <- function(x, grid_type = "rho", slice, ..., S = "Cs_r", depth = "h
     ## Compute vertical stretching function, C(k):
     ##stretch <- stretching(x,depth_grid)
     if (depth_grid=="w") {
-      stretch <- list(C=angstroms:::ncget(x,"Cs_w"),s=angstroms:::ncget(x,"s_w"))
+      stretch <- list(C=ncget(x,"Cs_w"),s=ncget(x,"s_w"))
     } else {
-      stretch <- list(C=angstroms:::ncget(x,"Cs_r"),s=angstroms:::ncget(x,"s_rho"))
+      stretch <- list(C=ncget(x,"Cs_r"),s=ncget(x,"s_rho"))
     }
     
     ## Average bathymetry and free-surface at requested C-grid type.
@@ -143,7 +143,7 @@ romshcoords <- function(x, grid_type = "rho", slice, ..., S = "Cs_r", depth = "h
     ## FIXME all these flips and twirls can be applied more efficiently (or avoided)
     ## though should layers start at the surface and go down or ...
     out <- raster::flip(set_indextent(raster::brick(z, transpose = TRUE)), "y")
-    out <- raster::subset(out, rev(seq_len(nlayers(out))))
+    out <- raster::subset(out, rev(seq_len(raster::nlayers(out))))
     
   } 
   

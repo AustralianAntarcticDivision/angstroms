@@ -38,7 +38,8 @@ romsdata(x, varname, slice = c(1L, 1L), transpose = TRUE, ...)
 
 romsdata2d(x, varname, slice = c(1L, 1L), transpose = TRUE, ...)
 
-romsdata3d(x, varname, slice = 1L, transpose = TRUE, verbose = TRUE, ...)
+romsdata3d(x, varname, slice = 1L, transpose = TRUE, verbose = TRUE, ...,
+  lvar = 4L)
 }
 \arguments{
 \item{x}{ROMS file name}
@@ -50,8 +51,6 @@ romsdata3d(x, varname, slice = 1L, transpose = TRUE, verbose = TRUE, ...)
 \item{transpose}{the extents (ROMS is FALSE, Access is TRUE)}
 
 \item{...}{unused}
-
-\item{ncdf}{default to \code{TRUE}, set to \code{FALSE} to allow raster format detection brick}
 }
 \value{
 RasterLayer

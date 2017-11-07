@@ -3,7 +3,7 @@
 #' 
 #' @param x netcdf file path
 #' @param varname variable name
-#'
+#' @param ... dots (ignored)
 #' @export
 rawdata <- function(x, varname, ...) UseMethod("rawdata")
 #' @name rawdata

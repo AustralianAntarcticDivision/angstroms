@@ -18,6 +18,8 @@ rawdata(x, varname, ...)
 \item{x}{netcdf file path}
 
 \item{varname}{variable name}
+
+\item{...}{dots (ignored)}
 }
 \description{
 Read the variable as is

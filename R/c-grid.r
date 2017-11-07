@@ -40,6 +40,11 @@
 #' https://ecowatch.ncddc.noaa.gov/thredds/dodsC/northwest_fisheries/roms/nep_c.nc
 #' @importFrom raster crop 
 #' @name plot_cgrid
+#' @param x ROMS file
+#' @param ex extent in index space
+#' @param include grid elements to plot (all by default, uv, rho, psi)
+#' @param cell draw the cells (defaults to TRUE)
+#' @param ... arguments passed to plot
 #' @export
 plot_cgrid <- function(x, ex = extent(0, 15, 0, 20), 
                        include = c("u", "v", "rho", "psi"), cell = TRUE,  ...) {

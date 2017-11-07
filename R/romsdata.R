@@ -12,7 +12,7 @@ raster_ispace <- function(x, transpose = TRUE) {
 #' to a correctly oriented layer of depth values
 romscoords_z <- function(x, cell) {
   ## important to readAll here, else extract is very slow in the loop
-  h <- readAll(raster(x, varname = "h", ncdf = TRUE))
+  h <- raster::readAll(raster(x, varname = "h", ncdf = TRUE))
   ## Cs_r is the S-coord stretching
   Cs_r <- rawdata(x, "Cs_r")
   
@@ -92,7 +92,6 @@ roms_zt <- function(x, varname, slice = c(1L, 1L), transpose = TRUE, ...) {
 #' @param slice index in w and t (depth and time), defaults to first encountered
 #' @param transpose the extents (ROMS is FALSE, Access is TRUE)
 #' @param ... unused
-#' @param ncdf default to \code{TRUE}, set to \code{FALSE} to allow raster format detection brick
 #' @importFrom raster brick 
 #' @return RasterLayer
 #' @export

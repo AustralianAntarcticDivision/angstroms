@@ -13,6 +13,17 @@ https://ecowatch.ncddc.noaa.gov/thredds/dodsC/northwest_fisheries/roms/nep_c.nc}
 plot_cgrid(x, ex = extent(0, 15, 0, 20), include = c("u", "v", "rho",
   "psi"), cell = TRUE, ...)
 }
+\arguments{
+\item{x}{ROMS file}
+
+\item{ex}{extent in index space}
+
+\item{include}{grid elements to plot (all by default, uv, rho, psi)}
+
+\item{cell}{draw the cells (defaults to TRUE)}
+
+\item{...}{arguments passed to plot}
+}
 \description{
 https://www.myroms.org/wiki/easygrid
 The rho-grid represents the grid centers (red dots)
