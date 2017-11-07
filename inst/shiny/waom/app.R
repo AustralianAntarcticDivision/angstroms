@@ -42,7 +42,7 @@ ui <- fluidPage(
 
 server <- function(input, output) {
    output$rasterPlot <- renderPlot({
-      roms <- set_indextent(raster(f, varname = input$variable_name))
+      roms <- set_indextent(raster(f, varname = input$variable_name, ncdf = TRUE))
       afun <- NULL
       if (input$ice_contour) {
         ice <- raadtools::readice(latest = TRUE)
