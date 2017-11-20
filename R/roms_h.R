@@ -11,6 +11,7 @@
 #' @param slice integer: if non-missing, use this time slice to index into zeta (free-surface). Otherwise assume zeta is zero (and hence depth is time-independent)
 #' @param ... dots
 #' @param depth string: the name of the appropriate variable to use for depth
+#' @param simple logical: if TRUE, use the old "simple" depth method, which may not be correct
 #' @return RasterStack with a layer for every depth
 #' @export
 romshcoords <- function(x, grid_type = "rho", slice, ..., depth = "h", simple = FALSE){

@@ -20,6 +20,8 @@ romsdepth(x, ...)
 \item{...}{dots}
 
 \item{depth}{string: the name of the appropriate variable to use for depth}
+
+\item{simple}{logical: if TRUE, use the old "simple" depth method, which may not be correct}
 }
 \value{
 RasterStack with a layer for every depth
