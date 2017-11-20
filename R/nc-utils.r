@@ -1,6 +1,6 @@
 
 #' Read the variable as is
-#' 
+#'
 #' @param x netcdf file path
 #' @param varname variable name
 #' @param ... dots (ignored)
@@ -14,11 +14,11 @@ rawdata.character <- function(x, varname, ...) {
 #' @name rawdata
 #' @export
 rawdata.NetCDF <- function(x, varname, ...) {
-  rawdata(nc$file$filename[1L], varname = varname, ...)
+  rawdata(x$file$filename[1L], varname = varname, ...)
 }
 
 
-#' @importFrom ncdf4 nc_open nc_close ncvar_get 
+#' @importFrom ncdf4 nc_open nc_close ncvar_get
 ncget <- function(x, varname) {
   nc <- ncdf4::nc_open(x)
   on.exit(ncdf4::nc_close(nc))
