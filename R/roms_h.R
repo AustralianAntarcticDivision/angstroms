@@ -15,7 +15,7 @@
 #' @param S  of S-coordinate stretching curve at RHO-points
 #' @return RasterStack with a layer for every depth
 #' @export
-romshcoords <- function(x, grid_type = "rho", slice, ..., S = "Cs_r", depth = "h", simple = FALSE){
+romsdepth <- function(x, grid_type = "rho", slice, ..., S = "Cs_r", depth = "h", simple = FALSE){
   h <- romsdata(x, varname = depth)
   Cs_r <- ncget(x, S)
   v <- values(h)
@@ -33,7 +33,7 @@ romshcoords <- function(x, grid_type = "rho", slice, ..., S = "Cs_r", depth = "h
     
     depth_grid <- if (grid_type=="w") "w" else "rho"
     
-    zeta <- if (missing(slice)) 0 else stop("not coded yet")##angstroms::romsdata2d(x,"zeta",slice=slice,transpose=FALSE)
+    zeta <- if (missing(slice)) 0 else stop("slice not supported yet")##angstroms::romsdata2d(x,"zeta",slice=slice,transpose=FALSE)
     N <- length(ncget(x,"Cs_r"))
     Np <- N+1
     
@@ -142,8 +142,10 @@ romshcoords <- function(x, grid_type = "rho", slice, ..., S = "Cs_r", depth = "h
     }
     ## FIXME all these flips and twirls can be applied more efficiently (or avoided)
     ## though should layers start at the surface and go down or ...
+    
     out <- raster::flip(set_indextent(raster::brick(z, transpose = TRUE)), "y")
-    out <- raster::subset(out, rev(seq_len(raster::nlayers(out))))
+    ## NO - we want to start at the bottom, so we match romsdata3d
+    #out <- raster::subset(out, rev(seq_len(raster::nlayers(out))))
     
   } 
   
@@ -153,8 +155,9 @@ romshcoords <- function(x, grid_type = "rho", slice, ..., S = "Cs_r", depth = "h
 # FIXME: should be romsdepth the name anyway ...
 #' @name romshcoords
 #' @export
-romsdepth <- function(x, ...) {...
- romshcoords(x, ...) 
+romshcoords <- function(x, ...) {
+  .Deprecated("romsdepth")
+ romsdepth(x, ...) 
 }
   
   
