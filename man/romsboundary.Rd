@@ -2,7 +2,6 @@
 % Please edit documentation in R/romsmap.R
 \name{romsboundary}
 \alias{romsboundary}
-\alias{romsboundary}
 \alias{databoundary}
 \title{Boundary polygon from raster of coordinates.}
 \usage{

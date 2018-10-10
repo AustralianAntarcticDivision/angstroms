@@ -2,9 +2,7 @@
 % Please edit documentation in R/nc-utils.r
 \name{rawdata}
 \alias{rawdata}
-\alias{rawdata}
 \alias{rawdata.character}
-\alias{rawdata}
 \alias{rawdata.NetCDF}
 \title{Read the variable as is}
 \usage{

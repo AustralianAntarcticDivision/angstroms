@@ -3,20 +3,12 @@
 \name{romsdata}
 \alias{romsdata}
 \alias{roms_xy}
-\alias{romsdata}
 \alias{roms_xz}
-\alias{romsdata}
 \alias{roms_xt}
-\alias{romsdata}
 \alias{roms_yz}
-\alias{romsdata}
 \alias{roms_yt}
-\alias{romsdata}
 \alias{roms_zt}
-\alias{romsdata}
-\alias{romsdata}
 \alias{romsdata2d}
-\alias{romsdata}
 \alias{romsdata3d}
 \title{ROMS single slice 2D layer
 
@@ -38,8 +30,8 @@ romsdata(x, varname, slice = c(1L, 1L), transpose = TRUE, ...)
 
 romsdata2d(x, varname, slice = c(1L, 1L), transpose = TRUE, ...)
 
-romsdata3d(x, varname, slice = 1L, transpose = TRUE, verbose = TRUE, ...,
-  lvar = 4L)
+romsdata3d(x, varname, slice = 1L, transpose = TRUE, verbose = TRUE,
+  ..., lvar = 4L)
 }
 \arguments{
 \item{x}{ROMS file name}
@@ -58,8 +50,6 @@ RasterLayer
 \description{
 \code{romsdata} always works in the first two dimensions (x-y), the more specialist functions will
 work in the space indicated by their name \code{roms_xy}, \code{roms_xt} and so on.
-
-for romsdata3d slice must be length 1, intended to get all depths
 }
 \examples{
 #x <- raadtools:::cpolarfiles()$fullname[1]

@@ -4,7 +4,6 @@
 \name{angstroms}
 \alias{angstroms}
 \alias{angstroms-package}
-\alias{angstroms-package}
 \title{Tools for ROMS model output.}
 \description{
 Facilities for  easy access to Regional Ocean Modeling System (ROMS) output.
