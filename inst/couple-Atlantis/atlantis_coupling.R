@@ -119,30 +119,42 @@ Cs_r <- rawdata(file_db$fullname[1], "Cs_r")
 
 list_nc_z_index <- vector('list', nrow(box_roms_index))
 max_depth <- max(extract(h, unique(box_roms_index$cell)))
-atlantis_depths <- -rev(cumsum(c(0, rev(rbgm::build_dz(-max_depth)))))
+atlantis_depths <- -cumsum(c(0, rev(rbgm::build_dz(-max_depth))))
 for (i in seq_len(nrow(box_roms_index))) {
   rl <- roms_level(Cs_r, h, box_roms_index$cell[i])
   ## implicit 0 at the surface, and implicit bottom based on ROMS
-  list_nc_z_index[[i]] <- length(atlantis_depths) - findInterval(rl, atlantis_depths) + 1
+#  list_nc_z_index[[i]] <- length(atlantis_depths) - findInterval(rl, atlantis_depths) + 1
+  list_nc_z_index[[i]] <- findInterval(atlantis_depths, rl)
 if (i %% 1000 == 0) print(i)
 }
+range(lengths(list_nc_z_index))
 
 
-# 
-# ll <- extract(roms_ll, box_roms_index$cell)
-# box_roms_index$lon <- ll[, 1]
-# box_roms_index$lat <- ll[, 2]
-# library(ggplot2)
-# ggplot(box_roms_index, aes(lon, lat, colour = box)) + geom_point(pch = ".")
-# 
+ibox <- cbind(cell = rep(box_roms_index$cell, each = length(atlantis_depths)),   
+              col = unlist(list_nc_z_index))
+
+#              box = rep(box_roms_index$box, each = length(atlantis_depths)))
+zeros <- ibox[,2] < 1
+if (any(zeros)) ibox[zeros,2] <- NA
+rdata <- readAll(set_indextent(brick(roms_file, varname = "temp", lvar = 4, level = level)))
+
+
+otemp <- tibble(cell = ibox[,1], box = rep(box_roms_index$box, each = length(atlantis_depths)), 
+                temp = rdata@data@values[ibox[,1:2]], 
+                level = rep(seq_along(atlantis_depths), length(list_nc_z_index)))
+
+tt <- otemp %>% group_by(box, level) %>% summarize(temp = mean(temp, na.rm = T)) %>% ungroup()
+ggplot(sf::st_as_sf(sf::st_transform(box, 4326) %>% inner_join(tt, c("label" = "box")))) + geom_sf(aes(fill = temp)) + facet_wrap(~level)
+
 
 ## join the box-xy-index to the level index
 box_z_index <- bind_rows(lapply(list_nc_z_index, 
-                 function(x) tibble(atlantis_level = pmax(1, x), roms_level = seq_along(x))), 
+                 function(x) tibble(atlantis_level = x, roms_level = seq_along(x))), 
           .id = "cell_index") %>% 
   inner_join(mutate(box_roms_index, cell_index = as.character(row_number()))) %>% 
   select(-cell_index)
 
+#boxcell_z_index <- cbind(rep(box_roms_index$cell, each = 11), t(do.call(rbind, list_nc_z_index))
 
 # ll <- extract(roms_ll, box_z_index$cell)
 # box_z_index$lon <- ll[, 1]
@@ -156,6 +168,8 @@ for (i in seq_len(nrow(face_roms_index))) {
   rl <- roms_level(Cs_r, h, face_roms_index$cell[i])
   ## implicit 0 at the surface, and implicit bottom based on ROMS
   list_nc_z_index[[i]] <- length(atlantis_depths) -findInterval(rl, atlantis_depths) + 1
+#  list_nc_z_index[[i]] <- findInterval(atlantis_depths, rl)
+  
   if (i %% 1000 == 0) print(i)
 }
 ## join the face-xy-index to the level index
@@ -175,10 +189,12 @@ extract_at_level <- function(x, cell_level) {
   ulevel <- unique(cell_level$level)
   values <- numeric(nrow(cell_level))
   for (ul in seq_along(ulevel)) {
+   
     asub <- cell_level$level == ulevel[ul]
     values[asub] <- extract(x[[ulevel[ul]]], 
             cell_level$cell[asub])
-  }
+    }
+  
   values
 }
 
@@ -194,7 +210,7 @@ for (i_timeslice in seq(nrow(file_db))) {
   rv <- set_indextent(brick(roms_file, varname = "v", lvar = 4, level = level))
   face_z_index$v <- extract_at_level(rv, rename(face_z_index, level = roms_level, cell = cell))
   rdata <- set_indextent(brick(roms_file, varname = "temp", lvar = 4, level = level))
-  box_z_index$temp <- extract_at_level(rdata, rename(box_z_index, level = roms_level, cell = cell))
+  box_z_index$temp <- extract_at_level(rdata, rename(box_z_index, level = atlantis_level, cell = cell))
   rdata <- set_indextent(brick(roms_file, varname = "salt", lvar = 4, level = level))
   box_z_index$salt <- extract_at_level(rdata, rename(box_z_index, level = roms_level, cell = cell))
   box_props[[i_timeslice]] <- box_z_index %>% group_by(atlantis_level, box) %>% 
