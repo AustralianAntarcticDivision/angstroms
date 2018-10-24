@@ -2,9 +2,9 @@
 output: github_document
 ---
 
-[![Travis-CI Build Status](https://travis-ci.org/hypertidy/angstroms.svg?branch=master)](https://travis-ci.org/hypertidy/angstroms)
-[![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/hypertidy/angstroms?branch=master&svg=true)](https://ci.appveyor.com/project/hypertidy/angstroms)
-[![Coverage Status](https://img.shields.io/codecov/c/github/hypertidy/angstroms/master.svg)](https://codecov.io/github/hypertidy/angstroms?branch=master)
+[![Travis-CI Build Status](https://travis-ci.org/AustralianAntarcticDivision/angstroms.svg?branch=master)](https://travis-ci.org/AustralianAntarcticDivision/angstroms)
+[![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/AustralianAntarcticDivision/angstroms?branch=master&svg=true)](https://ci.appveyor.com/project/AustralianAntarcticDivision/angstroms)
+[![Coverage Status](https://img.shields.io/codecov/c/github/AustralianAntarcticDivision/angstroms/master.svg)](https://codecov.io/github/AustralianAntarcticDivision/angstroms?branch=master)
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
 ```{r, echo = FALSE}
@@ -25,7 +25,7 @@ You can install the development version of angstroms from github with:
 
 ```{r gh-installation, eval = FALSE}
 # install.packages("devtools")
-devtools::install_github("hypertidy/angstroms")
+devtools::install_github("AustralianAntarcticDivision/angstroms")
 ```
 
 ## angstroms - R for ROMS

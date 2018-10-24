@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Remap an object to the ROMS grid. — romsmap • angstroms</title>
+<title>Create "transport" file for Atlantis. — create_transport • angstroms</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -30,9 +30,12 @@
 
 
 
-<meta property="og:title" content="Remap an object to the ROMS grid. — romsmap" />
+<meta property="og:title" content="Create "transport" file for Atlantis. — create_transport" />
 
-<meta property="og:description" content="Find the nearest-neighbour coordinates of x in the coordinate arrays of coords." />
+<meta property="og:description" content="Transport is the hydrodynamic forcing for the Atlantis model from oceanographic models. These functions
+aim to minimize the amount of manual handling of details, creating an NetCDF file that can be modified directly.
+All the Box Geometry Model details are determined from the bgm file itself. The output file is the precursor file
+for input to HydroConstruct (as per section 4.1 of the Atlantis User Guide)." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -100,82 +103,71 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Remap an object to the ROMS grid.</h1>
-    <small class="dont-index">Source: <a href='https://github.com/mdsumner/angstroms/blob/master/R/romsmap.R'><code>R/romsmap.R</code></a></small>
-    <div class="hidden name"><code>romsmap.Rd</code></div>
+    <h1>Create "transport" file for Atlantis.</h1>
+    <small class="dont-index">Source: <a href='https://github.com/mdsumner/angstroms/blob/master/R/atlantis_hydro.R'><code>R/atlantis_hydro.R</code></a></small>
+    <div class="hidden name"><code>create_transport.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Find the nearest-neighbour coordinates of <code>x</code> in the coordinate arrays of <code>coords</code>.</p>
+    <p>Transport is the hydrodynamic forcing for the Atlantis model from oceanographic models. These functions
+aim to minimize the amount of manual handling of details, creating an NetCDF file that can be modified directly.
+All the Box Geometry Model details are determined from the bgm file itself. The output file is the precursor file
+for input to HydroConstruct (as per section 4.1 of the Atlantis User Guide).</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>romsmap</span>(<span class='no'>x</span>, <span class='no'>...</span>)
-
-<span class='co'># S3 method for SpatialPolygonsDataFrame</span>
-<span class='fu'>romsmap</span>(<span class='no'>x</span>, <span class='no'>coords</span>, <span class='kw'>crop</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>lonlat</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='no'>...</span>)
-
-<span class='co'># S3 method for default</span>
-<span class='fu'>romsmap</span>(<span class='no'>x</span>, <span class='no'>coords</span>, <span class='kw'>crop</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>lonlat</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='no'>...</span>)
-
-<span class='co'># S3 method for SpatialLinesDataFrame</span>
-<span class='fu'>romsmap</span>(<span class='no'>x</span>, <span class='no'>coords</span>, <span class='kw'>crop</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>lonlat</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='no'>...</span>)
-
-<span class='co'># S3 method for SpatialPointsDataFrame</span>
-<span class='fu'>romsmap</span>(<span class='no'>x</span>, <span class='no'>coords</span>, <span class='kw'>crop</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>lonlat</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>create_transport</span>(<span class='no'>filename</span>, <span class='kw'>model_title</span> <span class='kw'>=</span> <span class='st'>"Transport file [placeholder]"</span>,
+  <span class='kw'>bgmfilepath</span> <span class='kw'>=</span> <span class='st'>""</span>, <span class='kw'>bgmlevels</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>time_steps</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>transp_params</span> <span class='kw'>=</span> <span class='st'>""</span>, <span class='kw'>overwrite</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>x</th>
-      <td><p>object to transform to the grid space, e.g. a <code><a href='http://www.rdocumentation.org/packages/sp/topics/Spatial-class'>Spatial</a></code> object</p></td>
+      <th>filename</th>
+      <td><p>the NetCDF file to create</p></td>
     </tr>
     <tr>
-      <th>...</th>
-      <td><p>unused</p></td>
+      <th>model_title</th>
+      <td><p>name of the model</p></td>
     </tr>
     <tr>
-      <th>coords</th>
-      <td><p>romscoords RasterStack</p></td>
+      <th>bgmfilepath</th>
+      <td><p>path to BGM file</p></td>
     </tr>
     <tr>
-      <th>crop</th>
-      <td><p>logical, if <code>TRUE</code> crop x to the extent of the boundary of the values in coords</p></td>
+      <th>bgmlevels</th>
+      <td><p>the Atlantis depth levels</p></td>
     </tr>
     <tr>
-      <th>lonlat</th>
-      <td><p>logical, if <code>TRUE</code> check for need to back-transform to longitude/latitude and do it</p></td>
+      <th>time_steps</th>
+      <td><p>actual time steps, need to be regularly space</p></td>
+    </tr>
+    <tr>
+      <th>transp_params</th>
+      <td><p>optional details to put in the NetCDF notes</p></td>
+    </tr>
+    <tr>
+      <th>overwrite</th>
+      <td><p>set to <code>TRUE</code> to clobber an existing file</p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>input object with coordinates transformed to space of the coords</p>
+    <p>the filename of the output (use ncdf4 to inspect, modify it)</p>
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>The input <code>coords</code> is a assumed to be a 2-layer RasterStack or RasterBrick and
-using <code><a href='http://www.rdocumentation.org/packages/nabor/topics/knn'>nabor::knn</a></code> the nearest matching position of the coordinates of <code>x</code> is found in the grid space of <code>coords</code>. The
-motivating use-case is the curvilinear longitude and latitude arrays of ROMS model output.</p>
-<p>No account is made for the details of a ROMS cell, though this may be included in future. We tested only with the "lon_u" and "lat_u"
-arrays.</p>
-    
-    <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
-
-    <p>Do not use this for extraction purposes without checking the output, this is best used for exploration
-and visualization. Re-mapping ROMS data is better done by looking up the <code>coords_points</code> within spatial objects,
-and transferring via the grid index.</p>
+    <p>Please use the original BGM file in its native map projection, there is no need to copy this to a longitude-latitude version
+of the same file.</p>
+<p>TODO: check that bgmlevels should only be an index, check that time_steps must be regular ?( or just monotonic incresing?)</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>ant_ice_coords</span> <span class='kw'>&lt;-</span> <span class='fu'>romsmap</span>(<span class='no'>antarctica</span>, <span class='no'>ice_coords</span>)
-<span class='fu'>plot</span>(<span class='no'>ice_fake</span>, <span class='kw'>main</span> <span class='kw'>=</span> <span class='st'>"sea ice in pure grid space"</span>)</div><div class='input'><span class='fu'>plot</span>(<span class='no'>ant_ice_coords</span>, <span class='kw'>add</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='img'><img src='romsmap-1.png' alt='' width='700' height='433' /></div><div class='input'>
-
+    <pre class="examples"><div class='input'><span class='no'>tfile</span> <span class='kw'>&lt;-</span> <span class='fu'>file.path</span>(<span class='fu'>tempdir</span>(), <span class='st'>"my_hydrofile.nc"</span>)
+(<span class='no'>ncfile</span> <span class='kw'>&lt;-</span> <span class='fu'>create_transport</span>(<span class='no'>tfile</span>, <span class='kw'>bgmfilepath</span> <span class='kw'>=</span> <span class='kw pkg'>bgmfiles</span><span class='kw ns'>::</span><span class='fu'><a href='http://www.rdocumentation.org/packages/bgmfiles/topics/bgmfiles'>bgmfiles</a></span>(<span class='st'>"antarctica_99"</span>)))</div><div class='output co'>#&gt; <span class='message'>'bgmlevels' not supplied, building levels at -5277.47746194913, -2000, -999.999999999995, -749.999999999995, -399.999999999995, -299.999999999995, -199.999999999995, -99.9999999999955, -49.9999999999955, -19.9999999999955, 4.54747350886464e-12</span></div><div class='output co'>#&gt; [1] "/tmp/Rtmpngf0bx/my_hydrofile.nc"</div><div class='input'>## use ncdf4::nc_open to inspect the file
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
@@ -186,8 +178,6 @@ and transferring via the grid index.</p>
       <li><a href="#value">Value</a></li>
 
       <li><a href="#details">Details</a></li>
-
-      <li><a href="#note">Note</a></li>
       
       <li><a href="#examples">Examples</a></li>
     </ul>

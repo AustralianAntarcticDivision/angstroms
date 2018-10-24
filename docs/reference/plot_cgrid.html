@@ -6,7 +6,13 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Antarctica simple coastline. — antarctica • angstroms</title>
+<title>https://www.myroms.org/wiki/easygrid
+The rho-grid represents the grid centers (red dots)
+The u-grid represents the grid East-West sides (blue triangles)
+The v-grid represents the grid North-South sides (green triangles)
+The psi-grid represents the grid corners (purple crosses)
+A useable Thredds example is here
+https://ecowatch.ncddc.noaa.gov/thredds/dodsC/northwest_fisheries/roms/nep_c.nc — plot_cgrid • angstroms</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -30,9 +36,21 @@
 
 
 
-<meta property="og:title" content="Antarctica simple coastline. — antarctica" />
+<meta property="og:title" content="https://www.myroms.org/wiki/easygrid
+The rho-grid represents the grid centers (red dots)
+The u-grid represents the grid East-West sides (blue triangles)
+The v-grid represents the grid North-South sides (green triangles)
+The psi-grid represents the grid corners (purple crosses)
+A useable Thredds example is here
+https://ecowatch.ncddc.noaa.gov/thredds/dodsC/northwest_fisheries/roms/nep_c.nc — plot_cgrid" />
 
-<meta property="og:description" content="Taken from &quot;rnaturalearth::countries110&quot;" />
+<meta property="og:description" content="https://www.myroms.org/wiki/easygrid
+The rho-grid represents the grid centers (red dots)
+The u-grid represents the grid East-West sides (blue triangles)
+The v-grid represents the grid North-South sides (green triangles)
+The psi-grid represents the grid corners (purple crosses)
+A useable Thredds example is here
+https://ecowatch.ncddc.noaa.gov/thredds/dodsC/northwest_fisheries/roms/nep_c.nc" />
 <meta name="twitter:card" content="summary" />
 
 
@@ -100,23 +118,63 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Antarctica simple coastline.</h1>
-    <small class="dont-index">Source: <a href='https://github.com/mdsumner/angstroms/blob/master/R/angstroms-package.r'><code>R/angstroms-package.r</code></a></small>
-    <div class="hidden name"><code>antarctica.Rd</code></div>
+    <h1>https://www.myroms.org/wiki/easygrid
+The rho-grid represents the grid centers (red dots)
+The u-grid represents the grid East-West sides (blue triangles)
+The v-grid represents the grid North-South sides (green triangles)
+The psi-grid represents the grid corners (purple crosses)
+A useable Thredds example is here
+https://ecowatch.ncddc.noaa.gov/thredds/dodsC/northwest_fisheries/roms/nep_c.nc</h1>
+    <small class="dont-index">Source: <a href='https://github.com/mdsumner/angstroms/blob/master/R/c-grid.r'><code>R/c-grid.r</code></a></small>
+    <div class="hidden name"><code>plot_cgrid.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Taken from "rnaturalearth::countries110"</p>
+    <p>https://www.myroms.org/wiki/easygrid
+The rho-grid represents the grid centers (red dots)
+The u-grid represents the grid East-West sides (blue triangles)
+The v-grid represents the grid North-South sides (green triangles)
+The psi-grid represents the grid corners (purple crosses)
+A useable Thredds example is here
+https://ecowatch.ncddc.noaa.gov/thredds/dodsC/northwest_fisheries/roms/nep_c.nc</p>
     
     </div>
 
-        
+    <pre class="usage"><span class='fu'>plot_cgrid</span>(<span class='no'>x</span>, <span class='kw'>ex</span> <span class='kw'>=</span> <span class='fu'>extent</span>(<span class='fl'>0</span>, <span class='fl'>15</span>, <span class='fl'>0</span>, <span class='fl'>20</span>), <span class='kw'>include</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"u"</span>, <span class='st'>"v"</span>, <span class='st'>"rho"</span>,
+  <span class='st'>"psi"</span>), <span class='kw'>cell</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='no'>...</span>)</pre>
+    
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>x</th>
+      <td><p>ROMS file</p></td>
+    </tr>
+    <tr>
+      <th>ex</th>
+      <td><p>extent in index space</p></td>
+    </tr>
+    <tr>
+      <th>include</th>
+      <td><p>grid elements to plot (all by default, uv, rho, psi)</p></td>
+    </tr>
+    <tr>
+      <th>cell</th>
+      <td><p>draw the cells (defaults to TRUE)</p></td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td><p>arguments passed to plot</p></td>
+    </tr>
+    </table>
+    
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
+      <li><a href="#arguments">Arguments</a></li>
                 </ul>
 
   </div>

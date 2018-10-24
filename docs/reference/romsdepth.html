@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Antarctica simple coastline. — antarctica • angstroms</title>
+<title>Coordinates at depth — romsdepth • angstroms</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -30,9 +30,9 @@
 
 
 
-<meta property="og:title" content="Antarctica simple coastline. — antarctica" />
+<meta property="og:title" content="Coordinates at depth — romsdepth" />
 
-<meta property="og:description" content="Taken from &quot;rnaturalearth::countries110&quot;" />
+<meta property="og:description" content="Extract the multi-layer 'h'eight grid with S-coordinate stretching applied" />
 <meta name="twitter:card" content="summary" />
 
 
@@ -100,24 +100,76 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Antarctica simple coastline.</h1>
-    <small class="dont-index">Source: <a href='https://github.com/mdsumner/angstroms/blob/master/R/angstroms-package.r'><code>R/angstroms-package.r</code></a></small>
-    <div class="hidden name"><code>antarctica.Rd</code></div>
+    <h1>Coordinates at depth</h1>
+    <small class="dont-index">Source: <a href='https://github.com/mdsumner/angstroms/blob/master/R/roms_h.R'><code>R/roms_h.R</code></a></small>
+    <div class="hidden name"><code>romsdepth.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Taken from "rnaturalearth::countries110"</p>
+    <p>Extract the multi-layer 'h'eight grid with S-coordinate stretching applied</p>
     
     </div>
 
-        
+    <pre class="usage"><span class='fu'>romsdepth</span>(<span class='no'>x</span>, <span class='kw'>grid_type</span> <span class='kw'>=</span> <span class='st'>"rho"</span>, <span class='no'>slice</span>, <span class='no'>...</span>, <span class='kw'>S</span> <span class='kw'>=</span> <span class='st'>"Cs_r"</span>, <span class='kw'>depth</span> <span class='kw'>=</span> <span class='st'>"h"</span>,
+  <span class='kw'>simple</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
+    
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>x</th>
+      <td><p>ROMS file name</p></td>
+    </tr>
+    <tr>
+      <th>grid_type</th>
+      <td><p>string: "rho","psi","u","v","w"</p></td>
+    </tr>
+    <tr>
+      <th>slice</th>
+      <td><p>integer: if non-missing, use this time slice to index into zeta (free-surface). Otherwise assume zeta is zero (and hence depth is time-independent)</p></td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td><p>dots</p></td>
+    </tr>
+    <tr>
+      <th>S</th>
+      <td><p>of S-coordinate stretching curve at RHO-points</p></td>
+    </tr>
+    <tr>
+      <th>depth</th>
+      <td><p>depth thing</p></td>
+    </tr>
+    <tr>
+      <th>simple</th>
+      <td><p>do old deprecated behaviour (don't use)</p></td>
+    </tr>
+    </table>
+    
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>RasterStack with a layer for every depth</p>
+    
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>Compute ROMS grid depth from vertical stretched variables
+Given a bathymetry (h), free-surface (zeta) and terrain-following parameters, this function computes the 3D depths for the requested C-grid location. If the free-surface is not provided, a zero value is assumed resulting in unperturb depths.  This function can be used when generating initial conditions or climatology data for an application. Check the following link for details: https://www.myroms.org/wiki/index.php/Vertical_S-coordinate
+See https://github.com/dcherian/tools/blob/master/ROMS/arango/utility/set_depth.m
+Original Matlab code by Deepak Cherian.
+<code>S</code> and <code>h</code> are the  names of the appropriate variables</p>
+    
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
-                </ul>
+      <li><a href="#arguments">Arguments</a></li>
+      
+      <li><a href="#value">Value</a></li>
+
+      <li><a href="#details">Details</a></li>
+          </ul>
 
   </div>
 </div>
