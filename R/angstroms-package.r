@@ -9,7 +9,7 @@
 #'  \code{\link{romsdata}} read data layers from 4D variables by arbitrary slice  \cr
 #'  \code{\link{romsboundary}} \tab generate the spatial boundary of the ROMS data set in x-y coordinate space \cr
 #'  \code{\link{romscoords}} \tab extract the x-y (long-lat) coordinates \cr
-#'  \code{\link{romshcoords}} \tab extract the multi-layer 'h'eight grid with S-coordinate stretching applied \cr
+#'  \code{\link{romsdepth}} \tab extract the multi-layer 'h'eight grid with S-coordinate stretching applied \cr
 #'  \code{\link{romsmap}} \tab re-map a spatial layer (polygons, lines, points) into ROMS grid space \cr
 #'  }
 #' @name angstroms

@@ -154,10 +154,9 @@ romsdepth <- function(x, grid_type = "rho", slice, ..., S = "Cs_r", depth = "h",
 }
 
 # FIXME: should be romsdepth the name anyway ...
-#' @name romshcoords
-#' @export
+
 romshcoords <- function(x, ...) {
-  .Deprecated("romsdepth")
+  .Defunct("romsdepth")
  romsdepth(x, ...) 
 }
   

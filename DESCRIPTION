@@ -29,7 +29,6 @@ RoxygenNote: 6.1.0
 Suggests: 
     bgmfiles,
     covr, 
-    rgdal,
     testthat
 Roxygen: list(markdown = TRUE)
 URL: https://github.com/mdsumner/angstroms
