@@ -4,3 +4,4 @@
 data/*.nc
 data/coords.rda
 extradata
+inst/couple-Atlantis/AtlantisUserGuide_PartI.pdf

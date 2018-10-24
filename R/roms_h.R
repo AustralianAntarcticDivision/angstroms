@@ -12,6 +12,7 @@
 #' @param slice integer: if non-missing, use this time slice to index into zeta (free-surface). Otherwise assume zeta is zero (and hence depth is time-independent)
 #' @param ... dots
 #' @param depth depth thing
+#' @param simple do old deprecated behaviour (don't use)
 #' @param S  of S-coordinate stretching curve at RHO-points
 #' @return RasterStack with a layer for every depth
 #' @export

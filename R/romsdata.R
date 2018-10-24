@@ -8,8 +8,8 @@ raster_ispace <- function(x, transpose = TRUE) {
   setExtent(raster(x), e)
 }
 
-#' convert the depth ramp Cs_r, h (bottom depth), and cell number
-#' to a correctly oriented layer of depth values
+# convert the depth ramp Cs_r, h (bottom depth), and cell number
+# to a correctly oriented layer of depth values
 romscoords_z <- function(x, cell) {
   ## important to readAll here, else extract is very slow in the loop
   h <- raster::readAll(raster(x, varname = "h", ncdf = TRUE))
@@ -92,6 +92,8 @@ roms_zt <- function(x, varname, slice = c(1L, 1L), transpose = TRUE, ...) {
 #' @param slice index in w and t (depth and time), defaults to first encountered
 #' @param transpose the extents (ROMS is FALSE, Access is TRUE)
 #' @param ... unused
+#' @param verbose be chatty
+#' @param lvar passed to `raster::brick` to specify 3rd or 4th dimension
 #' @importFrom raster brick 
 #' @return RasterLayer
 #' @export

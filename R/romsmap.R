@@ -159,7 +159,7 @@ databoundary <- function(x, mask = NULL, ...) {
     maskboundary <- rgeos::gPolygonize(methods::as(keeponlymostcomplexline(
       raster::rasterToContour(is.na(raster::extend(x, c(2, 2), value = NA)), level = 1)), 
       "SpatialLinesDataFrame"))
-    maskboundary <- SpatialPolygonsDataFrame(maskboundary, data.frame(boundary = "mask", stringsAsFactors = FALSE))
+    maskboundary <- sp::SpatialPolygonsDataFrame(maskboundary, data.frame(boundary = "mask", stringsAsFactors = FALSE))
   }
   maskboundary
 }

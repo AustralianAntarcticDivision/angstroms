@@ -19,6 +19,8 @@ romsdepth(x, grid_type = "rho", slice, ..., S = "Cs_r", depth = "h",
 \item{S}{of S-coordinate stretching curve at RHO-points}
 
 \item{depth}{depth thing}
+
+\item{simple}{do old deprecated behaviour (don't use)}
 }
 \value{
 RasterStack with a layer for every depth

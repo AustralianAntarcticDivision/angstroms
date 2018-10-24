@@ -43,6 +43,10 @@ romsdata3d(x, varname, slice = 1L, transpose = TRUE, verbose = TRUE,
 \item{transpose}{the extents (ROMS is FALSE, Access is TRUE)}
 
 \item{...}{unused}
+
+\item{verbose}{be chatty}
+
+\item{lvar}{passed to \code{raster::brick} to specify 3rd or 4th dimension}
 }
 \value{
 RasterLayer

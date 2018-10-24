@@ -14,7 +14,7 @@ rawdata.character <- function(x, varname, ...) {
 #' @name rawdata
 #' @export
 rawdata.NetCDF <- function(x, varname, ...) {
-  rawdata(nc$file$filename[1L], varname = varname, ...)
+  rawdata(x$file$filename[1L], varname = varname, ...)
 }
 
 
