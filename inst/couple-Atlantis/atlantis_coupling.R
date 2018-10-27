@@ -8,7 +8,7 @@
 
 ##corners <- read.delim("https://raw.githubusercontent.com/cecilieha/NoBA/master/corners_neighbours_nordic.txt")
 
-## curvlinear vector rotation: https://www.myroms.org/forum/viewtopic.php?f=3&t=295
+## curvilinear vector rotation: https://www.myroms.org/forum/viewtopic.php?f=3&t=295
 
 ## hydro stuff
 # https://confluence.csiro.au/display/Atlantis/Forcing+Files
@@ -44,6 +44,14 @@ index_box <- function(box_sp, roms_ll) {
     filter(!is.na(box))
 }
 
+## 
+index_face <- function(face_sp, roms_ll) {
+  roms_face <- romsmap(project_to(face_sp, "+init=epsg:4326"), roms_ll)
+  ind_face <- cellFromLine(roms_ll, roms_face)
+  tibble(face = roms_face$label[rep(seq_len(nrow(roms_face)), lengths(ind_face))], 
+         cell = unlist(ind_face))
+}
+
 #' return the ramp of positive depths from surface down 
 #' (so that the order is native to the NetCDF order)
 roms_level <- function(Cs_r, h, cell) {
@@ -56,14 +64,8 @@ roms_z <- function(Cs_r, h, cell) {
   setExtent(out, extent(0, ncol(out), 0, nrow(out)))
 }
 
-## new sf approach for rbgm
-# make_boxes <- function(tab) {
-#   tab <- tab[grepl("box", tab$vert), ]
-#   lapply(split(tab[, c("X", "Y")], tab$vert), function(x) sf::st_polygon(list(as.matrix(x))))
-# }
-# make_faces <- function(tab) {
-#   lapply(split(tab[, c("x1", "y1", "x2", "y2")], tab$face), function(x) sf::st_linestring(matrix(unlist(x), ncol = 2, byrow = TRUE)))
-# }
+set_indextent <- tabularaster:::set_indextent
+
 
 ##devtools::install_github(c("mdsumner/angstroms"))
 library(angstroms)
@@ -75,10 +77,15 @@ library(dplyr)
 
 cpolar <- raadtools:::cpolarfiles()
   
-file_db <- purrr::map_df(cpolar$fullname, 
-                            function(x) tibble::tibble(fullname = x,
-                                                       time = tidync(x)$transforms$ocean_time$ocean_time) %>% 
-                              dplyr::mutate(band_level = row_number()))
+## for each file we know about each separate time, and this is lvar = 4, level = [band_level]
+## there are 31 depth levels (surface water is the first one)
+## files have 28, 30, or 31 time steps file_db %>% group_by(fullname) %>% tally() %>% distinct(n)
+## so we can't just assume a constant
+file_db <- purrr::map_df(cpolar$fullname[2], 
+                         function(x) tibble::tibble(fullname = x,
+                                                    time = tidync(x)$transforms$ocean_time$ocean_time) %>% 
+                           dplyr::mutate(band_level = row_number()))
+
 
 ## get a BGM and read it
 bfile <- bgmfiles::bgmfiles("antarctica_28")
@@ -86,39 +93,37 @@ bgm <- rbgm:::read_bgm(bfile)
 
 
 ## get the longitude/latitude arrays
-roms_ll <- romscoords(file_db$fullname[1], transpose = TRUE)
+roms_file <- file_db$fullname[1]
+roms_ll <- romscoords(roms_file, transpose = TRUE)
 
-## we need the unsullied boxes to identify points inside them
-# boxes <- as(sf::st_sf(label = bgm$box$box, 
-#                       geometry =  sf::st_sfc(make_boxes(bgm$vertices), 
-#                                              crs = bgm$meta$projection), stringsAsFactors = FALSE), "Spatial")
 boxes <- boxSpatial(bgm)
 faces <- faceSpatial(bgm) 
-#roms_face <- romsmap(project_to(faceSpatial(bgm), "+init=epsg:4326"), roms_ll)
-roms_face <- romsmap(project_to(faces, "+init=epsg:4326"), roms_ll)
-
-
-
 
 ## build the index for each box to the ROMS cells it contains
 ## and each face for the ROMS cells it traverses
 library(dplyr)
-box_roms_index <- index_box(boxes, roms_ll)
-ind_face <- cellFromLine(romsdata(file_db$fullname[1], "u"), roms_face)
-face_roms_index <- tibble(face = roms_face$label[rep(seq_len(nrow(roms_face)), lengths(ind_face))], 
-                          cell = unlist(ind_face))
 
+## this is the 2D index, into the _u cells
+## we only build them here to check things are going well (see plot)
+box_roms_index <- index_box(boxes, roms_ll)
+face_roms_index <- index_face(faces, roms_ll)
+#plot(coords_points(roms_ll)[box_roms_index$cell, ], pch = ".", col = factor(box_roms_index$box))
+#plot(coords_points(roms_ll)[face_roms_index$cell, ], pch = ".", col = factor(face_roms_index$face))
+
+## the next step is to find the right depth level, and strictly we probably 
+## need the interval - there's more density in 2D than in depth
 
 ## important to readAll here, else extract is very slow in the loop
-h <- brick(readAll(raster(file_db$fullname[1], varname = "h")))
+h <- brick(readAll(raster(roms_file, varname = "h")))
 ## Cs_r is the S-coord stretching
-Cs_r <- rawdata(file_db$fullname[1], "Cs_r")
+Cs_r <- rawdata(roms_file, "Cs_r")
 
 
 ## build the level index between Atlantis and ROMS
 
 list_nc_z_index <- vector('list', nrow(box_roms_index))
 max_depth <- max(extract(h, unique(box_roms_index$cell)))
+## here we must use the same as we used for the nc output files
 atlantis_depths <- -cumsum(c(0, rev(rbgm::build_dz(-max_depth))))
 for (i in seq_len(nrow(box_roms_index))) {
   rl <- roms_level(Cs_r, h, box_roms_index$cell[i])
@@ -127,7 +132,7 @@ for (i in seq_len(nrow(box_roms_index))) {
   list_nc_z_index[[i]] <- findInterval(atlantis_depths, rl)
 if (i %% 1000 == 0) print(i)
 }
-range(lengths(list_nc_z_index))
+#range(lengths(list_nc_z_index))
 
 
 ibox <- cbind(cell = rep(box_roms_index$cell, each = length(atlantis_depths)),   
@@ -136,7 +141,7 @@ ibox <- cbind(cell = rep(box_roms_index$cell, each = length(atlantis_depths)),
 #              box = rep(box_roms_index$box, each = length(atlantis_depths)))
 zeros <- ibox[,2] < 1
 if (any(zeros)) ibox[zeros,2] <- NA
-rdata <- readAll(set_indextent(brick(roms_file, varname = "temp", lvar = 4, level = level)))
+rdata <- readAll(set_indextent(brick(roms_file, varname = "temp", lvar = 4, level = 1)))
 
 
 otemp <- tibble(cell = ibox[,1], box = rep(box_roms_index$box, each = length(atlantis_depths)), 
@@ -144,37 +149,28 @@ otemp <- tibble(cell = ibox[,1], box = rep(box_roms_index$box, each = length(atl
                 level = rep(seq_along(atlantis_depths), length(list_nc_z_index)))
 
 tt <- otemp %>% group_by(box, level) %>% summarize(temp = mean(temp, na.rm = T)) %>% ungroup()
-ggplot(sf::st_as_sf(sf::st_transform(box, 4326) %>% inner_join(tt, c("label" = "box")))) + geom_sf(aes(fill = temp)) + facet_wrap(~level)
+library(ggplot2)
+#ggplot(sf::st_as_sf(sf::st_transform(sf::st_as_sf(boxes), 4326) %>% inner_join(tt, c("label" = "box")))) + geom_sf(aes(fill = temp)) + facet_wrap(~level)
 
 
 ## join the box-xy-index to the level index
 box_z_index <- bind_rows(lapply(list_nc_z_index, 
-                 function(x) tibble(atlantis_level = x, roms_level = seq_along(x))), 
+                 function(x) tibble(roms_level = x, atlantis_level = seq_along(x))), 
           .id = "cell_index") %>% 
   inner_join(mutate(box_roms_index, cell_index = as.character(row_number()))) %>% 
   select(-cell_index)
 
-#boxcell_z_index <- cbind(rep(box_roms_index$cell, each = 11), t(do.call(rbind, list_nc_z_index))
-
-# ll <- extract(roms_ll, box_z_index$cell)
-# box_z_index$lon <- ll[, 1]
-# box_z_index$lat <- ll[, 2]
-# library(ggplot2)
-# ggplot(box_z_index, aes(lon, lat, colour = roms_level)) + geom_point(pch = ".") + 
-#   facet_wrap(~atlantis_level)
 
 
 for (i in seq_len(nrow(face_roms_index))) {
   rl <- roms_level(Cs_r, h, face_roms_index$cell[i])
   ## implicit 0 at the surface, and implicit bottom based on ROMS
   list_nc_z_index[[i]] <- length(atlantis_depths) -findInterval(rl, atlantis_depths) + 1
-#  list_nc_z_index[[i]] <- findInterval(atlantis_depths, rl)
-  
   if (i %% 1000 == 0) print(i)
 }
 ## join the face-xy-index to the level index
 face_z_index <- bind_rows(lapply(list_nc_z_index, 
-                                function(x) tibble(atlantis_level = x, roms_level = seq_along(x))), 
+                                function(x) tibble(roms_level = x, atlantis_level = seq_along(x))), 
                          .id = "cell_index") %>% 
   inner_join(mutate(face_roms_index, cell_index = as.character(row_number()))) %>% 
   select(-cell_index)
@@ -201,8 +197,12 @@ extract_at_level <- function(x, cell_level) {
 #file_db <- file_db[1, ]
 box_props <- face_props <- vector("list", nrow(file_db))
 i_timeslice <- 1
-set_indextent <- tabularaster:::set_indextent
-for (i_timeslice in seq(nrow(file_db))) {
+
+
+
+
+
+#for (i_timeslice in seq(nrow(file_db))) {
   roms_file <- file_db$fullname[i_timeslice]
   level <- file_db$band_level[i_timeslice]
   ru <- set_indextent(brick(roms_file, varname = "u", lvar = 4, level = level))
@@ -219,7 +219,7 @@ for (i_timeslice in seq(nrow(file_db))) {
   face_props[[i_timeslice]] <-  face_z_index %>% group_by(atlantis_level, face) %>% 
     summarize(flux = mean(sqrt(u * u + v * v), na.rm = TRUE) * 24 * 3600) %>% 
     mutate(band_level = level)
-}
+#}
 
 box_props <- bind_rows(box_props)
 face_props <- bind_rows(face_props)
