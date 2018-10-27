@@ -117,8 +117,9 @@ create_transport <- function(filename,
   if (!raster::isLonLat(bgm$extra$projection)) {
     ll[c("x", "y")] <- rgdal::project(as.matrix( ll[c("x", "y")]), bgm$extra$projection, inv = TRUE)
   }
-  v1 <- bgm$facesXverts[bgm$facesXverts$.p0 == 1, ] %>%  dplyr::inner_join(ll, ".vx0")
-  v2 <- bgm$facesXverts[bgm$facesXverts$.p0 == 2, ] %>%  dplyr::inner_join(ll, ".vx0")
+  v1 <- bgm$facesXverts[bgm$facesXverts[[".p0"]] == 1, ] %>%  dplyr::inner_join(ll, ".vx0")
+  v2 <- bgm$facesXverts[bgm$facesXverts[[".p0"]] == 2, ] %>%  dplyr::inner_join(ll, ".vx0")
+  
   #browser()
   ncvar_put(nc_transp, "pt1_x",  v1$x)
   ncvar_put(nc_transp, "pt2_x",  v1$y)
