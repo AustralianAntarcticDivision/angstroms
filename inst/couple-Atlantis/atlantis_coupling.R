@@ -246,6 +246,13 @@ for (itime in seq_len(nrow(file_db))) {
   }
 }
 
+ncvar_put(nctran, "transport", transport)
+ncvar_put(ncmass, "temperature", temperature)
+ncvar_put(ncmass, "salinity", salinity)
+ncvar_put(ncmass, "verticalflux", vertical)
+nc_close(nctran)
+nc_close(ncmass)
+
 # 
 # ## Plot
 # range_raster <- function(x) {
