@@ -6,6 +6,15 @@ library(raadtools)
 library(tidync)
 library(dplyr)
 
+
+## TODO
+## rotate u/v vectors on import (see ROMS details)
+## check hyper diffusion scaling
+## check depth interval (do we multiply by face height?)
+## apply interpolation between ROMs layers (per pixel for the pre-stage)
+## check vertical flux calcs
+
+
 cpolar <- raadtools:::cpolarfiles()
   
 ## for each file we know about each separate time, and this is lvar = 4, level = [dim4_slice]
