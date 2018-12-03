@@ -20,7 +20,7 @@ file_db <- purrr::map_df(cpolar$fullname,
                                                     time = tidync(x)$transforms$ocean_time$ocean_time) %>% 
                            dplyr::mutate(dim4_slice = row_number()))
 
-
+time_step <- 3600 * 24
 ## get a BGM and read it
 bfile <- bgmfiles::bgmfiles("antarctica_28")
 bgm <- rbgm:::read_bgm(bfile)
@@ -64,7 +64,8 @@ Cs_r <- rawdata(roms_file, "Cs_r")
 #list_nc_z_index <- vector('list', nrow(box_roms_index))
 deepest_depth <- max(raster::extract(h, tabularaster::cellnumbers(h, sf::st_as_sf(romsbox))$cell_), na.rm = TRUE)
 ## here we must use the same as we used for the nc output files
-atlantis_depths <- -cumsum(c(0, rev(rbgm::build_dz(-3000))))
+dz <- rev(rbgm::build_dz(-3000))
+atlantis_depths <- -cumsum(c(0, dz))
 
 ## boxes
 box_mass_index <- matrix(NA_integer_, nrow(hhh@data@values), length(atlantis_depths))
@@ -144,22 +145,37 @@ nctran <- ncdf4::nc_open(transp_filename, write = TRUE)
 vertical <- salinity <- temperature <- ncvar_get(ncmass, "temperature")
 transport <- ncvar_get(nctran, "transport")
 cols <- palr::sstPal(2600)
+delif <- function(x) {
+  f <- filename(x)
+  if (file.exists(f)) {
+    ff <- gsub("grd$", "gri", f)
+    if (file.exists(ff)) file.remove(ff)
+  }
+  invisible(NULL)
+}
 for (itime in seq_len(nrow(file_db))) {
 
   ## box properties
   temp <- crop(romsdata3d(file_db$fullname[itime], varname = "temp", slice = file_db$dim4_slice[itime]), romsbox)
-  salt <- crop(romsdata3d(file_db$fullname[itime], varname = "salt", slice = file_db$dim4_slice[itime]), romsbox)
-  salt_atlantis <- temp_atlantis <- box_mass_index * NA_real_
   tempvals <- values(temp)
+  delif(temp)
+  rm(temp)
+  salt <- crop(romsdata3d(file_db$fullname[itime], varname = "salt", slice = file_db$dim4_slice[itime]), romsbox)
   saltvals <- values(salt)
-  
+  delif(salt)
+  rm(salt)
+  salt_atlantis <- temp_atlantis <- box_mass_index * NA_real_
+ 
+
   ## face properties
   u <- crop(romsdata3d(file_db$fullname[itime], varname = "u", slice = file_db$dim4_slice[itime]), romsbox)
-  v <- crop(romsdata3d(file_db$fullname[itime], varname = "v", slice = file_db$dim4_slice[itime]), romsbox)
-  u_atlantis <- v_atlantis <- face_index * NA_real_
   uvals <- values(u)
+
+  v <- crop(romsdata3d(file_db$fullname[itime], varname = "v", slice = file_db$dim4_slice[itime]), romsbox)
   vvals <- values(v)
-  
+
+  u_atlantis <- v_atlantis <- face_index * NA_real_
+
   for (i in seq_len(nrow(temp_atlantis))) {
     temp_atlantis[i, ] <- tempvals[i, box_mass_index[i, ]]
     salt_atlantis[i, ] <- saltvals[i, box_mass_index[i, ]]
@@ -172,6 +188,9 @@ for (itime in seq_len(nrow(file_db))) {
   names(salt0) <- names(temp0)
   u0  <- setValues(subset(u * NA_real_, 1:ncol(u_atlantis)), u_atlantis)
   v0  <- setValues(subset(v * NA_real_, 1:ncol(v_atlantis)), v_atlantis)
+  delif(u)
+  delif(v)
+  rm(u, v)
   names(u0) <- sprintf("depth_%i", as.integer(abs(atlantis_depths)))
   names(v0) <- names(temp0)
   
@@ -182,9 +201,9 @@ for (itime in seq_len(nrow(file_db))) {
     #face_cells$right <- boxes$box_id[match(faces$right[face_cells$object_], boxes$box_id)]
     face_cells$box_width <- boxes$width[match(faces$left[face_cells$object_], boxes$box_id)]
     face_cells$box_height <- boxes$height[match(faces$left[face_cells$object_], boxes$box_id)]
-    
+    face_cells$length <- faces$length[face_cells$object_]
   }
-
+ 
   for (ilayer in seq_len(nrow(temperature))) {
     mass_cells$temperature <- raster::extract(temp0[[ilayer]], mass_cells$cell_)
     mass_cells$salinity <- raster::extract(salt0[[ilayer]], mass_cells$cell_)
@@ -201,68 +220,73 @@ for (itime in seq_len(nrow(file_db))) {
   
     face_summ <- face_cells %>% 
       dplyr::group_by(object_) %>% 
-      dplyr::summarize(u = sum(u / box_width, na.rm = TRUE), v = sum(v/box_height, na.rm = TRUE), 
-                       transport = sqrt(u * u + v * v))
+      dplyr::summarize(u = sum(u / length, na.rm = TRUE), v = sum(v/length, na.rm = TRUE), 
+                       transport = sqrt(u * u + v * v) * time_step * c(dz, tail(dz, 1))[ilayer])
     transport[ilayer, face_summ$object_, itime] <- face_summ$transport
   }
+  delif(temp0)
+  delif(u0)
+  delif(salt0)
+  delif(v0)
+  rm(temp0, u0, salt0, v0)
   print(itime)
+  gc()
   if (itime %% 10 == 0) {
-    image(transport[,,itime], col = cols, zlim = c(0, 2.5e-5), useRaster = TRUE)
-    gc()
+    image(transport[,,itime], col = cols, zlim = c(0, 100), useRaster = TRUE)
    
   }
 }
 
-
-## Plot
-range_raster <- function(x) {
-  c(min = min(cellStats(x, min)), max = max(cellStats(x, max)))
-}
-temp0  <- setValues(subset(hhh, 1:ncol(temp_atlantis)), temp_atlantis)
-salt0 <- setValues(subset(hhh, 1:ncol(temp_atlantis)), salt_atlantis)
-names(temp0) <- sprintf("depth_%i", as.integer(abs(atlantis_depths)))
-names(salt0) <- names(temp0)
-
-u0  <- setValues(subset(u * NA_real_, 1:ncol(u_atlantis)), u_atlantis)
-v0  <- setValues(subset(v * NA_real_, 1:ncol(v_atlantis)), v_atlantis)
-names(u0) <- sprintf("depth_%i", as.integer(abs(atlantis_depths)))
-names(v0) <- names(temp0)
-
-ix <- c(1, 4, 7, 10)
-library(quadmesh)
-mesh_plot(temp0[[2]], crs = projection(boxes), coords = roms_ll)
-plot(subset(temp0, ix), zlim = range_raster(temp0), col = palr::sstPal(26))
-plot(subset(salt0, ix), zlim = range_raster(salt0), col = palr::sstPal(26))
-
-plot(subset(u0, ix), zlim = range_raster(u0), col = palr::sstPal(26))
-plot(subset(v0, ix), zlim = range_raster(v0), col = palr::sstPal(26))
-
-get_coords <- memoise::memoise(function(f) {
-    cd <- romscoords(f, transpose = TRUE)
-    # raster::crop(cd, romsmap(geom, cd))
-    cd
-    }
-)
-plot_roms <- function(file, varname = "temp", map = NULL, slice = c(1, 1)) {
-  coords <- get_coords(file)
-  ro_map <- NULL
-  if (!is.null(map)) ro_map <- romsmap(map, coords)
-  if (varname == "[uv]") {
-    u <- romsdata(file, varname = "u", slice = slice)
-    v <- romsdata(file, varname = "v", slice = slice)
-    dat <- sqrt(u * u + v* v)
-  } else {
-    dat <- romsdata(file, varname = varname, slice = slice)
-  }
-  if (!is.null(ro_map)) {
-    dat <- raster::crop(dat, ro_map)
-    coords <- raster::crop(coords, ro_map)
-  }
-  crs <- NULL
-  if (!is.null(map)) crs <- raster::projection(map)
-  
-  quadmesh::mesh_plot(dat, crs = crs, coords = coords)
-  if (!is.null(map)) plot(map, add = TRUE)
-  invisible(NULL)
-}
-plot_roms(roms_file, varname = "[uv]", map = boxes, slice = c(31, 12))
+# 
+# ## Plot
+# range_raster <- function(x) {
+#   c(min = min(cellStats(x, min)), max = max(cellStats(x, max)))
+# }
+# temp0  <- setValues(subset(hhh, 1:ncol(temp_atlantis)), temp_atlantis)
+# salt0 <- setValues(subset(hhh, 1:ncol(temp_atlantis)), salt_atlantis)
+# names(temp0) <- sprintf("depth_%i", as.integer(abs(atlantis_depths)))
+# names(salt0) <- names(temp0)
+# 
+# u0  <- setValues(subset(u * NA_real_, 1:ncol(u_atlantis)), u_atlantis)
+# v0  <- setValues(subset(v * NA_real_, 1:ncol(v_atlantis)), v_atlantis)
+# names(u0) <- sprintf("depth_%i", as.integer(abs(atlantis_depths)))
+# names(v0) <- names(temp0)
+# 
+# ix <- c(1, 4, 7, 10)
+# library(quadmesh)
+# mesh_plot(temp0[[2]], crs = projection(boxes), coords = roms_ll)
+# plot(subset(temp0, ix), zlim = range_raster(temp0), col = palr::sstPal(26))
+# plot(subset(salt0, ix), zlim = range_raster(salt0), col = palr::sstPal(26))
+# 
+# plot(subset(u0, ix), zlim = range_raster(u0), col = palr::sstPal(26))
+# plot(subset(v0, ix), zlim = range_raster(v0), col = palr::sstPal(26))
+# 
+# get_coords <- memoise::memoise(function(f) {
+#     cd <- romscoords(f, transpose = TRUE)
+#     # raster::crop(cd, romsmap(geom, cd))
+#     cd
+#     }
+# )
+# plot_roms <- function(file, varname = "temp", map = NULL, slice = c(1, 1)) {
+#   coords <- get_coords(file)
+#   ro_map <- NULL
+#   if (!is.null(map)) ro_map <- romsmap(map, coords)
+#   if (varname == "[uv]") {
+#     u <- romsdata(file, varname = "u", slice = slice)
+#     v <- romsdata(file, varname = "v", slice = slice)
+#     dat <- sqrt(u * u + v* v)
+#   } else {
+#     dat <- romsdata(file, varname = varname, slice = slice)
+#   }
+#   if (!is.null(ro_map)) {
+#     dat <- raster::crop(dat, ro_map)
+#     coords <- raster::crop(coords, ro_map)
+#   }
+#   crs <- NULL
+#   if (!is.null(map)) crs <- raster::projection(map)
+#   
+#   quadmesh::mesh_plot(dat, crs = crs, coords = coords)
+#   if (!is.null(map)) plot(map, add = TRUE)
+#   invisible(NULL)
+# }
+# plot_roms(roms_file, varname = "[uv]", map = boxes, slice = c(31, 12))
