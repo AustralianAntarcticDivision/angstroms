@@ -41,10 +41,15 @@ roms_file <- file_db$fullname[itime]
 roms_slice <- file_db$dim4_slice[itime]
 roms_ll <- romscoords(roms_file, transpose = TRUE)
 boxes <- boxSpatial(bgm)
+## width and height of each box
+e <- vector("list", nrow(boxes))
+for (i in seq_along(e)) {ex <- raster::extent(boxes[i, ]); e[[i]] <- c(xmin = xmin(ex), xmax = xmax(ex), ymin = ymin(ex), ymax = ymax(ex))}
+boxes$width <- apply(do.call(rbind, e)[,1:2], 1, diff)
+boxes$height <- apply(do.call(rbind, e)[,3:4], 1, diff)
 faces <- faceSpatial(bgm)
 romsbox <- romsmap(boxes, roms_ll)
 roms_ll <- crop(roms_ll , romsbox, snap = "out")
-
+romsface <- romsmap(faces, romscoords(roms_file, transpose = TRUE))
 ## dummy grids
 u <- crop(romsdata3d(roms_file, varname = "u", slice = 1), romsbox)
 v <- crop(romsdata3d(roms_file, varname = "v", slice = 1), romsbox)
@@ -59,7 +64,7 @@ Cs_r <- rawdata(roms_file, "Cs_r")
 #list_nc_z_index <- vector('list', nrow(box_roms_index))
 deepest_depth <- max(raster::extract(h, tabularaster::cellnumbers(h, sf::st_as_sf(romsbox))$cell_), na.rm = TRUE)
 ## here we must use the same as we used for the nc output files
-atlantis_depths <- -cumsum(c(0, rev(rbgm::build_dz(-deepest_depth))))
+atlantis_depths <- -cumsum(c(0, rev(rbgm::build_dz(-3000))))
 
 ## boxes
 box_mass_index <- matrix(NA_integer_, nrow(hhh@data@values), length(atlantis_depths))
@@ -97,18 +102,116 @@ for (i in seq_len(nrow(temp_atlantis))) {
 }
 
 
-## face properties
 
-u <- crop(romsdata3d(roms_file, varname = "u", slice = 1), romsbox)
-v <- crop(romsdata3d(roms_file, varname = "v", slice = 1), romsbox)
-u_atlantis <- v_atlantis <- face_index * NA_real_
-for (i in seq_len(nrow(u_atlantis))) {
-  u_atlantis[i, ] <- u@data@values[i, face_index[i, ]]
-  v_atlantis[i, ] <- v@data@values[i, face_index[i, ]]
+
+
+## create NetCDF templates for Atlantis hydro
+library(ncdf4)
+
+### FOR TRANSPORT NC FILE
+transp_filename <- sprintf("%s_transport.nc", tempfile())
+mass_filename  <- sprintf("%s_mass.nc", tempfile())
+transp_params <- ""
+mass_params <- ""
+
+bgmfilepath <- bgmfiles::bgmfiles("antarctica_28")
+library(angstroms)
+
+
+## there are 1095 daily time steps
+
+# ocean_time  Size:31   *** is unlimited ***
+#   long_name: time since initialization
+# units: seconds since 0001-01-01 00:00:00
+# calendar: julian
+# field: time, scalar, series
+
+## GRRR 
+#time_steps <- ISOdatetime(1970, 1, 1, 0, 0, 0, tz = "UTC") + file_db$time
+## ignore the file time steps and assume they daily from the start value
+time_steps <-  seq(ISOdatetime(1970, 1, 1, 0, 0, 0, tz = "UTC") + file_db$time[1], by = "1 day", length.out = nrow(file_db))
+
+
+angstroms:::create_transport(transp_filename, model_title = "Transport file Antarctica_28", bgmfilepath = bgmfilepath, 
+                 bgmlevels = atlantis_depths, time_steps = time_steps)
+
+angstroms:::create_mass(mass_filename, model_title = "Mass file Antarctica_28", bgmfilepath = bgmfilepath, 
+            bgmlevels = atlantis_depths, time_steps = time_steps
+            )
+
+ncmass <- ncdf4::nc_open(mass_filename, write = TRUE)
+nctran <- ncdf4::nc_open(transp_filename, write = TRUE)
+vertical <- salinity <- temperature <- ncvar_get(ncmass, "temperature")
+transport <- ncvar_get(nctran, "transport")
+cols <- palr::sstPal(2600)
+for (itime in seq_len(nrow(file_db))) {
+
+  ## box properties
+  temp <- crop(romsdata3d(file_db$fullname[itime], varname = "temp", slice = file_db$dim4_slice[itime]), romsbox)
+  salt <- crop(romsdata3d(file_db$fullname[itime], varname = "salt", slice = file_db$dim4_slice[itime]), romsbox)
+  salt_atlantis <- temp_atlantis <- box_mass_index * NA_real_
+  tempvals <- values(temp)
+  saltvals <- values(salt)
   
-  if (i %% 1000 == 0) print(i)
-}
+  ## face properties
+  u <- crop(romsdata3d(file_db$fullname[itime], varname = "u", slice = file_db$dim4_slice[itime]), romsbox)
+  v <- crop(romsdata3d(file_db$fullname[itime], varname = "v", slice = file_db$dim4_slice[itime]), romsbox)
+  u_atlantis <- v_atlantis <- face_index * NA_real_
+  uvals <- values(u)
+  vvals <- values(v)
+  
+  for (i in seq_len(nrow(temp_atlantis))) {
+    temp_atlantis[i, ] <- tempvals[i, box_mass_index[i, ]]
+    salt_atlantis[i, ] <- saltvals[i, box_mass_index[i, ]]
+    u_atlantis[i, ] <- uvals[i, face_index[i, ]]
+    v_atlantis[i, ] <- vvals[i, face_index[i, ]]
+  }
+  temp0  <- setValues(subset(hhh, 1:ncol(temp_atlantis)), temp_atlantis)
+  salt0 <- setValues(subset(hhh, 1:ncol(temp_atlantis)), salt_atlantis)
+  names(temp0) <- sprintf("depth_%i", as.integer(abs(atlantis_depths)))
+  names(salt0) <- names(temp0)
+  u0  <- setValues(subset(u * NA_real_, 1:ncol(u_atlantis)), u_atlantis)
+  v0  <- setValues(subset(v * NA_real_, 1:ncol(v_atlantis)), v_atlantis)
+  names(u0) <- sprintf("depth_%i", as.integer(abs(atlantis_depths)))
+  names(v0) <- names(temp0)
+  
+  if (itime == 1) {
+    mass_cells <- tabularaster::cellnumbers(temp0[[1]], sf::st_as_sf(romsbox))
+    face_cells <- tabularaster::cellnumbers(u0[[1]], sf::st_as_sf(romsface))
+    #face_cells$left <- boxes$box_id[match(faces$left[face_cells$object_], boxes$box_id)]
+    #face_cells$right <- boxes$box_id[match(faces$right[face_cells$object_], boxes$box_id)]
+    face_cells$box_width <- boxes$width[match(faces$left[face_cells$object_], boxes$box_id)]
+    face_cells$box_height <- boxes$height[match(faces$left[face_cells$object_], boxes$box_id)]
+    
+  }
 
+  for (ilayer in seq_len(nrow(temperature))) {
+    mass_cells$temperature <- raster::extract(temp0[[ilayer]], mass_cells$cell_)
+    mass_cells$salinity <- raster::extract(salt0[[ilayer]], mass_cells$cell_)
+    mass_cells$vertical <- raster::extract(sqrt(u0[[ilayer]] * u0[[ilayer]] + v0[[ilayer]] * v0[[ilayer]]), mass_cells$cell_)
+    mass_summ <- mass_cells %>% dplyr::group_by(object_) %>% dplyr::summarize(temperature = mean(temperature, na.rm = TRUE), 
+                                                                           salinity = mean(salinity, na.rm = TRUE), 
+                                                                           vertical = mean(vertical, na.rm = TRUE))
+    temperature[ilayer, mass_summ$object_, itime] <- mass_summ$temperature
+    salinity[ilayer, mass_summ$object_, itime] <- mass_summ$salinity
+    vertical[ilayer, mass_summ$object_, itime] <- mass_summ$vertical
+    
+    face_cells$u <- raster::extract(u0[[ilayer]], face_cells$cell_)
+    face_cells$v <- raster::extract(v0[[ilayer]], face_cells$cell_)
+  
+    face_summ <- face_cells %>% 
+      dplyr::group_by(object_) %>% 
+      dplyr::summarize(u = sum(u / box_width, na.rm = TRUE), v = sum(v/box_height, na.rm = TRUE), 
+                       transport = sqrt(u * u + v * v))
+    transport[ilayer, face_summ$object_, itime] <- face_summ$transport
+  }
+  print(itime)
+  if (itime %% 10 == 0) {
+    image(transport[,,itime], col = cols, zlim = c(0, 2.5e-5), useRaster = TRUE)
+    gc()
+   
+  }
+}
 
 
 ## Plot
@@ -141,7 +244,7 @@ get_coords <- memoise::memoise(function(f) {
     }
 )
 plot_roms <- function(file, varname = "temp", map = NULL, slice = c(1, 1)) {
-  coords <- get_coords(file, map)
+  coords <- get_coords(file)
   ro_map <- NULL
   if (!is.null(map)) ro_map <- romsmap(map, coords)
   if (varname == "[uv]") {

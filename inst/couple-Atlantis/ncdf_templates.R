@@ -11,10 +11,15 @@ mass_params <- ""
 
 bgmfilepath <- bgmfiles::bgmfiles("antarctica_28")
 library(angstroms)
-create_transport(transp_filename, model_title = "Transport file Antarctica_28", bgmfilepath = bgmfilepath, 
-                              bgmlevels = 1:9, time_steps = Sys.time() + (1:10) * 24 * 3600)
 
-create_mass(mass_filename, model_title = "Mass file Antarctica_28", bgmfilepath = bgmfilepath)
+
+
+create_transport(transp_filename, model_title = "Transport file Antarctica_28", bgmfilepath = bgmfilepath, 
+                              bgmlevels = atlantis_depths, time_steps = time_steps)
+
+create_mass(mass_filename, model_title = "Mass file Antarctica_28", bgmfilepath = bgmfilepath, 
+                              bgmlevels = atlantis_depths, time_steps = time_steps)
+
 
 nctransp <- ncdf4::nc_open(transp_filename, write = TRUE)
 transport <- array(rnorm(9 * 90 * 10), c(9, 90, 10))
