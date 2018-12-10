@@ -64,7 +64,7 @@ u <- crop(romsdata3d(roms_file, varname = "u", slice = 1), romsbox)
 v <- crop(romsdata3d(roms_file, varname = "v", slice = 1), romsbox)
 temp <- crop(romsdata3d(roms_file, varname = "temp", slice = 1), romsbox)
 salt <- crop(romsdata3d(roms_file, varname = "salt", slice = 1), romsbox)
-
+angle <- crop(romsdata2d(roms_file, "angle"), romsbox)
 h <- crop(romsdata(roms_file, varname = "h"), romsbox, snap = "out")
 hhh <- crop(romsdepth(roms_file), romsbox, snap = "out")
 
@@ -73,46 +73,80 @@ Cs_r <- rawdata(roms_file, "Cs_r")
 #list_nc_z_index <- vector('list', nrow(box_roms_index))
 deepest_depth <- max(raster::extract(h, tabularaster::cellnumbers(h, sf::st_as_sf(romsbox))$cell_), na.rm = TRUE)
 ## here we must use the same as we used for the nc output files
-dz <- rev(rbgm::build_dz(-3000))
+dz <- rev(rbgm::build_dz(-deepest_depth, zlayers = c(-Inf, -4000, -2000, -1000, -750, -400, -300, 
+                                                      -200, -100, -50, -20, 0)))
 atlantis_depths <- -cumsum(c(0, dz))
 
 ## boxes
-box_mass_index <- matrix(NA_integer_, nrow(hhh@data@values), length(atlantis_depths))
-for (i in seq_len(nrow(box_mass_index))) {
-  idx <- clamp(findInterval(atlantis_depths, hhh@data@values[i, ]))
-  ## max out at ~200m beyond the deepest depth
-  idx[(atlantis_depths - min(hhh@data@values[i, ])) < -20] <- NA_integer_
-  box_mass_index[i, ] <- idx
-  if (i %% 1000 == 0) print(i)
-}
-
-## faces
-face_index <- matrix(NA_integer_, nrow(u@data@values), 
-                     length(atlantis_depths))
-
-
-for (i in seq_len(nrow(face_index))) {
-  idx <- clamp(findInterval(atlantis_depths, hhh@data@values[i, ]))
-  ## max out at ~200m beyond the deepest depth
-  idx[(atlantis_depths - min(hhh@data@values[i, ])) < -20] <- NA_integer_
-  face_index[i, ] <- idx
-  if (i %% 1000 == 0) print(i)
-}
-
-
-## box properties
-temp <- crop(romsdata3d(roms_file, varname = "temp", slice = 1), romsbox)
-salt <- crop(romsdata3d(roms_file, varname = "salt", slice = 1), romsbox)
-salt_atlantis <- temp_atlantis <- box_mass_index * NA_real_
-for (i in seq_len(nrow(temp_atlantis))) {
-  temp_atlantis[i, ] <- temp@data@values[i, box_mass_index[i, ]]
-  salt_atlantis[i, ] <- salt@data@values[i, box_mass_index[i, ]]
-  
-  if (i %% 1000 == 0) print(i)
-}
+ncol_v <- ncol(temp@data@values)
+face_index <- box_mass_index <- matrix(NA_integer_, nrow(hhh@data@values), ncol_v)
 
 
 
+cellmap <- tabularaster::cellnumbers(temp[[1]], sf::st_as_sf(romsbox))
+cellmap$box <- romsbox$.bx0[cellmap$object_]
+
+
+bigtab <- tabularaster::as_tibble(temp, dim = FALSE) %>% 
+  rename(temp = cellvalue) %>% 
+  mutate(salt = tabularaster::as_tibble(salt, cell = FALSE, dim = FALSE)[[1]], 
+         depth = tabularaster::as_tibble(hhh, cell = FALSE, dim = FALSE)[[1]], 
+         level = findInterval(-depth, -atlantis_depths))
+
+bigtab$box <- cellmap$box[match(bigtab$cellindex, cellmap$cell_)]
+bigtab <- bigtab %>% dplyr::filter(!is.na(box))
+bigtab %>% group_by(level, box) %>% summarize(temp = mean(temp), salt = mean(salt))
+
+mass_x <- bigtab %>% group_by(level, box) %>% 
+  summarize(temp = mean(temp, na.rm = TRUE), 
+            salt = mean(salt, na.rm = TRUE))
+#a <- inner_join(sf::st_as_sf(boxes), x, c("label" = "box"))
+#ggplot(a) + geom_sf(aes(fill = temp)) + facet_wrap(~level)
+
+uv_cellmap <- tabularaster::cellnumbers(u, sf::st_as_sf(romsface))
+uv_cellmap$face <- romsface$.fx0[uv_cellmap$object_]
+
+
+
+library(silicate)
+faces_ll <- SC(spTransform(faces, "+proj=longlat +datum=WGS84"))
+start <- sc_start(faces_ll)
+end <- sc_end(faces_ll)
+
+face_tab <- tibble::tibble(face = faces_ll$object$.fx0[match(start$object_, faces_ll$object$object_)], 
+                           x0 = start$x_, y0 = start$y_, 
+                           x1 = end$x_, y1 = end$y_)
+
+face_tab$angle_sec <- 180 * (atan2(face_tab$x1 - face_tab$x0, 
+                                   face_tab$y1 - face_tab$y0))/pi
+
+
+uv_cellmap$angle_sec <- face_tab$angle_sec[match(uv_cellmap$face, face_tab$face)]
+uv_cellmap$dist <- rgeos::gLength(faces, byid = TRUE)[match(uv_cellmap$face, faces$.fx0)]
+
+uvtab <- tabularaster::as_tibble(u, dim = FALSE) %>% 
+  rename(u = cellvalue) %>% 
+  mutate(v = tabularaster::as_tibble(v, cell = FALSE, dim = FALSE)[[1]], 
+         depth = tabularaster::as_tibble(hhh, cell = FALSE, dim = FALSE)[[1]], 
+         level = findInterval(-depth, -atlantis_depths))
+
+
+uvtab$face <- uv_cellmap$face[match(uvtab$cellindex, uv_cellmap$cell_)]
+uvtab <- uvtab %>% dplyr::filter(!is.na(face))
+uvtab[c("u", "v")] <- romsrotate(cbind(uvtab$v, uvtab$v), extract(angle, uvtab$cellindex))
+uvtab$angle_sec <- uv_cellmap$angle_sec[match(uvtab$cellindex, uv_cellmap$cell_)]
+uvtab$angle_vel <- 180 * (atan2(uvtab$u, 
+                                uvtab$v))/pi
+uvtab$dist <- uv_cellmap$dist[match(uvtab$cellindex, uv_cellmap$cell_)]
+uvtab$angle_rel <- uvtab$angle_vel - uvtab$angle_sec
+uvtab$angle_rel[uvtab$angle_rel > 180] <- uvtab$angle_rel[uvtab$angle_rel > 180] - 360
+uvtab$angle_rel[uvtab$angle_rel < -180] <- uvtab$angle_rel[uvtab$angle_rel < -180] + 360
+
+
+uvtab$vel_section <- sqrt(uvtab$u^2 + uvtab$v^2) *ifelse(uvtab$angle_rel < 0, 1, -1)
+uvtab$height <- abs(diff(atlantis_depths))[uvtab$level]
+# compute flux over sections
+uvtab$exchange <- uvtab$vel_section * uvtab$dist * uvtab$height
 
 
 ## create NetCDF templates for Atlantis hydro
