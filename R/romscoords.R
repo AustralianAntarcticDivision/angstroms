@@ -34,7 +34,7 @@ romscoords <- function(x, spatial = c("lon_u", "lat_u"), ncdf = TRUE,  transpose
   } else {
     l <- lapply(l, function(x) setExtent(x, extent(0, nrow(x), 0, ncol(x))))
   }
-  raster::stack(l)
+  raster::readAll(raster::stack(l))
 }
 
 
