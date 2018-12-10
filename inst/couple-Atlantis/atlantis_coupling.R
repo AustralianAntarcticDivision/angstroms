@@ -95,7 +95,7 @@ bigtab <- tabularaster::as_tibble(temp, dim = FALSE) %>%
 
 bigtab$box <- cellmap$box[match(bigtab$cellindex, cellmap$cell_)]
 bigtab <- bigtab %>% dplyr::filter(!is.na(box))
-bigtab %>% group_by(level, box) %>% summarize(temp = mean(temp), salt = mean(salt))
+#bigtab %>% group_by(level, box) %>% summarize(temp = mean(temp), salt = mean(salt))
 
 mass_x <- bigtab %>% group_by(level, box) %>% 
   summarize(temp = mean(temp, na.rm = TRUE), 
@@ -135,18 +135,21 @@ uvtab$face <- uv_cellmap$face[match(uvtab$cellindex, uv_cellmap$cell_)]
 uvtab <- uvtab %>% dplyr::filter(!is.na(face))
 uvtab[c("u", "v")] <- romsrotate(cbind(uvtab$v, uvtab$v), extract(angle, uvtab$cellindex))
 uvtab$angle_sec <- uv_cellmap$angle_sec[match(uvtab$cellindex, uv_cellmap$cell_)]
-uvtab$angle_vel <- 180 * (atan2(uvtab$u, 
-                                uvtab$v))/pi
 uvtab$dist <- uv_cellmap$dist[match(uvtab$cellindex, uv_cellmap$cell_)]
-uvtab$angle_rel <- uvtab$angle_vel - uvtab$angle_sec
-uvtab$angle_rel[uvtab$angle_rel > 180] <- uvtab$angle_rel[uvtab$angle_rel > 180] - 360
-uvtab$angle_rel[uvtab$angle_rel < -180] <- uvtab$angle_rel[uvtab$angle_rel < -180] + 360
 
 
-uvtab$vel_section <- sqrt(uvtab$u^2 + uvtab$v^2) *ifelse(uvtab$angle_rel < 0, 1, -1)
-uvtab$height <- abs(diff(atlantis_depths))[uvtab$level]
+uv_summ <- group_by(uvtab, face, level, angle_sec, dist) %>% summarize( mean.u = mean(u) ,mean.v = mean(v)) %>% 
+ mutate(angle_vel = 180 * (atan2(mean.u, 
+                                mean.v))/pi, 
+       angle_rel = angle_vel - angle_sec)
+uv_summ$angle_rel[uv_summ$angle_rel > 180] <- uv_summ$angle_rel[uv_summ$angle_rel > 180] - 360
+uv_summ$angle_rel[uv_summ$angle_rel < -180] <- uv_summ$angle_rel[uv_summ$angle_rel < -180] + 360
+
+
+uv_summ$vel_section <- sqrt(uv_summ$mean.u^2 + uv_summ$mean.v^2) *ifelse(uv_summ$angle_rel < 0, 1, -1)
+uv_summ$height <- abs(diff(atlantis_depths))[uv_summ$level]
 # compute flux over sections
-uvtab$exchange <- uvtab$vel_section * uvtab$dist * uvtab$height
+uv_summ$level$exchange <- uv_summ$level$vel_section * uv_summ$level$dist * uv_summ$level$height
 
 
 ## create NetCDF templates for Atlantis hydro
