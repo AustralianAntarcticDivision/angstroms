@@ -1,0 +1,78 @@
+nhdfiles 1
+#hd0.name inputs/SOhydro.nc
+hd0.name /home/shared/data/Atlantis/HydroCoupling/MichaelSumner/file265238d86d50_transport.nc
+
+# Bottom stress
+# BottomStress inputs/stress/stress.nc
+# BottomStress inputs/stress/nxstress.nc
+
+#############################################
+# Point source\sink lists
+npointss 0
+ts_on_hydro_time 1
+
+#pss0.name NameInput
+#pss0.location x y -z
+#pss0.data inputs/filename.ts
+#pss0.rewind 0
+
+##########################################
+## TO DO ##
+# Rain and evaporation
+#Precipitation inputs/meteor/times1.6.nc
+#Evaporation inputs/meteor/84-95.nc
+
+# Solar time series data file
+#Solar_radiation inputs/SOsolar.ts
+#Solar_radiation_rewind 1
+
+# Temperature time series data file
+use_tempfiles 1
+# The number of temperature input files
+ntempfiles 1
+# The names of the temperature input files.
+#Temperature0.name inputs/SOtemp.nc
+Temperature0.name /home/shared/data/Atlantis/HydroCoupling/MichaelSumner/file26522491e32_mass.nc
+# Salinity time series data file
+use_saltfiles 1
+# The number of salinity files
+nsaltfiles 1
+# The names of the salinity input files
+#Salinity0.name inputs/SOsalt.nc
+Salinity0.name /home/shared/data/Atlantis/HydroCoupling/MichaelSumner/file26522491e32_mass.nc
+
+use_phFiles 0
+
+# Recruitment_time_series
+
+# Recruitment_enviro_forcing
+# Recruitment_enviro_forcing inputs/larval/recdevs.ts
+
+#############################################
+# Historical catch lists - nCatchts is the number of time series to be loaded and
+# typeCatchts is whether or not the data is to be interpolated (0) by the model
+# or just use previous record (1)
+nCatchts 0
+typeCatchts 0
+
+#############################################
+# Historical discard lists
+nDiscardts 0
+typeDiscardts 0
+
+#############################################
+# Residual lists - on market fish prices
+nResidualsts 0
+typeResidualsts 0
+
+#############################################
+# Economic statistics - GDP and fuel costs
+nEconts 0
+typeEconts 0
+
+##############################################
+# MPA (spatial management) files for cases where change through time
+# Same format as Catchts above
+nMPAts 0
+typeMPAts 0
+
