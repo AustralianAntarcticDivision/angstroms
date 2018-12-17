@@ -14,7 +14,8 @@
 # Code:
 #   u(XI,ETA)=u(LON,LAT)*cos(angle(i,j))+v(LON,LAT)*sin(angle(i,j))
 # v(XI,ETA)=u(LON,LAT)*sin(angle(i,j))-v(LON,LAT)*cos(angle(i,j))
-
+#' @name romsrotate
+#' @export
 romsrotate <- function(uv, angle) {
   u <- uv[, 1] * cos(angle) - uv[,2] * sin(angle)
   v <- uv[, 1] * sin(angle) + uv[,2] * cos(angle)
