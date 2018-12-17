@@ -28,7 +28,7 @@
 #' 
 romscoords <- function(x, spatial = c("lon_u", "lat_u"), ncdf = TRUE,  transpose = FALSE, ... ) {
   l <- vector("list", length(spatial))
-  for (i in seq_along(l)) l[[i]] <- raster(x, varname = spatial[i], ncdf = TRUE, ...)
+  for (i in seq_along(l)) l[[i]] <- raster(x, varname = spatial[i], ncdf = TRUE, ..., stopIfNotEqualSpaced = FALSE)
   if (transpose) {
     l <- lapply(l, function(x) setExtent(x, extent(0, ncol(x), 0, nrow(x))))
   } else {
