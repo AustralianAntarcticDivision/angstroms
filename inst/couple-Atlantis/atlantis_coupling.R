@@ -73,7 +73,7 @@ Cs_r <- rawdata(roms_file, "Cs_r")
 #list_nc_z_index <- vector('list', nrow(box_roms_index))
 deepest_depth <- max(raster::extract(h, tabularaster::cellnumbers(h, sf::st_as_sf(romsbox))$cell_), na.rm = TRUE)
 ## here we must use the same as we used for the nc output files
-dz <- rev(rbgm::build_dz(-deepest_depth, zlayers = c(-Inf, -4000, -2000, -1000, -750, -400, -300, 
+dz <- rev(rbgm::build_dz(-deepest_depth, zlayers = c(-Inf,  -2000, -1000, -750, -400, -300, 
                                                       -200, -100, -50, -20, 0)))
 atlantis_depths <- -cumsum(c(0, dz))
 
