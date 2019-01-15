@@ -23,7 +23,7 @@ romsdepth <- function(x, grid_type = "rho", slice, ..., S = "Cs_r", depth = "h",
   if (simple) {
     ## simplistic, early version - probably should be defunct
     out <- set_indextent(brick(array(rep(rev(Cs_r), each = length(v)) * v, 
-                                     c(ncol(h), nrow(h), length(Cs_r))), transpose = TRUE, stopIfNotEqualSpaced = FALSE))
+                                     c(ncol(h), nrow(h), length(Cs_r))), transpose = TRUE))
   } else {
     grid_type <- match.arg(tolower(grid_type),c("rho","psi","u","v","w"))
     
@@ -144,7 +144,7 @@ romsdepth <- function(x, grid_type = "rho", slice, ..., S = "Cs_r", depth = "h",
     ## FIXME all these flips and twirls can be applied more efficiently (or avoided)
     ## though should layers start at the surface and go down or ...
     
-    out <- raster::flip(set_indextent(raster::brick(z, transpose = TRUE, stopIfNotEqualSpaced = FALSE)), "y")
+    out <- raster::flip(set_indextent(raster::brick(z, transpose = TRUE)), "y")
     ## NO - we want to start at the bottom, so we match romsdata3d
     #out <- raster::subset(out, rev(seq_len(raster::nlayers(out))))
     
