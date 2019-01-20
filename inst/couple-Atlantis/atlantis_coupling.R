@@ -149,8 +149,9 @@ uv_summ$angle_rel[uv_summ$angle_rel < -180] <- uv_summ$angle_rel[uv_summ$angle_r
 uv_summ$vel_section <- sqrt(uv_summ$mean.u^2 + uv_summ$mean.v^2) *ifelse(uv_summ$angle_rel < 0, 1, -1)
 uv_summ$height <- abs(diff(atlantis_depths))[uv_summ$level]
 # compute flux over sections
-uv_summ$level$exchange <- uv_summ$level$vel_section * uv_summ$level$dist * uv_summ$level$height
+#uv_summ$level$exchange <- uv_summ$level$vel_section * uv_summ$level$dist * uv_summ$level$height
 
+####exchange[j,km,d]=vel_section[j,km,d]*(distGeo(xy[1,],xy[2,])*dz_hi[which(dz_hi$face == i),(6-km)])
 
 ## create NetCDF templates for Atlantis hydro
 library(ncdf4)
