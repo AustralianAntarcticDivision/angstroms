@@ -72,7 +72,8 @@ romsmap.SpatialPolygonsDataFrame <- function(x, coords, crop = FALSE, lonlat = T
   
   if (repro & !is.na(proj)) {
     llproj <- "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs +towgs84=0,0,0"
-    xy <- proj4::ptransform(cbind(tab$x_, tab$y_, 0), src.proj = proj, dst.proj = llproj, silent = FALSE) * 180 / pi
+    #xy <- proj4::ptransform(cbind(tab$x_, tab$y_, 0), src.proj = proj, dst.proj = llproj, silent = FALSE) * 180 / pi
+    xy <- reproj::reproj(cbind(tab$x_, tab$y_, 0), target = llproj, source = proj)
     ## spbabel standard is attributes with underlines
     tab$x_ <- xy[,1]
     tab$y_ <- xy[,2]
