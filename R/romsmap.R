@@ -73,8 +73,8 @@ romsmap.SpatialPolygonsDataFrame <- function(x, coords, crop = FALSE, lonlat = T
   if (repro & !is.na(proj)) {
     llproj <- "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs +towgs84=0,0,0"
     ## replace with reproj
-    xy <- reproj::reproj(cbind(tab$x_, tab$y_, 0), sourc = proj, target = llproj)
-    ## spbabel standard is attributes with underlines
+    xy <- reproj::reproj(cbind(tab$x_, tab$y_, 0), target = llproj, source = proj)
+  ## spbabel standard is attributes with underlines
     tab$x_ <- xy[,1]
     tab$y_ <- xy[,2]
     proj <- llproj
