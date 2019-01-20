@@ -18,8 +18,8 @@ Imports:
     methods,
     nabor,
     ncdf4,
-    proj4,
     rbgm,
+    reproj (>= 0.1.0.9001),
     rgdal,
     rgeos,
     sp,
@@ -29,7 +29,10 @@ RoxygenNote: 6.1.1
 Suggests: 
     bgmfiles,
     covr, 
+    proj4,
     testthat
 Roxygen: list(markdown = TRUE)
 URL: https://github.com/mdsumner/angstroms
 BugReports: https://github.com/mdsumner/angstroms/issues
+Remotes: hypertidy/reproj
+
