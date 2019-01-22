@@ -15,7 +15,7 @@ library(dplyr)
 ## check vertical flux calcs
 
 
-cpolar <- raadtools:::cpolarfiles()
+#cpolar <- raadtools:::cpolarfiles()
 
 ## for each file we know about each separate time, and this is lvar = 4, level = [dim4_slice]
 ## there are 31 depth levels (surface water is the first one)
@@ -31,8 +31,18 @@ cpolar <- raadtools:::cpolarfiles()
 #saveRDS(file_db, file = "inst/couple-Atlantis/coupling_versionJanu2019/file_db.rds")
 
 file_db <- readRDS("inst/couple-Atlantis/coupling_versionJanu2019/file_db.rds")
+## GRRR 
+#time_steps <- ISOdatetime(1970, 1, 1, 0, 0, 0, tz = "UTC") + file_db$time
+## ignore the file time steps and assume they daily from the start value
+file_db$time_steps <-  seq(ISOdatetime(1970, 1, 1, 0, 0, 0, tz = "UTC") + file_db$time[1], by = "1 day", length.out = nrow(file_db))
 
-time_step <- 3600 * 24
+afac <- 1  ## set = 1 for full time resolution
+time_step <- 3600 * 24 * afac
+if (!afac == 1) file_db <- file_db[seq(1, nrow(file_db), by = afac), ]
+
+asub <- 1:365  ## set to 1:nrow(file_db) for full
+file_db <- file_db[asub, ]
+
 ## get a BGM and read it
 bfile <- bgmfiles::bgmfiles("antarctica_28")
 bgm <- rbgm:::read_bgm(bfile)
@@ -142,17 +152,13 @@ library(angstroms)
 # calendar: julian
 # field: time, scalar, series
 
-## GRRR 
-#time_steps <- ISOdatetime(1970, 1, 1, 0, 0, 0, tz = "UTC") + file_db$time
-## ignore the file time steps and assume they daily from the start value
-time_steps <-  seq(ISOdatetime(1970, 1, 1, 0, 0, 0, tz = "UTC") + file_db$time[1], by = "1 day", length.out = nrow(file_db))
 
 
 angstroms:::create_transport(transp_filename, model_title = "Transport file Antarctica_28", bgmfilepath = bgmfilepath, 
-                             bgmlevels = atlantis_depths, time_steps = time_steps)
+                             bgmlevels = atlantis_depths, time_steps = file_db$time_steps)
 
 angstroms:::create_mass(mass_filename, model_title = "Mass file Antarctica_28", bgmfilepath = bgmfilepath, 
-                        bgmlevels = atlantis_depths, time_steps = time_steps
+                        bgmlevels = atlantis_depths, time_steps = file_db$time_steps
 )
 
 ncmass <- ncdf4::nc_open(mass_filename, write = TRUE)
@@ -204,8 +210,11 @@ for (itime in seq_len(nrow(file_db))) {
   }
   temp0  <- setValues(subset(hhh, 1:ncol(temp_atlantis)), temp_atlantis)
   salt0 <- setValues(subset(hhh, 1:ncol(temp_atlantis)), salt_atlantis)
+  w0 <- setValues(subset(hhh, 1:ncol(temp_atlantis)), w_atlantis)
+  
   names(temp0) <- sprintf("depth_%i", as.integer(abs(atlantis_depths)))
   names(salt0) <- names(temp0)
+  names(w0) <- names(temp0)
   u0  <- setValues(subset(u * NA_real_, 1:ncol(u_atlantis)), u_atlantis)
   v0  <- setValues(subset(v * NA_real_, 1:ncol(v_atlantis)), v_atlantis)
   ## FIXME: need the w ROMS
@@ -229,8 +238,8 @@ for (itime in seq_len(nrow(file_db))) {
   for (ilayer in seq_len(nrow(temperature))) {
     mass_cells$temperature <- raster::extract(temp0[[ilayer]], mass_cells$cell_)
     mass_cells$salinity <- raster::extract(salt0[[ilayer]], mass_cells$cell_)
-    ## FIXME: needs to use w from ROMS
-    mass_cells$vertical <- raster::extract(sqrt(u0[[ilayer]] * u0[[ilayer]] + v0[[ilayer]] * v0[[ilayer]]), mass_cells$cell_)
+    
+    mass_cells$vertical <- raster::extract(w0, mass_cells$cell_)
     mass_summ <- mass_cells %>% dplyr::group_by(object_) %>% dplyr::summarize(temperature = mean(temperature, na.rm = TRUE), 
                                                                               salinity = mean(salinity, na.rm = TRUE), 
                                                                               vertical = mean(vertical, na.rm = TRUE))
@@ -251,7 +260,8 @@ for (itime in seq_len(nrow(file_db))) {
   delif(u0)
   delif(salt0)
   delif(v0)
-  rm(temp0, u0, salt0, v0)
+  delif(w0)
+  rm(temp0, u0, salt0, v0, w0)
   print(itime)
   gc()
   if (itime %% 10 == 0) {
@@ -266,3 +276,8 @@ ncvar_put(ncmass, "salinity", salinity)
 ncvar_put(ncmass, "verticalflux", vertical)
 nc_close(nctran)
 nc_close(ncmass)
+
+
+
+
+
