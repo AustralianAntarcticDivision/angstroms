@@ -2,6 +2,10 @@ library(angstroms)
 library(rbgm)
 library(dplyr)
 
+## TODO
+## DONE rotate u/v vectors on import (see ROMS details)
+## check hyper diffusion scaling - I think this can be ignored
+## check vertical flux calcs - I think this is ok
 
 wrap180 <- function(x, lmin = -180) (x - lmin)%%360 + lmin
 sgn1 <- function(x) ifelse(x < 0, 1, -1)
@@ -38,6 +42,7 @@ faces$.y1 <- purrr::map_dbl(coordinates(faces_ll), ~.x[[1]][2, 2])
 romsbox <- romsmap(boxes, roms_ll)
 roms_ll <- crop(roms_ll , romsbox, snap = "out")
 romsface <- romsmap(faces, romscoords(roms_file, transpose = TRUE))
+
 ## dummy grids
 u <- crop(romsdata3d(roms_file, varname = "u", slice = 1), romsbox)
 v <- crop(romsdata3d(roms_file, varname = "v", slice = 1), romsbox)
@@ -102,13 +107,25 @@ delif <- function(x) {
   invisible(NULL)
 }
 
-
+angle <- crop(romsangle(roms_file), romsbox)
 
 doitfun <- function(itime) {
   roms_file <- file_db$fullname[itime]
   roms_slice <- file_db$dim4_slice[itime]
   u0 <- crop(romsdata3d(roms_file, varname = "u", slice = roms_slice), romsbox)
   v0 <- crop(romsdata3d(roms_file, varname = "v", slice = roms_slice), romsbox)
+  
+  ## apply required ROMs rotation  https://www.myroms.org/forum/viewtopic.php?f=3&t=295
+  ul <- vector("list", nlayers(u0))
+  vl <- vector("list", nlayers(u0))
+  for (j in seq_along(ul)) {
+    uv <- romsrotate(brick(u0[[j]], v0[[j]]), angle)
+    ul[[j]] <- uv[[1]]
+    vl[[j]] <- uv[[2]]
+  }
+  u0 <- brick(ul)
+  v0 <- brick(vl)
+  rm(ul, vl)
   temp0 <- crop(romsdata3d(roms_file, varname = "temp", slice = roms_slice), romsbox)
   salt0 <- crop(romsdata3d(roms_file, varname = "salt", slice = roms_slice), romsbox)
   vert0 <- subset(crop(romsdata3d(roms_file, varname = "w", slice = roms_slice), romsbox), 1:31)

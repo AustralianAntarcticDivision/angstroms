@@ -14,9 +14,27 @@
 # Code:
 #   u(XI,ETA)=u(LON,LAT)*cos(angle(i,j))+v(LON,LAT)*sin(angle(i,j))
 # v(XI,ETA)=u(LON,LAT)*sin(angle(i,j))-v(LON,LAT)*cos(angle(i,j))
+
+
+#' Rotate roms vectors
+#' 
+#' `romsrotate` performs the rotation on a 2-layer brick
+#' `romsangle` reads the (likely) angle variable
+#' @references  [ROMS website](https://www.myroms.org/forum/viewtopic.php?f=3&t=295)
 #' @name romsrotate
 #' @export
 romsrotate <- function(uv, angle) {
+  u <- uv[[1]] * cos(angle) - uv[[2]] * sin(angle)
+  v <- uv[[1]] * sin(angle) + uv[[2]] * cos(angle)
+  brick(u, v)
+}
+
+#' @name romsrotate
+#' @export
+romsangle <- function(x, varname = "angle", ...) {
+  romsdata2d(x, varname = varname, ...)
+}
+oldrotate <- function(uv, angle) {
   u <- uv[, 1] * cos(angle) - uv[,2] * sin(angle)
   v <- uv[, 1] * sin(angle) + uv[,2] * cos(angle)
   cbind(u, v)
