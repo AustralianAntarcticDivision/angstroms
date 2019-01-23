@@ -199,7 +199,7 @@ nc_close(nctran)
 nc_close(ncmass)
 
 #dir.create("../EA-Atlantis-dev/hydroconstruct/hydroruns.5/")
-file.copy(mass_filename, "~/Git/EA-Atlantis-dev/hydroconstruct/hydroruns.5/")
-file.copy(transp_filename, "~/EA-Atlantis-dev/hydroconstruct/hydroruns.5/")
-file.copy("~/Git/angstroms/inst/couple-Atlantis/vectorized_coupling.R", "~/EA-Atlantis-dev/hydroconstruct/hydroruns.5/")
+file.copy(mass_filename, ".")
+file.copy(transp_filename, ".")
+
 
