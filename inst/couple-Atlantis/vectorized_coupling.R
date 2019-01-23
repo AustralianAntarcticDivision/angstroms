@@ -8,7 +8,7 @@ library(dplyr)
 ## check vertical flux calcs - I think this is ok
 
 wrap180 <- function(x, lmin = -180) (x - lmin)%%360 + lmin
-sgn1 <- function(x) ifelse(x < 0, 1, -1)
+sgn1 <- function(x) ifelse(x < 0, -1, 1)
 
 
 cpolar <- raadtools:::cpolarfiles() %>% dplyr::filter(stringr::str_detect(fullname, "his_31"))
@@ -198,5 +198,8 @@ ncvar_put(ncmass, "verticalflux", vertical)
 nc_close(nctran)
 nc_close(ncmass)
 
-file.copy(mass_filename, ".")
-file.copy(transp_filename, ".")
+#dir.create("../EA-Atlantis-dev/hydroconstruct/hydroruns.5/")
+file.copy(mass_filename, "~/Git/EA-Atlantis-dev/hydroconstruct/hydroruns.5/")
+file.copy(transp_filename, "~/EA-Atlantis-dev/hydroconstruct/hydroruns.5/")
+file.copy("~/Git/angstroms/inst/couple-Atlantis/vectorized_coupling.R", "~/EA-Atlantis-dev/hydroconstruct/hydroruns.5/")
+
