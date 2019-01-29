@@ -1,7 +1,18 @@
 library(angstroms)
 library(rbgm)
 library(dplyr)
+delif <- function(x) {
+  f <- filename(x)
+  if (file.exists(f)) {
+    ff <- gsub("grd$", "gri", f)
+    if (file.exists(ff)) file.remove(ff)
+  }
+  invisible(NULL)
+}
 
+face_area <- function(bgm) {
+  
+}
 ## TODO
 ## DONE rotate u/v vectors on import (see ROMS details)
 ## check hyper diffusion scaling - I think this can be ignored
@@ -21,7 +32,7 @@ file_db <- purrr::map_df(cpolar$fullname,
 #time_steps <- ISOdatetime(1970, 1, 1, 0, 0, 0, tz = "UTC") + file_db$time
 ## ignore the file time steps and assume they daily from the start value
 file_db$time_steps <-  seq(ISOdatetime(1970, 1, 1, 0, 0, 0, tz = "UTC") + file_db$time[1], by = "1 day", length.out = nrow(file_db))
-
+time_step <- 86400
 
 ## get a BGM and read it
 bfile <- bgmfiles::bgmfiles("antarctica_28")
@@ -56,6 +67,15 @@ salt <- crop(romsdata3d(roms_file, varname = "salt", slice = 1), romsbox)
 vert <- subset(crop(romsdata3d(roms_file, varname = "w", slice = 1), romsbox), 1:31)
 h <- crop(romsdata(roms_file, varname = "h"), romsbox, snap = "out")
 hhh <- crop(romsdepth(roms_file), romsbox, snap = "out")
+## snap h onto the first layer (the bottom) and calculate delta_rho (dz)
+delta_rho <- calc(brick(-h, hhh), fun = function(x) diff(x))
+#pm <- brick(replicate(nlayers(hhh), crop(romsdata2d(roms_file, "pm"), romsbox)))
+#pn <- brick(replicate(nlayers(hhh), crop(romsdata2d(roms_file, "pn"), romsbox)))
+#harea <- pm * pn  ## cell area in horizontal
+#delif(pm)
+#delif(pn)
+
+
 
 deepest_depth <- max(raster::extract(h, tabularaster::cellnumbers(h, sf::st_as_sf(romsbox))$cell_), na.rm = TRUE)
 ## here we must use the same as we used for the nc output files
@@ -74,7 +94,12 @@ romstab <- tabularaster::as_tibble(u, dim = FALSE) %>%
                                                  salt = rvalues(salt), 
                                                  vert = rvalues(vert),
                                                  depth = rvalues(hhh), 
-                                                 layer = findInterval(-depth, -atlantis_depths))
+                                                 #dz = rvalues(delta_rho),  ## not this, this is ROMS cell depth, not face delta
+                                                # harea = rvalues(harea),
+                                                 layer = findInterval(-depth, -atlantis_depths), 
+                                                delta_layer = dz[layer])
+delif(delta_rho)
+#delif(harea)
 
 
 box_index <- tabularaster::cellnumbers(u, romsbox)
@@ -84,7 +109,6 @@ box_index$maxlayer  <- findInterval(-romsbox$botz[box_index$object_], -atlantis_
 face_index <- tabularaster::cellnumbers(u, romsface)
 face_index$faceid <- romsface$.fx0[face_index$object_]
 face_index <- inner_join(face_index, faces@data[c("left", "length", ".fx0", ".x0", ".y0", ".x1", ".y1")], c("faceid" = ".fx0"))
-
 
 
 ### FOR TRANSPORT NC FILE
@@ -105,14 +129,7 @@ nctran <- ncdf4::nc_open(transp_filename, write = TRUE)
 vertical <- salinity <- temperature <- ncdf4::ncvar_get(ncmass, "temperature")
 transport <- ncdf4::ncvar_get(nctran, "transport")
 cols <- palr::sstPal(2600)
-delif <- function(x) {
-  f <- filename(x)
-  if (file.exists(f)) {
-    ff <- gsub("grd$", "gri", f)
-    if (file.exists(ff)) file.remove(ff)
-  }
-  invisible(NULL)
-}
+
 
 angle <- crop(angstroms:::romsangle(roms_file), romsbox)
 
@@ -132,6 +149,10 @@ doitfun <- function(itime) {
   }
   u0 <- brick(ul)
   v0 <- brick(vl)
+  for (j in seq_along(ul)) {
+    delif(ul[[j]])
+    delif(vl[[j]])
+  }
   rm(ul, vl)
   temp0 <- crop(romsdata3d(roms_file, varname = "temp", slice = roms_slice), romsbox)
   salt0 <- crop(romsdata3d(roms_file, varname = "salt", slice = roms_slice), romsbox)
@@ -147,24 +168,28 @@ doitfun <- function(itime) {
   delif(temp0)
   delif(salt0)
   delif(vert0)
+  
 box_summ <- romstab %>% 
   inner_join(box_index[c("cell_", "boxid", "maxlayer")], c("cellindex" = "cell_")) %>% 
   dplyr::mutate(layer = pmin(layer, maxlayer)) %>%  ## push lower data into lowest layer
   group_by(boxid, layer) %>% summarize(temp = mean(temp, na.rm = TRUE), 
                                        salt = mean(salt, na.rm = TRUE), 
-                                       vert = mean(vert, na.rm = TRUE)) %>% 
+                                       vert = sum(vert, na.rm = TRUE)) %>% 
   ungroup() %>% 
   arrange(boxid, layer)
+
 
 face_summ <- romstab %>% dplyr::select(-temp, -salt) %>% 
   inner_join(face_index, c("cellindex" = "cell_")) %>% 
   inner_join(box_index[c("cell_", "maxlayer")], c("cellindex" = "cell_")) %>% 
   dplyr::mutate(layer = pmin(layer, maxlayer)) %>%  ## push lower data into lowest layer
   mutate(angle_face = (180 * atan2(.x0 - .x1, .y0 - .y1))/pi)  %>%   # angle in radians of tan(y/x) / pi resulting in angle in degrees
-  mutate(angle_flow = (180 * atan2(u, v))/pi) %>% 
-  mutate(relative_angle = wrap180(angle_flow - angle_face)) %>% 
+  mutate(angle_flow = (180 * atan2(u, v))/pi) %>%
+  mutate(relative_angle = wrap180(angle_flow - angle_face), 
+         flow = sqrt(u^2 + v^2) * sgn1(relative_angle)) %>% 
   group_by(faceid, layer) %>% 
-  summarize(flow = mean(sqrt(u^2 + v^2)  * sgn1(relative_angle))) %>% 
+  ## mean because (i)  https://github.com/AustralianAntarcticDivision/EA-Atlantis-dev/issues/5#issuecomment-457453852
+  summarize(flow = mean(flow * length * dz[layer], na.rm = TRUE)) %>% 
   ungroup() %>% 
   arrange(faceid, layer)
 
@@ -191,10 +216,10 @@ for (itime in seq_along(x)) {
 }
 
 library(ncdf4)
-ncvar_put(nctran, "transport", transport)
+ncvar_put(nctran, "transport", transport * time_step)
 ncvar_put(ncmass, "temperature", temperature)
 ncvar_put(ncmass, "salinity", salinity)
-ncvar_put(ncmass, "verticalflux", vertical)
+ncvar_put(ncmass, "verticalflux", vertical * time_step)
 nc_close(nctran)
 nc_close(ncmass)
 
