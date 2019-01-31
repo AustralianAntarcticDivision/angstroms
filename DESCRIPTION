@@ -1,6 +1,6 @@
 Package: angstroms
 Title: Tools for 'ROMS' the Regional Ocean Modeling System 
-Version: 0.0.1.9003
+Version: 0.0.2
 Authors@R: c(
   person("Michael D.","Sumner", role = c("aut", "cre"), email = "mdsumner@gmail.com"), 
   person("Ben", "Raymond", role = c("aut")), 
@@ -13,6 +13,7 @@ Depends:
     raster
 License: GPL-3
 LazyData: true
+Encoding: UTF-8
 Imports:
     dplyr,
     methods,

@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Extract coordinate arrays from ROMS. — romscoords • angstroms</title>
+<title>Rotate 'ROMS' vectors — romsrotate • angstroms</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,9 +30,10 @@
 
 
 
-<meta property="og:title" content="Extract coordinate arrays from ROMS. — romscoords" />
+<meta property="og:title" content="Rotate 'ROMS' vectors — romsrotate" />
 
-<meta property="og:description" content="Returns a RasterStack of the given variable names." />
+<meta property="og:description" content="romsrotate performs the rotation on a 2-layer brick
+romsangle reads the (likely) angle variable" />
 <meta name="twitter:card" content="summary" />
 
 
@@ -102,73 +103,60 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Extract coordinate arrays from ROMS.</h1>
-    <small class="dont-index">Source: <a href='https://github.com/mdsumner/angstroms/blob/master/R/romscoords.R'><code>R/romscoords.R</code></a></small>
-    <div class="hidden name"><code>romscoords.Rd</code></div>
+    <h1>Rotate 'ROMS' vectors</h1>
+    <small class="dont-index">Source: <a href='https://github.com/mdsumner/angstroms/blob/master/R/rotate.R'><code>R/rotate.R</code></a></small>
+    <div class="hidden name"><code>romsrotate.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Returns a RasterStack of the given variable names.</p>
+    <p><code>romsrotate</code> performs the rotation on a 2-layer brick
+<code>romsangle</code> reads the (likely) angle variable</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>romscoords</span>(<span class='no'>x</span>, <span class='kw'>spatial</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"lon_u"</span>, <span class='st'>"lat_u"</span>), <span class='kw'>ncdf</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>transpose</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>romsrotate</span>(<span class='no'>uv</span>, <span class='no'>angle</span>, <span class='no'>...</span>)
+
+<span class='fu'>romsangle</span>(<span class='no'>x</span>, <span class='kw'>varname</span> <span class='kw'>=</span> <span class='st'>"angle"</span>, <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>x</th>
-      <td><p>ROMS file name</p></td>
+      <th>uv</th>
+      <td><p>raster brick of two layers with 'u' ("east-west") and 'v' ("north-south") vector components</p></td>
     </tr>
     <tr>
-      <th>spatial</th>
-      <td><p>names of coordinate variables (e.g. lon_u, lat_u)</p></td>
-    </tr>
-    <tr>
-      <th>ncdf</th>
-      <td><p>default to NetCDF no matter what file name</p></td>
-    </tr>
-    <tr>
-      <th>transpose</th>
-      <td><p>the extents (ROMS is FALSE, Access is TRUE)</p></td>
+      <th>angle</th>
+      <td><p>raster layer of the 'angle' variable from 'ROMS'</p></td>
     </tr>
     <tr>
       <th>...</th>
-      <td><p>unused</p></td>
+      <td><p>ignored currently</p></td>
+    </tr>
+    <tr>
+      <th>x</th>
+      <td><p>filename</p></td>
+    </tr>
+    <tr>
+      <th>varname</th>
+      <td><p>variable name from file 'x'</p></td>
     </tr>
     </table>
     
-    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+    <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
-    <p>RasterStack with two layers of the 2D-variables</p>
-    
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>The two layers from the model output are used to define the real-world space. This is used to create a boundary <code>romsboundary</code>, to map real-world
-objects into  grid space <code>romscoords</code> and to generate graticules for mapping into the grid space with <code><a href='https://www.rdocumentation.org/packages/graphics/topics/contour'>graphics::contour</a></code>.</p>
+    <p><a href='https://www.myroms.org/forum/viewtopic.php?f=3&amp;t=295'>ROMS website</a></p>
     
 
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><span class='co'># NOT RUN {</span>
-  <span class='no'>coord</span> <span class='kw'>&lt;-</span> <span class='fu'>romscoord</span>(<span class='st'>"roms.nc"</span>)
-<span class='co'># }</span><div class='input'><span class='co'>## with in-built fake data</span>
-<span class='fu'><a href='https://www.rdocumentation.org/packages/graphics/topics/plot'>plot</a></span>(<span class='no'>ice_fake</span>, <span class='kw'>asp</span> <span class='kw'>=</span> <span class='fl'>0.5</span>)</div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/graphics/topics/contour'>contour</a></span>(<span class='no'>ice_coords</span><span class='kw'>[[</span><span class='fl'>1</span>]], <span class='kw'>add</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>levels</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/seq'>seq</a></span>(-<span class='fl'>165</span>, <span class='fl'>165</span>, <span class='kw'>by</span> <span class='kw'>=</span> <span class='fl'>15</span>))</div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/graphics/topics/contour'>contour</a></span>(<span class='no'>ice_coords</span><span class='kw'>[[</span><span class='fl'>2</span>]], <span class='kw'>add</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='img'><img src='romscoords-1.png' alt='' width='700' height='433' /></div><div class='input'>
-</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
       
-      <li><a href="#value">Value</a></li>
-
-      <li><a href="#details">Details</a></li>
-      
-      <li><a href="#examples">Examples</a></li>
-    </ul>
+      <li><a href="#references">References</a></li>
+          </ul>
 
   </div>
 </div>
