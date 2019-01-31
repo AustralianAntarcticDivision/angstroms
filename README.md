@@ -4,7 +4,7 @@ Status](http://badges.herokuapp.com/travis/AustralianAntarcticDivision/angstroms
 [![Build
 Status](http://badges.herokuapp.com/travis/AustralianAntarcticDivision/angstroms?branch=master&env=BUILD_NAME=osx_release&label=osx)](https://travis-ci.org/AustralianAntarcticDivision/angstroms)
 [![AppVeyor Build
-Status](https://ci.appveyor.com/api/projects/status/github/mdsumner/angstroms-8mue4?branch=master&svg=true)](https://ci.appveyor.com/project/mdsumner/angstroms-8mue4)
+Status](https://ci.appveyor.com/api/projects/status/github/mdsumner/angstroms?branch=master&svg=true)](https://ci.appveyor.com/project/mdsumner/angstroms)
 [![CRAN
 status](http://www.r-pkg.org/badges/version/angstroms)](https://cran.r-project.org/package=angstroms)
 ![cranlogs](http://cranlogs.r-pkg.org./badges/angstroms) [![Coverage
@@ -14,25 +14,50 @@ Status](https://img.shields.io/codecov/c/github/AustralianAntarcticDivision/angs
 
 # angstroms
 
-The goal of angstroms is to provide easy access to Regional Ocean
-Modeling System (ROMS) output for R.
+The goal of angstroms *was* ~~to provide easy access to Regional Ocean
+Modeling System (ROMS)~~ but now it provides easy access and control
+over *any* complex gridded output available to the
+[raster](https://CRAN.R-project.org/package=raster) package in R.
+
+The key features are:
+
+  - treat gridded data as existing index space
+  - handle coordinate arrays independently
+  - avoid remodelling data whenever possible
+  - re-map data into the grid space for extractions
+  - treat the grid as a mesh (which it always is).
+
+This approach aligns with the plotting and interpretation tools in the
+[quadmesh](https://CRAN.R-project.org/package=quadmesh) package,
+particularly the
+[mesh\_plot()](https://hypertidy.github.io/quadmesh/reference/mesh_plot.html)
+and
+[quadmesh()](https://hypertidy.github.io/quadmesh/reference/quadmesh.html)
+functions.
 
 ## Installation
+
+Install the released version from [CRAN](https://CRAN.R-project.org/)
+with:
+
+``` r
+install.packages("angstroms")
+```
 
 You can install the development version of angstroms from github with:
 
 ``` r
-# install.packages("devtools")
-devtools::install_github("AustralianAntarcticDivision/angstroms")
+# install.packages("remotes")
+remotes::install_github("AustralianAntarcticDivision/angstroms")
 ```
 
-## angstroms - R for ROMS
+## angstroms - R for gridded model data (including ROMS)
 
-Angstroms aims to make working with ROMS output as easy as possible in
-R. Rather than re-map explicitly the complex curvilinear grid in ROMS,
-the approach simplifies this by:
+Angstroms aims to make working with gridded output as easy as possible
+in R. Rather than re-map explicitly the complex curvilinear grid in ROMS
+or ACCESS (or many others), the approach simplifies this by:
 
-  - maintaining the internal index of ROMS as the default
+  - maintaining the internal index of a grid as the default
     *georeferencing*
   - converting external data (maps, transects, points, etc.) into the
     native internal index space of ROMS
@@ -40,17 +65,11 @@ the approach simplifies this by:
     or 3D) as Raster objects
   - providing tools to recover the original full coordinates as needed
 
-In combination these allow extraction and query from the ROMS output
-very easily.
+In combination these allow extraction and query from the complex grids
+output very easily.
 
 The ability to deal with time series across multiple files is still in
 development, though can be used simply now with standard loops.
-
-Some more examples:
-
-<http://rpubs.com/cyclemumner/roms0>
-
-<http://rpubs.com/cyclemumner/266770>
 
 ## Contributing
 
