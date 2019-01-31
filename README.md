@@ -4,7 +4,7 @@ Status](http://badges.herokuapp.com/travis/AustralianAntarcticDivision/angstroms
 [![Build
 Status](http://badges.herokuapp.com/travis/AustralianAntarcticDivision/angstroms?branch=master&env=BUILD_NAME=osx_release&label=osx)](https://travis-ci.org/AustralianAntarcticDivision/angstroms)
 [![AppVeyor Build
-Status](https://ci.appveyor.com/api/projects/status/github/AustralianAntarcticDivision/angstroms?branch=master&svg=true)](https://ci.appveyor.com/project/AustralianAntarcticDivision/angstroms)
+Status](https://ci.appveyor.com/api/projects/status/github/mdsumner/angstroms-8mue4?branch=master&svg=true)](https://ci.appveyor.com/project/mdsumner/angstroms-8mue4)
 [![CRAN
 status](http://www.r-pkg.org/badges/version/angstroms)](https://cran.r-project.org/package=angstroms)
 ![cranlogs](http://cranlogs.r-pkg.org./badges/angstroms) [![Coverage
