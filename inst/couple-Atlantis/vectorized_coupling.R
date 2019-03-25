@@ -174,7 +174,7 @@ transport <- angstroms::rawdata(transp_filename, "transport")
 # 10.214   1.342  16.637 
 
 ## a trivial function to run a single iteration, all is a single time
-doitfun <- function(itime) {
+doitfun <- function(itime, ..., push_layer = FALSE) {
   roms_file <- file_db$fullname[itime]
   roms_slice <- file_db$dim4_slice[itime]
   u0 <- crop(romsdata3d(roms_file, varname = "u", slice = roms_slice), romsbox)
@@ -209,22 +209,23 @@ doitfun <- function(itime) {
   delif(temp0)
   delif(salt0)
   delif(vert0)
-  
+ #browser()
 box_summ <- romstab %>% 
   inner_join(box_index[c("cell_", "boxid", "maxlayer")], c("cellindex" = "cell_")) %>% 
-  dplyr::mutate(layer = pmin(layer, maxlayer)) %>%  ## push lower data into lowest layer
+  #dplyr::mutate(layer = pmin(layer, maxlayer)) %>%  ## push lower data into lowest layer
+  dplyr::filter(layer <= maxlayer) %>%   ## no, drop any layer deeper than this box's max layer
   group_by(boxid, layer) %>% summarize(temp = mean(temp, na.rm = TRUE), 
                                        salt = mean(salt, na.rm = TRUE), 
                                        vert = sum(vert, na.rm = TRUE)) %>% 
   ungroup() %>% 
   arrange(boxid, layer)
 
-
+face_botz <- face_index %>% inner_join(box_index[c("cell_", "maxlayer")]) %>% 
+     group_by(faceid) %>% summarize(maxlayer = min(maxlayer))
 face_summ <- romstab %>% dplyr::select(-temp, -salt) %>% 
   inner_join(face_index, c("cellindex" = "cell_")) %>% 
-  inner_join(box_index[c("cell_", "maxlayer")], c("cellindex" = "cell_")) %>% 
-  dplyr::mutate(layer = pmin(layer, maxlayer)) %>%  ## push lower data into lowest layer
- ## mutate(angle_face = (180 * atan2(.x0 - .x1, .y0 - .y1))/pi)  %>%   # angle in radians of tan(y/x) / pi resulting in angle in degrees
+  inner_join(face_botz)  %>% ## unambiguous maxlayer
+  dplyr::filter(layer <= maxlayer) %>%   ## no, drop any layer deeper than this box's max layer
   mutate(angle_flow = (180 * atan2(u, v))/pi) %>%
   mutate(relative_angle = wrap180(angle_flow - angle_face), 
          velocity_magnitude = sqrt(u^2 + v^2) * sgn1(relative_angle)) %>% 
