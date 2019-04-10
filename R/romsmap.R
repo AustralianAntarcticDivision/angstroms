@@ -132,14 +132,15 @@ romsboundary <- function(cds) {
 #' @name romsboundary
 #' @export
 databoundary <- function(x, mask = NULL, ...) {
-  if (is.null(mask)) {
-    ## longshot, put an NA band around the mask and contour on that
-    maskboundary <- rgeos::gPolygonize(methods::as(keeponlymostcomplexline(
-      raster::rasterToContour(is.na(raster::extend(x, c(2, 2), value = NA)), level = 1)), 
-      "SpatialLinesDataFrame"))
-    maskboundary <- sp::SpatialPolygonsDataFrame(maskboundary, data.frame(boundary = "mask", stringsAsFactors = FALSE))
-  }
-  maskboundary
+  stop("databoundary is defunct")
+  # if (is.null(mask)) {
+  #   ## longshot, put an NA band around the mask and contour on that
+  #   maskboundary <- rgeos::gPolygonize(methods::as(keeponlymostcomplexline(
+  #     raster::rasterToContour(is.na(raster::extend(x, c(2, 2), value = NA)), level = 1)), 
+  #     "SpatialLinesDataFrame"))
+  #   maskboundary <- sp::SpatialPolygonsDataFrame(maskboundary, data.frame(boundary = "mask", stringsAsFactors = FALSE))
+  # }
+  # maskboundary
 }
 
 ## put any raster into xy-index space (0, nc, 0, nr)

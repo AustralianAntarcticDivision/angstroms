@@ -2,6 +2,7 @@
 
 * Replace nabor import with FNN. 
 
+* Remove rgeos dependency (for use on NCI). 
 
 * Added 'create_transport' function to flesh out details of a hydrodynamic forcing file for Atlantis. 
 
