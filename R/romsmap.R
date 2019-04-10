@@ -32,7 +32,6 @@ romsmap <- function(x, ...) {
 #' @rdname romsmap
 #' @export
 #' @importFrom spbabel sptable sp
-#' @importFrom nabor knn
 #' @importFrom raster intersect as.matrix projection
 #' @importFrom sp CRS
 romsmap.SpatialPolygonsDataFrame <- function(x, coords, crop = FALSE, lonlat = TRUE, ...) {
