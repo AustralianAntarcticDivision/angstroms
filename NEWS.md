@@ -1,5 +1,8 @@
 # angstroms dev
 
+* Replace nabor import with FNN. 
+
+
 * Added 'create_transport' function to flesh out details of a hydrodynamic forcing file for Atlantis. 
 
 * add better romshcoords logic, and romsdepth alias (simple arg provides original, 

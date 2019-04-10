@@ -1,26 +1,3 @@
-# romsmap.sf <- function(x, coords, crop = FALSE, lonlat = TRUE, ...) {
-#   ## first get the intersection
-#   #  if (crop) {
-#   #    op <- options(warn = -1)
-#   #    x <- raster::intersect(x, romsboundary(coords))
-#   #    options(op)
-#   #  }
-#   ## do we need to invert projection?
-#   #  repro <- !raster::isLonLat(x)
-#   #  proj <- projection(x)
-#   # tab <- spbabel::sptable(x)
-#   gm <- gibble::gibble(x)
-#   vertex <- silicate::sc_coord(x)
-#   xy <- as.matrix(coords)
-#   kd <- nabor::knn(xy, raster::as.matrix(vertex[, c("x_", "y_")]), k = 1, eps = 0)
-#   index <- expand.grid(x = seq(ncol(coords)), y = rev(seq(nrow(coords))))[kd$nn.idx, ]
-#   vertex$x_ <- index$x
-#   vertex$y_ <- index$y
-#   #  spbabel::sp(tab, attr_tab = as.data.frame(x), crs = NA_character_)
-#   out <- tibble::as_tibble(as.data.frame(x))
-#   out[[attr(x, "sf_column")]]  <- silicate:::build_sf(gm, vertex, crs = NA)
-#   out
-# }
 
 #' Remap an object to the ROMS grid. 
 #' 
@@ -80,8 +57,8 @@ romsmap.SpatialPolygonsDataFrame <- function(x, coords, crop = FALSE, lonlat = T
     proj <- llproj
   }
   xy <- as.matrix(coords)
-  kd <- nabor::knn(xy, raster::as.matrix(tab[, c("x_", "y_")]), k = 1, eps = 0)
-  index <- expand.grid(x = seq(ncol(coords)), y = rev(seq(nrow(coords))))[kd$nn.idx, ]
+  kd <- FNN::get.knnx(xy, raster::as.matrix(tab[, c("x_", "y_")]), k = 1)
+  index <- expand.grid(x = seq(ncol(coords)), y = rev(seq(nrow(coords))))[kd$nn.index[,1L,drop=TRUE], ]
  tab$x_ <- index$x
   tab$y_ <- index$y
   spbabel::sp(tab, attr_tab = as.data.frame(x), crs = NA_character_)
