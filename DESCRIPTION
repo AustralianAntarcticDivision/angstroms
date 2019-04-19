@@ -32,7 +32,7 @@ Suggests:
     proj4,
     testthat
 Roxygen: list(markdown = TRUE)
-URL: https://github.com/mdsumner/angstroms
-BugReports: https://github.com/mdsumner/angstroms/issues
+URL: https://github.com/AustralianAntarcticDivision/angstroms/
+BugReports: https://github.com/AustralianAntarcticDivision/angstroms/issues
 Remotes: hypertidy/reproj
 
