@@ -106,7 +106,7 @@ romsdata <- function (x, varname, slice = c(1L, 1L), transpose = TRUE, ...)
   romsdata3d(x, varname = varname, slice = slice[2L], transpose = transpose)[[slice[1L]]]
 }
 #' @name romsdata
-#' @export
+#' @export romsdata2d
 romsdata2d <- romsdata
 #' for romsdata3d slice must be length 1, intended to get all depths
 #' @name romsdata
