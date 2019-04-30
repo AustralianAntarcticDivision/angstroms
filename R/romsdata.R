@@ -36,21 +36,21 @@ romscoords_z <- function(x, cell) {
 #' #plot(roms_zt(x, "u", slice = c(1L, 392L)), asp = NA)
 #' @name romsdata
 #' @export
-roms_xy <- function(x, varname, slice = c(1L, 1L), transpose = TRUE, ...) {
+roms_xy <- function(x, varname = "", slice = c(1L, 1L), transpose = TRUE, ...) {
   start <- c(1L, 1L, slice)
   count <- c(-1L, -1L, 1L, 1L)
   raster_ispace(ncgetslice(x, varname, start = start, count = count))
 }
 #' @name romsdata
 #' @export
-roms_xz <- function(x, varname, slice = c(1L, 1L), transpose = TRUE, ...) {
+roms_xz <- function(x, varname = "", slice = c(1L, 1L), transpose = TRUE, ...) {
   start <- c(1L, slice[1L], 1L, slice[2L])
   count <- c(-1L, 1L, -1L, 1L)
   raster_ispace(ncgetslice(x, varname, start = start, count = count))
 }
 #' @name romsdata
 #' @export
-roms_xt <- function(x, varname, slice = c(1L, 1L), transpose = TRUE, ...) {
+roms_xt <- function(x, varname = "", slice = c(1L, 1L), transpose = TRUE, ...) {
   start <- c(1L, slice[1L], slice[2L], 1L)
   count <- c(-1L, 1L, 1L, -1L)
   raster_ispace(ncgetslice(x, varname, start = start, count = count))
@@ -59,14 +59,14 @@ roms_xt <- function(x, varname, slice = c(1L, 1L), transpose = TRUE, ...) {
 
 #' @name romsdata
 #' @export
-roms_yz <- function(x, varname, slice = c(1L, 1L), transpose = TRUE, ...) {
+roms_yz <- function(x, varname = "", slice = c(1L, 1L), transpose = TRUE, ...) {
   start <- c(slice[1L], 1L, 1L, slice[2L])
   count <- c(1L, -1L, -1L,  1L)
   raster_ispace(ncgetslice(x, varname, start = start, count = count))
 }
 #' @name romsdata
 #' @export
-roms_yt <- function(x, varname, slice = c(1L, 1L), transpose = TRUE, ...) {
+roms_yt <- function(x, varname = "", slice = c(1L, 1L), transpose = TRUE, ...) {
   start <- c(slice[1L], 1L,  slice[2L], 1L)
   count <- c(1L, -1L,  1L, -1L)
   raster_ispace(ncgetslice(x, varname, start = start, count = count))
@@ -74,7 +74,7 @@ roms_yt <- function(x, varname, slice = c(1L, 1L), transpose = TRUE, ...) {
 
 #' @name romsdata
 #' @export
-roms_zt <- function(x, varname, slice = c(1L, 1L), transpose = TRUE, ...) {
+roms_zt <- function(x, varname = "", slice = c(1L, 1L), transpose = TRUE, ...) {
   start <- c(slice, 1L, 1L)
   count <- c(1L, 1L, -1L, -1L)
   raster_ispace(ncgetslice(x, varname, start = start, count = count))
@@ -98,11 +98,11 @@ roms_zt <- function(x, varname, slice = c(1L, 1L), transpose = TRUE, ...) {
 #' @return RasterLayer
 #' @export
 #'
-romsdata <- function (x, varname, slice = c(1L, 1L), transpose = TRUE, ...) 
+romsdata <- function (x, varname = "", slice = c(1L, 1L), transpose = TRUE, ...) 
 {
-  if (missing(varname)) {
-    stop("no varname supplied")
-  }
+  #if (missing(varname)) {
+  #  stop("no varname supplied")
+  #}
   romsdata3d(x, varname = varname, slice = slice[2L], transpose = transpose)[[slice[1L]]]
 }
 #' @name romsdata
@@ -111,7 +111,7 @@ romsdata2d <- romsdata
 #' for romsdata3d slice must be length 1, intended to get all depths
 #' @name romsdata
 #' @export
-romsdata3d <- function (x, varname, slice = 1L, transpose = TRUE, verbose = TRUE,  ..., lvar = 4L) 
+romsdata3d <- function (x, varname = "", slice = 1L, transpose = TRUE, verbose = TRUE,  ..., lvar = 4L) 
 {
   stopifnot(length(slice) == 1L)
   if (is.null(x)) stop("x must be a valid NetCDF source name")

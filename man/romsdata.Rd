@@ -14,24 +14,24 @@
 
 Extract a data layer from ROMS by name and 4-D slice.}
 \usage{
-roms_xy(x, varname, slice = c(1L, 1L), transpose = TRUE, ...)
+roms_xy(x, varname = "", slice = c(1L, 1L), transpose = TRUE, ...)
 
-roms_xz(x, varname, slice = c(1L, 1L), transpose = TRUE, ...)
+roms_xz(x, varname = "", slice = c(1L, 1L), transpose = TRUE, ...)
 
-roms_xt(x, varname, slice = c(1L, 1L), transpose = TRUE, ...)
+roms_xt(x, varname = "", slice = c(1L, 1L), transpose = TRUE, ...)
 
-roms_yz(x, varname, slice = c(1L, 1L), transpose = TRUE, ...)
+roms_yz(x, varname = "", slice = c(1L, 1L), transpose = TRUE, ...)
 
-roms_yt(x, varname, slice = c(1L, 1L), transpose = TRUE, ...)
+roms_yt(x, varname = "", slice = c(1L, 1L), transpose = TRUE, ...)
 
-roms_zt(x, varname, slice = c(1L, 1L), transpose = TRUE, ...)
+roms_zt(x, varname = "", slice = c(1L, 1L), transpose = TRUE, ...)
 
-romsdata(x, varname, slice = c(1L, 1L), transpose = TRUE, ...)
+romsdata(x, varname = "", slice = c(1L, 1L), transpose = TRUE, ...)
 
-romsdata2d(x, varname, slice = c(1L, 1L), transpose = TRUE, ...)
+romsdata2d(x, varname = "", slice = c(1L, 1L), transpose = TRUE, ...)
 
-romsdata3d(x, varname, slice = 1L, transpose = TRUE, verbose = TRUE,
-  ..., lvar = 4L)
+romsdata3d(x, varname = "", slice = 1L, transpose = TRUE,
+  verbose = TRUE, ..., lvar = 4L)
 }
 \arguments{
 \item{x}{ROMS file name}

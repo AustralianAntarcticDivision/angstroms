@@ -60,7 +60,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">angstroms</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.2.9003</span>
       </span>
     </div>
 
@@ -82,7 +82,7 @@
       
       <ul class="nav navbar-nav navbar-right">
         <li>
-  <a href="https://github.com/mdsumner/angstroms">
+  <a href="https://github.com/AustralianAntarcticDivision/angstroms">
     <span class="fa fa-github fa-lg"></span>
      
   </a>
@@ -100,9 +100,29 @@
   <div class="col-md-9 contents">
     <div class="page-header">
       <h1>Changelog <small></small></h1>
-      <small>Source: <a href='https://github.com/mdsumner/angstroms/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
+      <small>Source: <a href='https://github.com/AustralianAntarcticDivision/angstroms/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
+    <div id="angstroms-0-0-2-9003" class="section level1">
+<h1 class="page-header">
+<a href="#angstroms-0-0-2-9003" class="anchor"></a>angstroms 0.0.2.9003<small> Unreleased </small>
+</h1>
+<ul>
+<li><p>Add rectilinear support to <code><a href="../reference/romscoords.html">romscoords()</a></code>, by expanding the coordinates as for the curvilinear case. This function now tries hard to find the coordinates, assuming they are 1D arrays if the 2D assumption fails.</p></li>
+<li><p>Argument <code>transpose</code> now TRUE by default for <code><a href="../reference/romsdata.html">romsdata()</a></code> family and <code><a href="../reference/romscoords.html">romscoords()</a></code>.</p></li>
+<li><p>Argument <code>varname</code> is now the empty string by default to match raster behaviour, and benefit from messages abuot available variables.</p></li>
+<li><p>Function <code><a href="../reference/romscoords.html">romscoords()</a></code> gains two new arguments <code>flip_y</code> to control latitude orientation, and <code>varname</code> in case the default raster doesn’t match the coordinate requested in the rectlinear case.</p></li>
+<li><p>Replace nabor import with FNN.</p></li>
+<li><p>Remove rgeos dependency (for use on NCI).</p></li>
+<li><p>Added ‘create_transport’ function to flesh out details of a hydrodynamic forcing file for Atlantis.</p></li>
+<li><p>add better romshcoords logic, and romsdepth alias (simple arg provides original, probably wrong, implementation)</p></li>
+<li><p>add lvar argument to romsdata3d (needs more thought)</p></li>
+<li><p>update missing uses of <code>ncdf = TRUE</code> thanks to Ryan Morse in <a href="https://github.com/hypertidy/angstroms/issues/6" class="uri">https://github.com/hypertidy/angstroms/issues/6</a></p></li>
+<li><p>added <code>databoundary</code> function, to trace around valid pixels</p></li>
+<li><p>more general approach to reading slices, with <code>romsdata3d</code> and <code>romsdata2d</code></p></li>
+<li><p>S3 methods for rawdata</p></li>
+</ul>
+</div>
     <div id="angstroms-0-0-1" class="section level1">
 <h1 class="page-header">
 <a href="#angstroms-0-0-1" class="anchor"></a>angstroms 0.0.1<small> 2017-05-01 </small>
@@ -130,6 +150,7 @@
     <div id="tocnav">
       <h2>Contents</h2>
       <ul class="nav nav-pills nav-stacked">
+        <li><a href="#angstroms-0-0-2-9003">0.0.2.9003</a></li>
         <li><a href="#angstroms-0-0-1">0.0.1</a></li>
         <li><a href="#angstroms-0-0-0-9000">0.0.0.9000</a></li>
       </ul>

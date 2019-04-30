@@ -68,7 +68,7 @@ work in the space indicated by their name roms_xy, roms_xt and so on." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">angstroms</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.2.9003</span>
       </span>
     </div>
 
@@ -90,7 +90,7 @@ work in the space indicated by their name roms_xy, roms_xt and so on." />
       
       <ul class="nav navbar-nav navbar-right">
         <li>
-  <a href="https://github.com/mdsumner/angstroms">
+  <a href="https://github.com/AustralianAntarcticDivision/angstroms">
     <span class="fa fa-github fa-lg"></span>
      
   </a>
@@ -110,7 +110,7 @@ work in the space indicated by their name roms_xy, roms_xt and so on." />
     <h1>ROMS single slice 2D layer
 
 Extract a data layer from ROMS by name and 4-D slice.</h1>
-    <small class="dont-index">Source: <a href='https://github.com/mdsumner/angstroms/blob/master/R/romsdata.R'><code>R/romsdata.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/AustralianAntarcticDivision/angstroms/blob/master/R/romsdata.R'><code>R/romsdata.R</code></a></small>
     <div class="hidden name"><code>romsdata.Rd</code></div>
     </div>
 
@@ -121,24 +121,24 @@ work in the space indicated by their name <code>roms_xy</code>, <code>roms_xt</c
     
     </div>
 
-    <pre class="usage"><span class='fu'>roms_xy</span>(<span class='no'>x</span>, <span class='no'>varname</span>, <span class='kw'>slice</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>1L</span>, <span class='fl'>1L</span>), <span class='kw'>transpose</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='no'>...</span>)
+    <pre class="usage"><span class='fu'>roms_xy</span>(<span class='no'>x</span>, <span class='kw'>varname</span> <span class='kw'>=</span> <span class='st'>""</span>, <span class='kw'>slice</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>1L</span>, <span class='fl'>1L</span>), <span class='kw'>transpose</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='no'>...</span>)
 
-<span class='fu'>roms_xz</span>(<span class='no'>x</span>, <span class='no'>varname</span>, <span class='kw'>slice</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>1L</span>, <span class='fl'>1L</span>), <span class='kw'>transpose</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='no'>...</span>)
+<span class='fu'>roms_xz</span>(<span class='no'>x</span>, <span class='kw'>varname</span> <span class='kw'>=</span> <span class='st'>""</span>, <span class='kw'>slice</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>1L</span>, <span class='fl'>1L</span>), <span class='kw'>transpose</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='no'>...</span>)
 
-<span class='fu'>roms_xt</span>(<span class='no'>x</span>, <span class='no'>varname</span>, <span class='kw'>slice</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>1L</span>, <span class='fl'>1L</span>), <span class='kw'>transpose</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='no'>...</span>)
+<span class='fu'>roms_xt</span>(<span class='no'>x</span>, <span class='kw'>varname</span> <span class='kw'>=</span> <span class='st'>""</span>, <span class='kw'>slice</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>1L</span>, <span class='fl'>1L</span>), <span class='kw'>transpose</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='no'>...</span>)
 
-<span class='fu'>roms_yz</span>(<span class='no'>x</span>, <span class='no'>varname</span>, <span class='kw'>slice</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>1L</span>, <span class='fl'>1L</span>), <span class='kw'>transpose</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='no'>...</span>)
+<span class='fu'>roms_yz</span>(<span class='no'>x</span>, <span class='kw'>varname</span> <span class='kw'>=</span> <span class='st'>""</span>, <span class='kw'>slice</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>1L</span>, <span class='fl'>1L</span>), <span class='kw'>transpose</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='no'>...</span>)
 
-<span class='fu'>roms_yt</span>(<span class='no'>x</span>, <span class='no'>varname</span>, <span class='kw'>slice</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>1L</span>, <span class='fl'>1L</span>), <span class='kw'>transpose</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='no'>...</span>)
+<span class='fu'>roms_yt</span>(<span class='no'>x</span>, <span class='kw'>varname</span> <span class='kw'>=</span> <span class='st'>""</span>, <span class='kw'>slice</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>1L</span>, <span class='fl'>1L</span>), <span class='kw'>transpose</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='no'>...</span>)
 
-<span class='fu'>roms_zt</span>(<span class='no'>x</span>, <span class='no'>varname</span>, <span class='kw'>slice</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>1L</span>, <span class='fl'>1L</span>), <span class='kw'>transpose</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='no'>...</span>)
+<span class='fu'>roms_zt</span>(<span class='no'>x</span>, <span class='kw'>varname</span> <span class='kw'>=</span> <span class='st'>""</span>, <span class='kw'>slice</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>1L</span>, <span class='fl'>1L</span>), <span class='kw'>transpose</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='no'>...</span>)
 
-<span class='fu'>romsdata</span>(<span class='no'>x</span>, <span class='no'>varname</span>, <span class='kw'>slice</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>1L</span>, <span class='fl'>1L</span>), <span class='kw'>transpose</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='no'>...</span>)
+<span class='fu'>romsdata</span>(<span class='no'>x</span>, <span class='kw'>varname</span> <span class='kw'>=</span> <span class='st'>""</span>, <span class='kw'>slice</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>1L</span>, <span class='fl'>1L</span>), <span class='kw'>transpose</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='no'>...</span>)
 
-<span class='fu'>romsdata2d</span>(<span class='no'>x</span>, <span class='no'>varname</span>, <span class='kw'>slice</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>1L</span>, <span class='fl'>1L</span>), <span class='kw'>transpose</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='no'>...</span>)
+<span class='fu'>romsdata2d</span>(<span class='no'>x</span>, <span class='kw'>varname</span> <span class='kw'>=</span> <span class='st'>""</span>, <span class='kw'>slice</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>1L</span>, <span class='fl'>1L</span>), <span class='kw'>transpose</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='no'>...</span>)
 
-<span class='fu'>romsdata3d</span>(<span class='no'>x</span>, <span class='no'>varname</span>, <span class='kw'>slice</span> <span class='kw'>=</span> <span class='fl'>1L</span>, <span class='kw'>transpose</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='no'>...</span>, <span class='kw'>lvar</span> <span class='kw'>=</span> <span class='fl'>4L</span>)</pre>
+<span class='fu'>romsdata3d</span>(<span class='no'>x</span>, <span class='kw'>varname</span> <span class='kw'>=</span> <span class='st'>""</span>, <span class='kw'>slice</span> <span class='kw'>=</span> <span class='fl'>1L</span>, <span class='kw'>transpose</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+  <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='no'>...</span>, <span class='kw'>lvar</span> <span class='kw'>=</span> <span class='fl'>4L</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">

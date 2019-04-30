@@ -63,7 +63,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">angstroms</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.2.9003</span>
       </span>
     </div>
 
@@ -85,7 +85,7 @@
       
       <ul class="nav navbar-nav navbar-right">
         <li>
-  <a href="https://github.com/mdsumner/angstroms">
+  <a href="https://github.com/AustralianAntarcticDivision/angstroms">
     <span class="fa fa-github fa-lg"></span>
      
   </a>
@@ -103,7 +103,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Extract coordinate arrays from ROMS.</h1>
-    <small class="dont-index">Source: <a href='https://github.com/mdsumner/angstroms/blob/master/R/romscoords.R'><code>R/romscoords.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/AustralianAntarcticDivision/angstroms/blob/master/R/romscoords.R'><code>R/romscoords.R</code></a></small>
     <div class="hidden name"><code>romscoords.Rd</code></div>
     </div>
 
@@ -114,7 +114,7 @@
     </div>
 
     <pre class="usage"><span class='fu'>romscoords</span>(<span class='no'>x</span>, <span class='kw'>spatial</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"lon_u"</span>, <span class='st'>"lat_u"</span>), <span class='kw'>ncdf</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>transpose</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='no'>...</span>)</pre>
+  <span class='kw'>transpose</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='no'>...</span>, <span class='kw'>varname</span> <span class='kw'>=</span> <span class='st'>""</span>, <span class='kw'>flip_y</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -138,6 +138,14 @@
     <tr>
       <th>...</th>
       <td><p>unused</p></td>
+    </tr>
+    <tr>
+      <th>varname</th>
+      <td><p>in desperate cases, specify the variable that these coordinate variables belong to</p></td>
+    </tr>
+    <tr>
+      <th>flip_y</th>
+      <td><p>Y coordinates are assumed to be in top-down order, set to FALSE to assume down-up</p></td>
     </tr>
     </table>
     

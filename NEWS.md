@@ -1,4 +1,13 @@
-# angstroms dev
+# angstroms 0.0.2.9003
+
+* Add rectilinear support to `romscoords()`, by expanding the coordinates as for the curvilinear case.  This function now tries hard to find the coordinates, assuming they are 1D arrays if the 2D assumption fails. 
+
+* Argument `transpose` now TRUE by default for `romsdata()` family and `romscoords()`.
+
+* Argument `varname` is now the empty string by default to match raster behaviour, and benefit 
+from messages abuot available variables. 
+
+* Function `romscoords()` gains two new arguments `flip_y` to control latitude orientation, and `varname` in case the default raster doesn't match the coordinate requested in the rectlinear case. 
 
 * Replace nabor import with FNN. 
 

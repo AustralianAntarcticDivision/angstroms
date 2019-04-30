@@ -5,7 +5,7 @@
 \title{Extract coordinate arrays from ROMS.}
 \usage{
 romscoords(x, spatial = c("lon_u", "lat_u"), ncdf = TRUE,
-  transpose = FALSE, ...)
+  transpose = TRUE, ..., varname = "", flip_y = TRUE)
 }
 \arguments{
 \item{x}{ROMS file name}
@@ -17,6 +17,10 @@ romscoords(x, spatial = c("lon_u", "lat_u"), ncdf = TRUE,
 \item{transpose}{the extents (ROMS is FALSE, Access is TRUE)}
 
 \item{...}{unused}
+
+\item{varname}{in desperate cases, specify the variable that these coordinate variables belong to}
+
+\item{flip_y}{Y coordinates are assumed to be in top-down order, set to FALSE to assume down-up}
 }
 \value{
 RasterStack with two layers of the 2D-variables
