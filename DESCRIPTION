@@ -1,6 +1,6 @@
 Package: angstroms
 Title: Tools for 'ROMS' the Regional Ocean Modeling System 
-Version: 0.0.2.9003
+Version: 0.0.2.9005
 Authors@R: c(
   person("Michael D.","Sumner", role = c("aut", "cre"), email = "mdsumner@gmail.com"), 
   person("Ben", "Raymond", role = c("aut")), 
@@ -20,19 +20,18 @@ Imports:
     FNN,
     ncdf4,
     rbgm,
-    reproj (>= 0.1.0.9001),
+    reproj (>= 0.2.0),
     rgdal,
     sp,
-    spbabel,
-    magrittr
-RoxygenNote: 6.1.1
+    magrittr,
+    silicate,
+    rlang
+RoxygenNote: 7.1.0
 Suggests: 
     bgmfiles,
-    covr, 
+    covr,
     proj4,
-    testthat
+    testthat (>= 2.1.0)
 Roxygen: list(markdown = TRUE)
 URL: https://github.com/AustralianAntarcticDivision/angstroms/
 BugReports: https://github.com/AustralianAntarcticDivision/angstroms/issues
-Remotes: hypertidy/reproj
-

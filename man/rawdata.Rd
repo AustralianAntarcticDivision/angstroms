@@ -6,11 +6,11 @@
 \alias{rawdata.NetCDF}
 \title{Read the variable as is}
 \usage{
-rawdata(x, varname, ...)
+rawdata(x, varname, ..., native = FALSE)
 
-\method{rawdata}{character}(x, varname, ...)
+\method{rawdata}{character}(x, varname, ..., native = FALSE)
 
-\method{rawdata}{NetCDF}(x, varname, ...)
+\method{rawdata}{NetCDF}(x, varname, ..., native = FALSE)
 }
 \arguments{
 \item{x}{netcdf file path}
@@ -18,6 +18,8 @@ rawdata(x, varname, ...)
 \item{varname}{variable name}
 
 \item{...}{dots (ignored)}
+
+\item{native}{maintain values in internal storge mode (default is \code{FALSE})}
 }
 \description{
 Read the variable as is

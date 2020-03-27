@@ -10,16 +10,13 @@
 \usage{
 romsmap(x, ...)
 
-\method{romsmap}{SpatialPolygonsDataFrame}(x, coords, crop = FALSE,
-  lonlat = TRUE, ...)
+\method{romsmap}{SpatialPolygonsDataFrame}(x, coords, crop = FALSE, lonlat = TRUE, ...)
 
 \method{romsmap}{default}(x, coords, crop = FALSE, lonlat = TRUE, ...)
 
-\method{romsmap}{SpatialLinesDataFrame}(x, coords, crop = FALSE,
-  lonlat = TRUE, ...)
+\method{romsmap}{SpatialLinesDataFrame}(x, coords, crop = FALSE, lonlat = TRUE, ...)
 
-\method{romsmap}{SpatialPointsDataFrame}(x, coords, crop = FALSE,
-  lonlat = TRUE, ...)
+\method{romsmap}{SpatialPointsDataFrame}(x, coords, crop = FALSE, lonlat = TRUE, ...)
 }
 \arguments{
 \item{x}{object to transform to the grid space, e.g. a \code{\link[sp]{Spatial}} object}
@@ -52,6 +49,7 @@ and visualization. Re-mapping ROMS data is better done by looking up the \code{c
 and transferring via the grid index.
 }
 \examples{
+library(raster)
 ant_ice_coords <- romsmap(antarctica, ice_coords)
 plot(ice_fake, main = "sea ice in pure grid space")
 plot(ant_ice_coords, add = TRUE)

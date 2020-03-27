@@ -4,9 +4,15 @@
 \alias{create_transport}
 \title{Create "transport" file for Atlantis.}
 \usage{
-create_transport(filename, model_title = "Transport file [placeholder]",
-  bgmfilepath = "", bgmlevels = NULL, time_steps = NULL,
-  transp_params = "", overwrite = FALSE)
+create_transport(
+  filename,
+  model_title = "Transport file [placeholder]",
+  bgmfilepath = "",
+  bgmlevels = NULL,
+  time_steps = NULL,
+  transp_params = "",
+  overwrite = FALSE
+)
 }
 \arguments{
 \item{filename}{the NetCDF file to create}

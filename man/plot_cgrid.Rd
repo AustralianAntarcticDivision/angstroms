@@ -10,8 +10,13 @@ The psi-grid represents the grid corners (purple crosses)
 A useable Thredds example is here
 https://ecowatch.ncddc.noaa.gov/thredds/dodsC/northwest_fisheries/roms/nep_c.nc}
 \usage{
-plot_cgrid(x, ex = extent(0, 15, 0, 20), include = c("u", "v", "rho",
-  "psi"), cell = TRUE, ...)
+plot_cgrid(
+  x,
+  ex = extent(0, 15, 0, 20),
+  include = c("u", "v", "rho", "psi"),
+  cell = TRUE,
+  ...
+)
 }
 \arguments{
 \item{x}{ROMS file}

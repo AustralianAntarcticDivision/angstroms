@@ -4,17 +4,18 @@
 #' @param x netcdf file path
 #' @param varname variable name
 #' @param ... dots (ignored)
+#' @param native maintain values in internal storge mode (default is `FALSE`)
 #' @export
-rawdata <- function(x, varname, ...) UseMethod("rawdata")
+rawdata <- function(x, varname, ..., native = FALSE) UseMethod("rawdata")
 #' @name rawdata
 #' @export
-rawdata.character <- function(x, varname, ...) {
-  return(ncdf4::ncvar_get(ncdf4::nc_open(x), varname))
+rawdata.character <- function(x, varname, ..., native = FALSE) {
+  return(ncdf4::ncvar_get(ncdf4::nc_open(x), varname, raw_datavals = native))
 }
 #' @name rawdata
 #' @export
-rawdata.NetCDF <- function(x, varname, ...) {
-  rawdata(x$file$filename[1L], varname = varname, ...)
+rawdata.NetCDF <- function(x, varname, ..., native = FALSE) {
+  rawdata(x$file$filename[1L], varname = varname, ..., native = native)
 }
 
 

@@ -1,4 +1,8 @@
-# angstroms 0.0.2.9003
+# angstroms 0.0.2.9005
+
+* Remove dependency on spbabel. 
+
+* Allow `rawdata()` to maintain original state of data values (`native` argument). 
 
 * Add rectilinear support to `romscoords()`, by expanding the coordinates as for the curvilinear case.  This function now tries hard to find the coordinates, assuming they are 1D arrays if the 2D assumption fails. 
 

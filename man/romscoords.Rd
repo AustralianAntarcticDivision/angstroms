@@ -4,8 +4,15 @@
 \alias{romscoords}
 \title{Extract coordinate arrays from ROMS.}
 \usage{
-romscoords(x, spatial = c("lon_u", "lat_u"), ncdf = TRUE,
-  transpose = TRUE, ..., varname = "", flip_y = TRUE)
+romscoords(
+  x,
+  spatial = c("lon_u", "lat_u"),
+  ncdf = TRUE,
+  transpose = TRUE,
+  ...,
+  varname = "",
+  flip_y = TRUE
+)
 }
 \arguments{
 \item{x}{ROMS file name}

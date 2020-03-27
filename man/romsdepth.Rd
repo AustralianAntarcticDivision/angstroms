@@ -4,8 +4,15 @@
 \alias{romsdepth}
 \title{Coordinates at depth}
 \usage{
-romsdepth(x, grid_type = "rho", slice, ..., S = "Cs_r", depth = "h",
-  simple = FALSE)
+romsdepth(
+  x,
+  grid_type = "rho",
+  slice,
+  ...,
+  S = "Cs_r",
+  depth = "h",
+  simple = FALSE
+)
 }
 \arguments{
 \item{x}{ROMS file name}
