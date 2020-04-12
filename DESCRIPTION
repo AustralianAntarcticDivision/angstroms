@@ -33,3 +33,4 @@ Suggests:
 Roxygen: list(markdown = TRUE)
 URL: https://github.com/AustralianAntarcticDivision/angstroms/
 BugReports: https://github.com/AustralianAntarcticDivision/angstroms/issues
+Remotes: AustralianAntarcticDivision/rbgm
