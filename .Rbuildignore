@@ -2,10 +2,8 @@
 ^\.Rproj\.user$
 ^figure.*
 ^extradata.*
-^\.travis\.yml$
 ^README\.Rmd$
 ^README-.*\.png$
-^appveyor\.yml$
 ^CONDUCT\.md$
 ^data-raw$
 ^cran-comments\.md$
@@ -13,4 +11,5 @@
 ^inst/couple-Atlantis/*
 ^inst/work/*
 ^inst/shiny/*
-^docs$
+
+^\.github$

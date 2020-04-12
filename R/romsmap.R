@@ -102,9 +102,10 @@ detectSpClass <- function(x) {
 #' 
 #' Find the nearest-neighbour coordinates of `x` in the coordinate arrays of `coords`. 
 #' 
-#' The input `coords` is a assumed to be a 2-layer RasterStack or RasterBrick and
-#' using `nabor::knn` the nearest matching position of the coordinates of `x` is found in the grid space of `coords`. The
-#' motivating use-case is the curvilinear longitude and latitude arrays of ROMS model output. 
+#' The input `coords` is a assumed to be a 2-layer RasterStack or RasterBrick
+#' and using [FNN::get.knnx()] the nearest matching position of the coordinates
+#' of `x` is found in the grid space of `coords`. The motivating use-case is the
+#' curvilinear longitude and latitude arrays of ROMS model output.
 #' 
 #' No account is made for the details of a ROMS cell, though this may be included in future. We tested only with the "lon_u" and "lat_u"
 #' arrays. 

@@ -1,14 +1,13 @@
 
-[![Build
-Status](http://badges.herokuapp.com/travis/AustralianAntarcticDivision/angstroms?branch=master&env=BUILD_NAME=trusty_release&label=ubuntu)](https://travis-ci.org/AustralianAntarcticDivision/angstroms)
-[![Build
-Status](http://badges.herokuapp.com/travis/AustralianAntarcticDivision/angstroms?branch=master&env=BUILD_NAME=osx_release&label=osx)](https://travis-ci.org/AustralianAntarcticDivision/angstroms)
-[![AppVeyor Build
-Status](https://ci.appveyor.com/api/projects/status/github/mdsumner/angstroms?branch=master&svg=true)](https://ci.appveyor.com/project/mdsumner/angstroms)
+<!-- badges: start -->
+
+[![R build
+status](https://github.com/AustralianAntarcticDivision/angstroms/workflows/R-CMD-check/badge.svg)](https://github.com/AustralianAntarcticDivision/angstroms/actions)
 [![CRAN
 status](http://www.r-pkg.org/badges/version/angstroms)](https://cran.r-project.org/package=angstroms)
 ![cranlogs](http://cranlogs.r-pkg.org./badges/angstroms) [![Coverage
 Status](https://img.shields.io/codecov/c/github/AustralianAntarcticDivision/angstroms/master.svg)](https://codecov.io/github/AustralianAntarcticDivision/angstroms?branch=master)
+<!-- badges: end -->
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 

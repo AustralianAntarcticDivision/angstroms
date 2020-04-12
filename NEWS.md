@@ -1,6 +1,8 @@
 # angstroms 0.0.2.9005
 
-* Remove dependency on spbabel. 
+* Now import reproj for coordinate reprojection. 
+
+* Remove dependency on spbabel and rgdal. 
 
 * Allow `rawdata()` to maintain original state of data values (`native` argument). 
 

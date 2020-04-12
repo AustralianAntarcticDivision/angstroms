@@ -21,7 +21,6 @@ Imports:
     ncdf4,
     rbgm,
     reproj (>= 0.2.0),
-    rgdal,
     sp,
     magrittr,
     silicate,
@@ -30,7 +29,6 @@ RoxygenNote: 7.1.0
 Suggests: 
     bgmfiles,
     covr,
-    proj4,
     testthat (>= 2.1.0)
 Roxygen: list(markdown = TRUE)
 URL: https://github.com/AustralianAntarcticDivision/angstroms/

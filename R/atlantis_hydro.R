@@ -64,7 +64,6 @@ mass_dimensions <- function(bgm, ntime = 365 * 2, nlevels = 2L,
 #' @return the filename of the output (use ncdf4 to inspect, modify it)
 #' @export
 #' @importFrom ncdf4 nc_open ncatt_put ncvar_put nc_close ncdim_def ncvar_def
-#' @importFrom rgdal project
 #' @examples
 #' tfile <- file.path(tempdir(), "my_hydrofile.nc")
 #' (ncfile <- create_transport(tfile, bgmfilepath = bgmfiles::bgmfiles("antarctica_99")))
@@ -115,7 +114,8 @@ create_transport <- function(filename,
   ncvar_put(nc_transp, "source_boxid",  bgm$faces$right)
   ll <- bgm$vertices
   if (!raster::isLonLat(bgm$extra$projection)) {
-    ll[c("x", "y")] <- rgdal::project(as.matrix( ll[c("x", "y")]), bgm$extra$projection, inv = TRUE)
+    ll[c("x", "y")] <- reproj::reproj(as.matrix( ll[c("x", "y")]), source = bgm$extra$projection, 
+                                      target = "+proj=longlat +datum=WGS84")[,1:2]
   }
   v1 <- bgm$facesXverts[bgm$facesXverts[[".p0"]] == 1, ] %>%  dplyr::inner_join(ll, ".vx0")
   v2 <- bgm$facesXverts[bgm$facesXverts[[".p0"]] == 2, ] %>%  dplyr::inner_join(ll, ".vx0")
