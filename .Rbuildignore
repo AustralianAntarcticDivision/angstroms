@@ -7,9 +7,7 @@
 ^CONDUCT\.md$
 ^data-raw$
 ^cran-comments\.md$
-^codecov\.yml$
 ^inst/couple-Atlantis/*
 ^inst/work/*
 ^inst/shiny/*
-
 ^\.github$

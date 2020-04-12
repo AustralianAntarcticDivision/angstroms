@@ -5,8 +5,9 @@
 status](https://github.com/AustralianAntarcticDivision/angstroms/workflows/R-CMD-check/badge.svg)](https://github.com/AustralianAntarcticDivision/angstroms/actions)
 [![CRAN
 status](http://www.r-pkg.org/badges/version/angstroms)](https://cran.r-project.org/package=angstroms)
-![cranlogs](http://cranlogs.r-pkg.org./badges/angstroms) [![Coverage
-Status](https://img.shields.io/codecov/c/github/AustralianAntarcticDivision/angstroms/master.svg)](https://codecov.io/github/AustralianAntarcticDivision/angstroms?branch=master)
+![cranlogs](http://cranlogs.r-pkg.org./badges/angstroms)
+![test-coverage](https://github.com/AustralianAntarcticDivision/angstroms/workflows/test-coverage/badge.svg)
+![pkgdown](https://github.com/AustralianAntarcticDivision/angstroms/workflows/pkgdown/badge.svg)
 <!-- badges: end -->
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
