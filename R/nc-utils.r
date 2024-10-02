@@ -10,7 +10,10 @@ rawdata <- function(x, varname, ..., native = FALSE) UseMethod("rawdata")
 #' @name rawdata
 #' @export
 rawdata.character <- function(x, varname, ..., native = FALSE) {
-  return(ncdf4::ncvar_get(ncdf4::nc_open(x), varname, raw_datavals = native))
+  nc <- ncdf4::nc_open(x)
+  var <- ncdf4::ncvar_get(nc, varname, raw_datavals = native)
+  ncdf4::nc_close(nc)
+  var
 }
 #' @name rawdata
 #' @export

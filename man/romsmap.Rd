@@ -37,7 +37,7 @@ Find the nearest-neighbour coordinates of \code{x} in the coordinate arrays of \
 }
 \details{
 The input \code{coords} is a assumed to be a 2-layer RasterStack or RasterBrick
-and using \code{\link[FNN:get.knnx]{FNN::get.knnx()}} the nearest matching position of the coordinates
+and using \code{\link[FNN:get.knn]{FNN::get.knnx()}} the nearest matching position of the coordinates
 of \code{x} is found in the grid space of \code{coords}. The motivating use-case is the
 curvilinear longitude and latitude arrays of ROMS model output.
 

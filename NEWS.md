@@ -1,3 +1,7 @@
+# angstroms dev
+
+* Fix closing files, see #23. 
+
 # angstroms 0.0.2.9005
 
 * Now import reproj for coordinate reprojection. 
