@@ -118,7 +118,7 @@ of the same file.</p>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">tfile</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">"my_hydrofile.nc"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">(</span><span class="va">ncfile</span> <span class="op">&lt;-</span> <span class="fu">create_transport</span><span class="op">(</span><span class="va">tfile</span>, bgmfilepath <span class="op">=</span> <span class="fu">bgmfiles</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/bgmfiles/man/bgmfiles.html" class="external-link">bgmfiles</a></span><span class="op">(</span><span class="st">"antarctica_99"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> 'bgmlevels' not supplied, building levels at -5277.47746194913, -2000, -999.999999999995, -749.999999999995, -399.999999999995, -299.999999999995, -199.999999999995, -99.9999999999955, -49.9999999999955, -19.9999999999955, 4.54747350886464e-12</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/tmp/RtmpjZSAom/my_hydrofile.nc"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "/tmp/RtmpNWRMfi/my_hydrofile.nc"</span>
 <span class="r-in"><span><span class="co">## use ncdf4::nc_open to inspect the file</span></span></span>
 </code></pre></div>
     </div>
