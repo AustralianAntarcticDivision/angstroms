@@ -1,3 +1,11 @@
+#' @keywords internal
+"_PACKAGE"
+
+## usethis namespace: start
+## usethis namespace: end
+NULL
+
+
 #' Tools for ROMS model output.
 #' 
 #' Facilities for  easy access to Regional Ocean Modeling System (ROMS) output. 
@@ -14,7 +22,6 @@
 #'  }
 #' @name angstroms
 #' @aliases angstroms-package
-#' @docType package
 #' @importFrom graphics lines plot points
 #' @importFrom stats filter
 NULL
