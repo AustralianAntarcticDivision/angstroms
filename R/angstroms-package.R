@@ -21,7 +21,6 @@ NULL
 #'  \code{\link{romsmap}} \tab re-map a spatial layer (polygons, lines, points) into ROMS grid space \cr
 #'  }
 #' @name angstroms
-#' @aliases angstroms-package
 #' @importFrom graphics lines plot points
 #' @importFrom stats filter
 NULL

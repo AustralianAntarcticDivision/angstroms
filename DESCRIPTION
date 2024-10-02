@@ -16,7 +16,6 @@ LazyData: true
 Encoding: UTF-8
 Imports:
     dplyr,
-    methods,
     FNN,
     ncdf4,
     rbgm,
@@ -25,7 +24,7 @@ Imports:
     magrittr,
     silicate,
     rlang
-RoxygenNote: 7.2.0
+RoxygenNote: 7.3.2
 Suggests: 
     bgmfiles,
     covr,

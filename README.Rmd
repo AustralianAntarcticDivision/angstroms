@@ -9,6 +9,7 @@ output: github_document
  ![cranlogs](http://cranlogs.r-pkg.org./badges/angstroms)
  ![test-coverage](https://github.com/AustralianAntarcticDivision/angstroms/workflows/test-coverage/badge.svg)
 ![pkgdown](https://github.com/AustralianAntarcticDivision/angstroms/workflows/pkgdown/badge.svg)
+[![R-CMD-check](https://github.com/AustralianAntarcticDivision/angstroms/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/AustralianAntarcticDivision/angstroms/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
