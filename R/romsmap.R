@@ -122,8 +122,8 @@ detectSpClass <- function(x) {
 #' @examples 
 #' library(raster)
 #' ant_ice_coords <- romsmap(antarctica, ice_coords)
-#' plot(ice_fake, main = "sea ice in pure grid space")
-#' plot(ant_ice_coords, add = TRUE)
+#' raster::plot(ice_fake, main = "sea ice in pure grid space")
+#' sp::plot(ant_ice_coords, add = TRUE)
 #' 
 #' 
 romsmap <- function(x, ...) {

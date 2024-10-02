@@ -2,12 +2,9 @@
 % Please edit documentation in R/roms_h.R
 \name{romshcoords}
 \alias{romshcoords}
-\alias{romsdepth}
 \title{Coordinates at depth}
 \usage{
 romshcoords(x, grid_type = "rho", slice, ..., depth = "h", simple = FALSE)
-
-romsdepth(x, ...)
 }
 \arguments{
 \item{x}{ROMS file name}
