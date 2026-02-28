@@ -23,7 +23,7 @@ create_transport(
 
 \item{bgmlevels}{the Atlantis depth levels}
 
-\item{time_steps}{actual time steps, need to be regularly space}
+\item{time_steps}{actual time steps, need to be regularly spaced}
 
 \item{transp_params}{optional details to put in the NetCDF notes}
 
@@ -34,15 +34,13 @@ the filename of the output (use ncdf4 to inspect, modify it)
 }
 \description{
 Transport is the hydrodynamic forcing for the Atlantis model from oceanographic models. These functions
-aim to minimize the amount of manual handling of details, creating an NetCDF file that can be modified directly.
+aim to minimize the amount of manual handling of details, creating a NetCDF file that can be modified directly.
 All the Box Geometry Model details are determined from the bgm file itself. The output file is the precursor file
 for input to HydroConstruct (as per section 4.1 of the Atlantis User Guide).
 }
 \details{
 Please use the original BGM file in its native map projection, there is no need to copy this to a longitude-latitude version
 of the same file.
-
-TODO: check that bgmlevels should only be an index, check that time_steps must be regular ?( or just monotonic incresing?)
 }
 \examples{
 tfile <- file.path(tempdir(), "my_hydrofile.nc")

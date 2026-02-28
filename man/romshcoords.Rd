@@ -20,14 +20,14 @@ romshcoords(x, grid_type = "rho", slice, ..., depth = "h", simple = FALSE)
 \item{simple}{logical: if TRUE, use the old "simple" depth method, which may not be correct}
 }
 \value{
-RasterStack with a layer for every depth
+SpatRaster with a layer for every depth
 }
 \description{
 Extract the multi-layer 'h'eight grid with S-coordinate stretching applied
 }
 \details{
 Compute ROMS grid depth from vertical stretched variables
-Given a bathymetry (h), free-surface (zeta) and terrain-following parameters, this function computes the 3D depths for the requested C-grid location. If the free-surface is not provided, a zero value is assumed resulting in unperturb depths.  This function can be used when generating initial conditions or climatology data for an application. Check the following link for details: https://www.myroms.org/wiki/index.php/Vertical_S-coordinate
+Given a bathymetry (h), free-surface (zeta) and terrain-following parameters, this function computes the 3D depths for the requested C-grid location. If the free-surface is not provided, a zero value is assumed resulting in unperturbed depths.  This function can be used when generating initial conditions or climatology data for an application. Check the following link for details: https://www.myroms.org/wiki/index.php/Vertical_S-coordinate
 See https://github.com/dcherian/tools/blob/master/ROMS/arango/utility/set_depth.m
 Original Matlab code by Hernan Arango.
 }

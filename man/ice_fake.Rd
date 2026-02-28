@@ -7,9 +7,10 @@
 \title{Fake model data.}
 \description{
 \code{ice_coords} and \code{ice_fake} are generated from a projected map of southern Ocean sea ice data.
+These are loaded as live \link[terra:SpatRaster-class]{terra::SpatRaster} objects via active bindings (not serialized .rda).
 }
 \details{
-The coords layer is the longitude and latitude values for the centres of the polar cells. This is veyr loosely
+The coords layer is the longitude and latitude values for the centres of the polar cells. This is very loosely
 analogous to the coordinate arrays used by ROMS data, included here for working examples, illustration and code tests.
 
 The proper metadata for these layers is

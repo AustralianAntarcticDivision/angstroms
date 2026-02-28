@@ -53,10 +53,10 @@ romsdata3d(
 
 \item{verbose}{be chatty}
 
-\item{lvar}{passed to \code{raster::brick} to specify 3rd or 4th dimension}
+\item{lvar}{passed to \code{terra::rast} to specify 3rd or 4th dimension}
 }
 \value{
-RasterLayer
+SpatRaster
 }
 \description{
 \code{romsdata} always works in the first two dimensions (x-y), the more specialist functions will

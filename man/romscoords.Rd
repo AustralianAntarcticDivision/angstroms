@@ -30,10 +30,10 @@ romscoords(
 \item{flip_y}{Y coordinates are assumed to be in top-down order, set to FALSE to assume down-up}
 }
 \value{
-RasterStack with two layers of the 2D-variables
+SpatRaster with two layers of the 2D-variables
 }
 \description{
-Returns a RasterStack of the given variable names.
+Returns a SpatRaster of the given variable names.
 }
 \details{
 The two layers from the model output are used to define the real-world space. This is used to create a boundary \code{romsboundary}, to map real-world
@@ -41,11 +41,11 @@ objects into  grid space \code{romscoords} and to generate graticules for mappin
 }
 \examples{
 \dontrun{
-  coord <- romscoord("roms.nc")
+  coord <- romscoords("roms.nc")
 }
 ## with in-built fake data
 plot(ice_fake, asp = 0.5)
-contour(ice_coords[[1]], add = TRUE, levels = seq(-165, 165, by = 15))
-contour(ice_coords[[2]], add = TRUE)
+terra::contour(ice_coords[[1]], add = TRUE, levels = seq(-165, 165, by = 15))
+terra::contour(ice_coords[[2]], add = TRUE)
 
 }

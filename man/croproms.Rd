@@ -9,7 +9,7 @@ croproms(x, ext, ...)
 \arguments{
 \item{x}{ROMS xy- coordinates, see \code{romscoords}}
 
-\item{ext}{\code{raster::extent} in the coordinate system of \code{x}}
+\item{ext}{\code{terra::ext} in the coordinate system of \code{x}}
 
 \item{...}{ignored}
 }
@@ -22,7 +22,7 @@ The spatial crop is performed in the coordinate space of roms data.
 \examples{
 ## notice that extent is in long-lat, but ice_local is in the grid
 ## space of ice_coords
-ice_local <- croproms(ice_coords, extent(100, 120, -75, -60))
+ice_local <- croproms(ice_coords, terra::ext(100, 120, -75, -60))
 plot(ice_coords[[2]], col = grey(seq(0, 1, length  = 20)))
-plot(crop(ice_fake, ice_local), add = TRUE)
+plot(terra::crop(ice_fake, ice_local), add = TRUE)
 }

@@ -5,5 +5,6 @@
 \alias{antarctica}
 \title{Antarctica simple coastline.}
 \description{
-Taken from "rnaturalearth::countries110"
+Taken from "rnaturalearth::countries110". Loaded as a live \link[terra:SpatVector-class]{terra::SpatVector}
+via active binding from a bundled GeoPackage.
 }

@@ -10,9 +10,9 @@ romsrotate(uv, angle, ...)
 romsangle(x, varname = "angle", ...)
 }
 \arguments{
-\item{uv}{raster brick of two layers with 'u' ("east-west") and 'v' ("north-south") vector components}
+\item{uv}{SpatRaster of two layers with 'u' ("east-west") and 'v' ("north-south") vector components}
 
-\item{angle}{raster layer of the 'angle' variable from 'ROMS'}
+\item{angle}{SpatRaster layer of the 'angle' variable from 'ROMS'}
 
 \item{...}{ignored currently}
 
@@ -21,7 +21,7 @@ romsangle(x, varname = "angle", ...)
 \item{varname}{variable name from file 'x'}
 }
 \description{
-\code{romsrotate} performs the rotation on a 2-layer brick
+\code{romsrotate} performs the rotation on a 2-layer SpatRaster
 \code{romsangle} reads the (likely) angle variable
 }
 \references{

@@ -4,7 +4,7 @@
 \alias{rawdata}
 \alias{rawdata.character}
 \alias{rawdata.NetCDF}
-\title{Read the variable as is}
+\title{Read the variable as-is}
 \usage{
 rawdata(x, varname, ..., native = FALSE)
 
@@ -19,8 +19,9 @@ rawdata(x, varname, ..., native = FALSE)
 
 \item{...}{dots (ignored)}
 
-\item{native}{maintain values in internal storge mode (default is \code{FALSE})}
+\item{native}{maintain values in internal storage mode (default is \code{FALSE})}
 }
 \description{
-Read the variable as is
+Read a raw variable from a NetCDF source with no transformation or
+raster interpretation.
 }

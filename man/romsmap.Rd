@@ -2,41 +2,56 @@
 % Please edit documentation in R/romsmap.R
 \name{romsmap}
 \alias{romsmap}
+\alias{romsmap.SpatVector}
+\alias{romsmap.sf}
+\alias{romsmap.sfc}
 \alias{romsmap.SpatialPolygonsDataFrame}
-\alias{romsmap.default}
 \alias{romsmap.SpatialLinesDataFrame}
 \alias{romsmap.SpatialPointsDataFrame}
+\alias{romsmap.default}
+\alias{romsmap.wk_wkb}
+\alias{romsmap.wk_wkt}
 \title{Remap an object to the ROMS grid.}
 \usage{
 romsmap(x, ...)
 
-\method{romsmap}{SpatialPolygonsDataFrame}(x, coords, crop = FALSE, lonlat = TRUE, ...)
+\method{romsmap}{SpatVector}(x, coords, crop = FALSE, lonlat = TRUE, ...)
 
-\method{romsmap}{default}(x, coords, crop = FALSE, lonlat = TRUE, ...)
+\method{romsmap}{sf}(x, coords, crop = FALSE, lonlat = TRUE, ...)
+
+\method{romsmap}{sfc}(x, coords, crop = FALSE, lonlat = TRUE, ...)
+
+\method{romsmap}{SpatialPolygonsDataFrame}(x, coords, crop = FALSE, lonlat = TRUE, ...)
 
 \method{romsmap}{SpatialLinesDataFrame}(x, coords, crop = FALSE, lonlat = TRUE, ...)
 
 \method{romsmap}{SpatialPointsDataFrame}(x, coords, crop = FALSE, lonlat = TRUE, ...)
+
+\method{romsmap}{default}(x, coords, crop = FALSE, lonlat = TRUE, ...)
+
+\method{romsmap}{wk_wkb}(x, coords, crop = FALSE, lonlat = TRUE, ...)
+
+\method{romsmap}{wk_wkt}(x, coords, crop = FALSE, lonlat = TRUE, ...)
 }
 \arguments{
-\item{x}{object to transform to the grid space, e.g. a \code{\link[sp]{Spatial}} object}
+\item{x}{object to transform to the grid space, e.g. an sf object, SpatVector, matrix of coordinates, or a wk-handleable geometry}
 
 \item{...}{unused}
 
-\item{coords}{romscoords RasterStack}
+\item{coords}{romscoords SpatRaster}
 
 \item{crop}{logical, if \code{TRUE} crop x to the extent of the boundary of the values in coords}
 
 \item{lonlat}{logical, if \code{TRUE} check for need to back-transform to longitude/latitude and do it}
 }
 \value{
-input object with coordinates transformed to space of the coords
+data.frame with columns \code{x_} and \code{y_} in grid index space, plus any feature identifiers
 }
 \description{
 Find the nearest-neighbour coordinates of \code{x} in the coordinate arrays of \code{coords}.
 }
 \details{
-The input \code{coords} is a assumed to be a 2-layer RasterStack or RasterBrick
+The input \code{coords} is assumed to be a 2-layer SpatRaster
 and using \code{\link[FNN:get.knn]{FNN::get.knnx()}} the nearest matching position of the coordinates
 of \code{x} is found in the grid space of \code{coords}. The motivating use-case is the
 curvilinear longitude and latitude arrays of ROMS model output.
@@ -50,10 +65,8 @@ and visualization. Re-mapping ROMS data is better done by looking up the \code{c
 and transferring via the grid index.
 }
 \examples{
-library(raster)
-ant_ice_coords <- romsmap(antarctica, ice_coords)
-raster::image(ice_fake, col = c("transparent", hcl.colors(24)), asp = 1)
-sp::plot(ant_ice_coords, add = TRUE)
-
-
+ant_idx <- romsmap(antarctica, ice_coords)
+plot(ice_fake, col = c("transparent", hcl.colors(24)), asp = 1)
+## ant_idx is a data.frame of index-space coordinates
+## use wk to reconstruct if needed
 }
