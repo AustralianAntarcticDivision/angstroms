@@ -82,6 +82,66 @@
 </ul>
 <p>This approach aligns with the plotting and interpretation tools in the <a href="https://CRAN.R-project.org/package=quadmesh" class="external-link">quadmesh</a> package, particularly the <a href="https://hypertidy.github.io/quadmesh/reference/mesh_plot.html" class="external-link">mesh_plot()</a> and <a href="https://hypertidy.github.io/quadmesh/reference/quadmesh.html" class="external-link">quadmesh()</a> functions.</p>
 <div class="section level2">
+<h2 id="what-angstroms-is-now">What angstroms is now<a class="anchor" aria-label="anchor" href="#what-angstroms-is-now"></a>
+</h2>
+<p>angstroms first reached CRAN in 2017. The five ideas above have since been taken up, more generally, by other packages and writing:</p>
+<ul>
+<li>index space first, with coordinates handled separately, is the stance of the book <a href="https://hypertidy.github.io/regular-in-what/" class="external-link">Regular in what?</a>: a grid is regular, rectilinear or curvilinear only <em>in a frame</em>, and “no frame” (index space) is a frame;</li>
+<li>re-mapping external data into grid space is what <a href="https://github.com/hypertidy/controlledburn" class="external-link">controlledburn</a> does for polygons, lines and points: sparse runs of whole cells plus exact coverage fractions, indexed by the grid’s own row and column;</li>
+<li>the grid as a mesh is <a href="https://CRAN.R-project.org/package=quadmesh" class="external-link">quadmesh</a>.</li>
+</ul>
+<p>So angstroms is not being rewritten in place. It is the ROMS front end: it keeps what is specific to ROMS, and over time hands the general jobs to packages that each do one thing.</p>
+<p>What stays in angstroms:</p>
+<ul>
+<li>the staggered C-grid locations (rho, u, v, psi) and their coordinate arrays (<code><a href="reference/romscoords.html">romscoords()</a></code>);</li>
+<li>terrain-following S-coordinate depths (<code><a href="reference/romshcoords.html">romshcoords()</a></code>);</li>
+<li>the grid angle, to turn grid-relative u and v into east and north (<code><a href="reference/romsrotate.html">romsangle()</a></code>, <code><a href="reference/romsrotate.html">romsrotate()</a></code>);</li>
+<li>coupling to Atlantis box models through rbgm (<code><a href="reference/create_transport.html">create_transport()</a></code>).</li>
+</ul>
+<p>What moves out, one small release at a time:</p>
+<table class="table">
+<colgroup>
+<col width="33%">
+<col width="33%">
+<col width="33%">
+</colgroup>
+<thead><tr>
+<th>Job</th>
+<th>Now</th>
+<th>Later</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>read slices</td>
+<td>raster and ncdf4</td>
+<td>tidync or vapour</td>
+</tr>
+<tr>
+<td>index arithmetic</td>
+<td>raster extents in index space</td>
+<td>vaster</td>
+</tr>
+<tr>
+<td>coordinate transformation</td>
+<td>reproj</td>
+<td>reproj (already)</td>
+</tr>
+<tr>
+<td>geometry into grid space</td>
+<td>nearest grid node (<code><a href="reference/romsmap.html">romsmap()</a></code>)</td>
+<td>controlledburn, with edges cut into short pieces before mapping</td>
+</tr>
+<tr>
+<td>grid as mesh, plotting</td>
+<td>quadmesh</td>
+<td>quadmesh</td>
+</tr>
+</tbody>
+</table>
+<p><code><a href="reference/romsmap.html">romsmap()</a></code> moves only the vertices of a geometry, each to its nearest grid node. That is fine for a quick look, as its help page says, but a long edge on a curvilinear grid can then cross cells it never touches. Cutting edges into short pieces first, and mapping to fractional column and row rather than the nearest node, is the fix that the controlledburn route will bring.</p>
+<p>The scope is ROMS for now. Other model grids with the same structure may follow.</p>
+</div>
+<div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
 <p>Install the released version from <a href="https://CRAN.R-project.org/" class="external-link">CRAN</a> with:</p>
@@ -159,10 +219,10 @@
 <div class="developers">
 <h2 data-toc-skip>Developers</h2>
 <ul class="list-unstyled">
-<li>Michael D. Sumner <br><small class="roles"> Author, maintainer </small>  </li>
-<li>Ben Raymond <br><small class="roles"> Author </small>  </li>
-<li>Hernan G. Arango <br><small class="roles"> Author </small>  </li>
-<li>Ryan Morse <br><small class="roles"> Author </small>  </li>
+<li>Michael D. Sumner <br><small class="roles"> Author, maintainer </small>   </li>
+<li>Ben Raymond <br><small class="roles"> Author </small>   </li>
+<li>Hernan G. Arango <br><small class="roles"> Author </small>   </li>
+<li>Ryan Morse <br><small class="roles"> Author </small>   </li>
 <li><a href="authors.html">More about authors...</a></li>
 </ul>
 </div>
@@ -187,7 +247,7 @@
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.</p>
 </div>
 
       </footer>
