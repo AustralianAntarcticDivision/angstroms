@@ -1,5 +1,8 @@
 # angstroms dev
 
+* README describes what angstroms is now: the ROMS front end, with general
+  jobs moving to packages that each do one thing.
+
 * Fix closing files, see #23. 
 
 # angstroms 0.0.2.9005
