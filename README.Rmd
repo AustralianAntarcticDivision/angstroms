@@ -39,6 +39,54 @@ The key features are:
 This approach aligns with the plotting and interpretation tools in the [quadmesh](https://CRAN.R-project.org/package=quadmesh) package, particularly the [mesh_plot()](https://hypertidy.github.io/quadmesh/reference/mesh_plot.html) and [quadmesh()](https://hypertidy.github.io/quadmesh/reference/quadmesh.html) functions. 
 
 
+## What angstroms is now
+
+angstroms first reached CRAN in 2017. The five ideas above have since
+been taken up, more generally, by other packages and writing:
+
+* index space first, with coordinates handled separately, is the stance
+  of the book [Regular in what?](https://hypertidy.github.io/regular-in-what/):
+  a grid is regular, rectilinear or curvilinear only *in a frame*, and
+  "no frame" (index space) is a frame;
+* re-mapping external data into grid space is what
+  [controlledburn](https://github.com/hypertidy/controlledburn) does for
+  polygons, lines and points: sparse runs of whole cells plus exact
+  coverage fractions, indexed by the grid's own row and column;
+* the grid as a mesh is [quadmesh](https://CRAN.R-project.org/package=quadmesh).
+
+So angstroms is not being rewritten in place. It is the ROMS front end:
+it keeps what is specific to ROMS, and over time hands the general jobs
+to packages that each do one thing.
+
+What stays in angstroms:
+
+* the staggered C-grid locations (rho, u, v, psi) and their coordinate
+  arrays (`romscoords()`);
+* terrain-following S-coordinate depths (`romshcoords()`);
+* the grid angle, to turn grid-relative u and v into east and north
+  (`romsangle()`, `romsrotate()`);
+* coupling to Atlantis box models through rbgm (`create_transport()`).
+
+What moves out, one small release at a time:
+
+| Job | Now | Later |
+|---|---|---|
+| read slices | raster and ncdf4 | tidync or vapour |
+| index arithmetic | raster extents in index space | vaster |
+| coordinate transformation | reproj | reproj (already) |
+| geometry into grid space | nearest grid node (`romsmap()`) | controlledburn, with edges cut into short pieces before mapping |
+| grid as mesh, plotting | quadmesh | quadmesh |
+
+`romsmap()` moves only the vertices of a geometry, each to its nearest
+grid node. That is fine for a quick look, as its help page says, but a
+long edge on a curvilinear grid can then cross cells it never touches.
+Cutting edges into short pieces first, and mapping to fractional column
+and row rather than the nearest node, is the fix that the controlledburn
+route will bring.
+
+The scope is ROMS for now. Other model grids with the same structure may
+follow.
+
 ## Installation
 
 Install the released version from [CRAN](https://CRAN.R-project.org/) with: 
